@@ -2,21 +2,15 @@ package com.example;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            @SuppressLint("SetTextI18n")
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length() == 4){

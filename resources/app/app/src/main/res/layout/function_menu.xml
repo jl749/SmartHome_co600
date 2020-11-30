@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -19,14 +20,14 @@
             android:layout_weight="1" >
 
             <ImageButton
-                android:id="@+id/button4"
+                android:id="@+id/button1"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:src="@drawable/temp" />
 
             <ImageButton
-                android:id="@+id/button1"
+                android:id="@+id/button2"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -40,14 +41,14 @@
             android:layout_weight="1" >
 
             <ImageButton
-                android:id="@+id/button2"
+                android:id="@+id/button3"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:src="@drawable/sound"  />
+                android:src="@drawable/alarm" />
 
             <ImageButton
-                android:id="@+id/button6"
+                android:id="@+id/button4"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -61,15 +62,15 @@
             android:layout_height="0dp"
             android:layout_weight="1" >
 
-            <Button
-                android:id="@+id/button3"
+            <ImageButton
+                android:id="@+id/button5"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:src="@drawable/airquality" />
 
             <ImageButton
-                android:id="@+id/button7"
+                android:id="@+id/button6"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"

@@ -7,4 +7,7 @@
     <string name="_40">40%</string>
     <string name="select_room">Select Room</string>
     <string name="currently_locked">Currently Locked</string>
+    <string name="toggle_alarm">Toggle Alarm</string>
+    <string name="alarm">Alarm</string>
+    <string name="currently_disarmed">Currently Disarmed</string>
 </resources>

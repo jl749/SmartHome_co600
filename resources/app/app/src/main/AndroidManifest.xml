@@ -17,11 +17,17 @@
 
         </activity>
         <activity android:name=".TempControl" />
-        <activity android:name=".SoundControl" />
         <activity android:name=".Security" />
         <activity android:name=".Security1" />
         <activity android:name=".Settings" />
         <activity android:name=".FunctionMenu" />
+        <activity android:name=".Alarm" />
+        <activity android:name=".Voicerec" />
+        <activity android:name=".Deeplearning" />
+        <activity android:name=".Device" />
+        <activity android:name=".Notifications" />
+        <activity android:name=".SecuritySettings" />
+        <activity android:name=".Profile" />
     </application>
 
 </manifest>
