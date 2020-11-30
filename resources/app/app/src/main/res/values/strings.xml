@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SmartHomeSystem</string>
+    <string name="textview">TextView</string>
+    <string name="please_enter_your_pin">Please enter your pin.</string>
+    <string name="temp_control">Temp Control</string>
+    <string name="_20_c">20 °C</string>
+    <string name="_40">40%</string>
+    <string name="select_room">Select Room</string>
+    <string name="currently_locked">Currently Locked</string>
+</resources>
