@@ -1,17 +1,18 @@
 #include "WiFiEsp.h"
+#include <dht.h>
 #include <SoftwareSerial.h>
 
 #define FV(s) ((const __FlashStringHelper*)(s))
 #define TXPIN 2
 #define RXPIN 3
+
+#define DHT11_PIN 7
+dht DHT;
 SoftwareSerial esp01(TXPIN,RXPIN); //esp TX -> 2 , esp RX -> 3
 
 const char ssid[]="BT-FFA25W"; //read straight from flash memory
 const char pass[]="cATY9hbJUC4GQi";
 int status=WL_IDLE_STATUS; //wifi radio's status
-
-#define ledPin 13
-#define digiPin 7
 
 WiFiEspServer server(80);
 
@@ -19,10 +20,6 @@ WiFiEspServer server(80);
 const int ANLpinsInUse[ANLpins]={0,1,2};
 
 void setup() {
-  pinMode(ledPin,OUTPUT);
-  pinMode(digiPin,OUTPUT);
-  digitalWrite(ledPin,LOW);
-  digitalWrite(digiPin,LOW);
   Serial.begin(9600);
   esp01.begin(9600);
   WiFi.init(&esp01); //init ESP module
@@ -54,12 +51,20 @@ void loop() {
         client.println(F("Content-Type: text/html"));
         client.println();
 
+        int chk = DHT.read11(DHT11_PIN);
+        client.print("Temperature = ");
+        client.println(DHT.temperature);
+        client.print("Humidity = ");
+        client.println(DHT.humidity);
+        
         for(int i=0;i<ANLpins;i++){
           client.print(F("analog input "));
           client.print(ANLpinsInUse[i]+": ");
           client.print(analogRead(ANLpinsInUse[i]));
           client.println(F("<br />"));
         }
+
+        delay(1000);
       }
     }
     delay(1); //wait until web browser recieve all data
