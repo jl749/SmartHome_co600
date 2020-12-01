@@ -18,6 +18,7 @@
             android:layout_weight="0.1" >
 
             <TextView
+                android:textStyle="normal|bold"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -25,6 +26,7 @@
                 android:background="@drawable/back"
                 android:text="Humidity" />
             <TextView
+                android:textStyle="normal|bold"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -84,7 +86,7 @@
                 android:layout_width="158dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:gravity="left"
+                android:gravity="top|center"
                 android:text="Target Temp:" />
 
         </TableRow>
