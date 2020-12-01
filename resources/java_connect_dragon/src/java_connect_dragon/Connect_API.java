@@ -31,6 +31,8 @@ public class Connect_API {
         }
 	}
 	
+	
+	
 	public void closeCon() {
 		try{con.close();}catch(SQLException e){System.err.println(e);}
 	}
@@ -62,6 +64,18 @@ public class Connect_API {
         return hexString.toString();  
     } 
     
+    public void fixIntegrity(String[][] arr) {
+    	List<List<Integer>> result=new ArrayList<>();
+    	for(int i=0;i<arr.length;i++) 
+    		for(int j=1;j<arr.length;j++) 
+    			if(arr[i][0].equals(arr[(i+j)%arr.length][1])) {
+    				List<Integer> tmp=new ArrayList<>();
+    				tmp.add(i);
+    				tmp.add((i+j)%arr.length);
+    				result.add(tmp);
+        		}
+    	//NOW CONNECT RESULTS
+    }
     public boolean integrityCheck() {
     	int linkCount=0;
     	int size=0;
