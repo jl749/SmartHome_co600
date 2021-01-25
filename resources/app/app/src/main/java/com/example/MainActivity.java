@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-
 public class MainActivity extends AppCompatActivity {
 
     private static String pin = "2222";
@@ -63,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 }
 
 

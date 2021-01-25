@@ -66,7 +66,6 @@ public class Security extends Activity {
                 if (x1 > x2) {
                     Intent i = new Intent(Security.this, Security1.class);
                     startActivity(i);
-
                 }
                 break;
 
