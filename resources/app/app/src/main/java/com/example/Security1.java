@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 public class Security1 extends Activity {
 
@@ -16,6 +19,25 @@ public class Security1 extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.security_page1);
+        SwitchCompat aSwitch = findViewById(R.id.toggleLight2);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if (isChecked) {
+                    TextView state = (TextView) findViewById(R.id.light2Status);
+                    state.setText("Light On");
+                    setLightOn();
+                }
+                else {
+                    TextView state = (TextView) findViewById(R.id.light2Status);
+                    state.setText("Light Off");
+                    setLightOff();
+                }
+            }
+        });
+
         ImageButton lockButton = (ImageButton) findViewById(R.id.lockbutton1);
 
         lockButton.setOnClickListener(new View.OnClickListener() {
@@ -27,6 +49,7 @@ public class Security1 extends Activity {
                     ImageView image = (ImageView) findViewById(R.id.currentState);
                     image.setImageResource(R.drawable.locked);
                     state.setText("Currently Locked");
+                    setClose();
                 }
 
             }
@@ -43,13 +66,49 @@ public class Security1 extends Activity {
                     ImageView image = (ImageView) findViewById(R.id.currentState);
                     image.setImageResource(R.drawable.unlocked);
                     state.setText("Currently Unlocked");
+                    setOpen();
                 }
             }
         });
+        if(((MyApplication) this.getApplication()).getLock2().equals("True")){
+            TextView state = (TextView) findViewById(R.id.currentState1);
+            ImageView image = (ImageView) findViewById(R.id.currentState);
+            image.setImageResource(R.drawable.locked);
+            state.setText("Currently Locked");
+
+        }
+        else{
+            TextView state = (TextView) findViewById(R.id.currentState1);
+            ImageView image = (ImageView) findViewById(R.id.currentState);
+            image.setImageResource(R.drawable.unlocked);
+            state.setText("Currently Unlocked");
+        }
+
+        if(((MyApplication) this.getApplication()).getLight2().equals("True")){
+            aSwitch.setChecked(true);
+            TextView state = (TextView) findViewById(R.id.light2Status);
+            state.setText("Light On");
+        }
+        else {
+            aSwitch.setChecked(false);
+            TextView state = (TextView) findViewById(R.id.light2Status);
+            state.setText("Light Off");
+        }
 
     }
 
-
+    public void setOpen(){
+        ((MyApplication) this.getApplication()).setLock2("False");
+    }
+    public void setClose(){
+        ((MyApplication) this.getApplication()).setLock2("True");
+    }
+    public void setLightOn(){
+        ((MyApplication) this.getApplication()).setLight2("True");
+    }
+    public void setLightOff(){
+        ((MyApplication) this.getApplication()).setLight2("False");
+    }
     public boolean onTouchEvent(MotionEvent touchEvent) {
         switch (touchEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:

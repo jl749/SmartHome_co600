@@ -61,6 +61,33 @@
                 android:src="@drawable/locked" />
         </TableRow>
 
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/back"
+            android:layout_weight="0.2" >
+
+            <TextView
+                android:id="@+id/light2Status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:text="Toggle Lights" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/toggleLight2"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity=""
+                android:checked="false"
+                android:gravity="center"
+                android:scaleX="2"
+                android:scaleY="2"
+                app:showText="false" />
+        </TableRow>
 
         <TableRow
             android:id="@+id/tableRow4"

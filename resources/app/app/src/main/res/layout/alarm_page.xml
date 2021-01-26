@@ -80,7 +80,7 @@
                 android:text="@string/toggle_alarm" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/hello"
+                android:id="@+id/toggleAlarm"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
