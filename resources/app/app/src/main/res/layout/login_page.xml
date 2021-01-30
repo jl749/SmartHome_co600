@@ -38,8 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="61dp"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="111dp" />
-        //android:src="" />
+        android:layout_marginTop="111dp"
+        android:src="@drawable/airquality" />
 
     <EditText
         android:id="@+id/editText2"
