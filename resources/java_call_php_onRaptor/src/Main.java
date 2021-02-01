@@ -14,6 +14,7 @@ public class Main {
 	public static boolean chkLogin(String id, String pass) {
 		StringBuilder result=new StringBuilder();
 		
+		HttpsURLConnection https=null;
 		OutputStream out=null;
 		InputStreamReader in=null;
 		BufferedReader reader=null;
@@ -23,7 +24,7 @@ public class Main {
 			byte[] postDataBytes=msg.getBytes("UTF-8");
 			
 			URLConnection con = url.openConnection();
-			HttpsURLConnection https = (HttpsURLConnection)con;
+			https = (HttpsURLConnection)con;
 			https.setRequestMethod("POST");
 			https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
@@ -37,10 +38,10 @@ public class Main {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
-			//con.close();
 			try{reader.close();}catch(Exception e) {e.printStackTrace();}
 			try{in.close();}catch(Exception e) {e.printStackTrace();}
 			try{out.close();}catch(Exception e) {e.printStackTrace();}
+			try {https.disconnect();}catch(Exception e) {e.printStackTrace();}
 		}
 		System.out.println(result.toString()+"!");
 		if(result.toString().equals("True")) 
@@ -49,11 +50,70 @@ public class Main {
 			return false;
 	}
 	
-	public void updateTMP(double val) {
-		
+	public static void updateTMP(double val,int houseID) {
+		HttpsURLConnection https=null;
+		OutputStream out=null;
+		InputStreamReader in=null;
+		BufferedReader reader=null;
+		try {
+			URL url = new URL(raptor+"update_tmp_intruder.php");
+			String msg="tmp="+val+"&houseID="+houseID;
+			byte[] postDataBytes=msg.getBytes("UTF-8");
+			
+			URLConnection con = url.openConnection();
+			https = (HttpsURLConnection)con;
+			https.setRequestMethod("POST");
+			https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+			https.setDoOutput(true);
+			out=https.getOutputStream();
+			out.write(postDataBytes);
+			
+			in=new InputStreamReader(https.getInputStream(),"UTF-8");
+			reader=new BufferedReader(in);
+			System.out.println(reader.readLine()+"!!!!");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try{out.close();}catch(Exception e) {e.printStackTrace();}
+			try {https.disconnect();}catch(Exception e) {e.printStackTrace();}
+		}
+	}
+	
+	public static void updateIntruder(boolean b,int houseID) {
+		HttpsURLConnection https=null;
+		OutputStream out=null;
+		InputStreamReader in=null;
+		BufferedReader reader=null;
+		try {
+			URL url = new URL(raptor+"update_tmp_intruder.php");
+			int val=(b) ? 1 : 0;
+			String msg="intruder="+val+"&houseID="+houseID;
+			byte[] postDataBytes=msg.getBytes("UTF-8");
+			
+			URLConnection con = url.openConnection();
+			https = (HttpsURLConnection)con;
+			https.setRequestMethod("POST");
+			https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+			https.setDoOutput(true);
+			out=https.getOutputStream();
+			out.write(postDataBytes);
+			
+			in=new InputStreamReader(https.getInputStream(),"UTF-8");
+			reader=new BufferedReader(in);
+			System.out.println(reader.readLine()+"!!!!");
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try{out.close();}catch(Exception e) {e.printStackTrace();}
+			try {https.disconnect();}catch(Exception e) {e.printStackTrace();}
+		}
 	}
 	
 	public static void main(String[] args) {
 		chkLogin("John98","19513FDC9DA4FB72A4A05EB66917548D3C90FF94D5419E1F2363EEA89DFEE1DD");
+		updateTMP(30,1234);
+		updateIntruder(true,1234);
 	}
 }
