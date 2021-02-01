@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -68,6 +69,8 @@ public class FunctionMenu extends Activity {
             }
         });
         new getHttp().execute();
+
+
     }
     public void setVariables(ArrayList<String> array) {
         boolean firstOpen = ((MyApplication) this.getApplication()).getFirstOpen();
@@ -101,7 +104,7 @@ public class FunctionMenu extends Activity {
         protected Void doInBackground(Void... voids) {
             URL url;
             try {
-                url = new URL("https://raptor.kent.ac.uk/~id95/status.html");
+                url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
                 String stringBuffer;
                 String string = "";

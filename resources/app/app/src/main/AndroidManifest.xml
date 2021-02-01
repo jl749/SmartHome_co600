@@ -5,9 +5,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/mainicon"
         android:label="SmartHomeSystem"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/mainicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"

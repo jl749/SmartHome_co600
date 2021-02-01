@@ -39,7 +39,7 @@
         android:layout_height="61dp"
         android:layout_below="@+id/textView"
         android:layout_marginTop="111dp"
-        android:src="@drawable/airquality" />
+        android:src="@drawable/mainicon" />
 
     <EditText
         android:id="@+id/editText2"
