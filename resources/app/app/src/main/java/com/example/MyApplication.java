@@ -13,6 +13,7 @@ public class MyApplication extends Application {
     private String light1;
     private String light2;
 
+
     public String getTemperature() {
         return temperature;
     }
@@ -48,4 +49,7 @@ public class MyApplication extends Application {
     public void setLight2(String light2){ this.light2 = light2; }
 
     public void setFirstOpen(){ firstOpen = false; }
+
+
+
 }
