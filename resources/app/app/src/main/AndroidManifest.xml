@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        android:name=".MyApplication" >
+        android:name=".MyApplication">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,6 +31,7 @@
         <activity android:name=".Notifications" />
         <activity android:name=".SecuritySettings" />
         <activity android:name=".Profile" />
+        <activity android:name=".UpdateValues" />
     </application>
 
 </manifest>

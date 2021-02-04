@@ -24,9 +24,9 @@ import java.net.URLConnection;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
-    private static String pin = "2222";
+    private static final String pin = "2222";
 
     final Handler handler = new Handler(Looper.getMainLooper());
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 setContentView(R.layout.login_page);
+                //setContentView(R.layout.pin_page);
                 loginFunctionality();
+                //pinFunctionality();
             }
         }, 3000);
     }
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             password1.setText("");
+            System.out.println("FAIL");
         }
     }
 
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if(s.length() == 4){
                     if(text1.getText().toString().equals(pin)){
+                        finish();
                         Intent i = new Intent(MainActivity.this, FunctionMenu.class);
                         startActivity(i);
                     }
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public class CheckLogin extends AsyncTask {
         private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
         StringBuilder result=new StringBuilder();
@@ -134,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
                 URLConnection con = url.openConnection();
                 https = (HttpsURLConnection)con;
                 https.setRequestMethod("POST");
+                https.setConnectTimeout(3000);
+                https.setReadTimeout(2000);
                 https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
                 https.setDoOutput(true);

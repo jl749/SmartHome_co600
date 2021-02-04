@@ -12,7 +12,7 @@ public class MyApplication extends Application {
     private String alarm;
     private String light1;
     private String light2;
-
+    private boolean connectionLost = false;
 
     public String getTemperature() {
         return temperature;
@@ -32,6 +32,10 @@ public class MyApplication extends Application {
     public String getLight1() { return light1; }
     public String getLight2() { return  light2; }
 
+    public boolean connection(){
+        return connectionLost;
+    }
+
     public boolean getFirstOpen() {
         return firstOpen;
     }
@@ -48,8 +52,12 @@ public class MyApplication extends Application {
     public void setLight1(String light1){ this.light1 = light1; }
     public void setLight2(String light2){ this.light2 = light2; }
 
-    public void setFirstOpen(){ firstOpen = false; }
+    public void setConnectionT(){ connectionLost = true; }
+    public void setConnectionF(){ connectionLost = false; }
 
+    public boolean checkNull(){
+        return temperature == null || humidity == null || lock1 == null || lock2 == null || alarm == null || light1 == null || light2 == null;
+    }
 
 
 }

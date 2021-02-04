@@ -10,4 +10,5 @@
     <string name="toggle_alarm">Toggle Alarm</string>
     <string name="alarm">Alarm</string>
     <string name="currently_disarmed">Currently Disarmed</string>
+    <string name="hello">Hello</string>
 </resources>
