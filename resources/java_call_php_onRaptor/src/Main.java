@@ -4,6 +4,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -26,6 +28,7 @@ public class Main {
 			URLConnection con = url.openConnection();
 			https = (HttpsURLConnection)con;
 			https.setRequestMethod("POST");
+			https.setConnectTimeout(500);
 			https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
 			https.setDoOutput(true);
@@ -41,7 +44,7 @@ public class Main {
 			try{reader.close();}catch(Exception e) {e.printStackTrace();}
 			try{in.close();}catch(Exception e) {e.printStackTrace();}
 			try{out.close();}catch(Exception e) {e.printStackTrace();}
-			try {https.disconnect();}catch(Exception e) {e.printStackTrace();}
+			try{https.disconnect();}catch(Exception e) {e.printStackTrace();}
 		}
 		System.out.println(result.toString()+"!");
 		if(result.toString().equals("True")) 
@@ -56,7 +59,7 @@ public class Main {
 		InputStreamReader in=null;
 		BufferedReader reader=null;
 		try {
-			URL url = new URL(raptor+"update_tmp_intruder.php");
+			URL url = new URL(raptor+"updateThreshold.php");
 			String msg="tmp="+val+"&houseID="+houseID;
 			byte[] postDataBytes=msg.getBytes("UTF-8");
 			
@@ -75,8 +78,10 @@ public class Main {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
+			try{reader.close();}catch(Exception e) {e.printStackTrace();}
+			try{in.close();}catch(Exception e) {e.printStackTrace();}
 			try{out.close();}catch(Exception e) {e.printStackTrace();}
-			try {https.disconnect();}catch(Exception e) {e.printStackTrace();}
+			try{https.disconnect();}catch(Exception e) {e.printStackTrace();}
 		}
 	}
 	
@@ -86,7 +91,7 @@ public class Main {
 		InputStreamReader in=null;
 		BufferedReader reader=null;
 		try {
-			URL url = new URL(raptor+"update_tmp_intruder.php");
+			URL url = new URL(raptor+"updateThreshold.php");
 			int val=(b) ? 1 : 0;
 			String msg="intruder="+val+"&houseID="+houseID;
 			byte[] postDataBytes=msg.getBytes("UTF-8");
@@ -106,14 +111,56 @@ public class Main {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
+			try{reader.close();}catch(Exception e) {e.printStackTrace();}
+			try{in.close();}catch(Exception e) {e.printStackTrace();}
 			try{out.close();}catch(Exception e) {e.printStackTrace();}
-			try {https.disconnect();}catch(Exception e) {e.printStackTrace();}
+			try{https.disconnect();}catch(Exception e) {e.printStackTrace();}
 		}
+	}
+	
+	public static List<String> getHouseReg(String username) {
+		List<String> result=new ArrayList<>();
+		
+		HttpsURLConnection https=null;
+		OutputStream out=null;
+		InputStreamReader in=null;
+		BufferedReader reader=null;
+		try {
+			URL url = new URL(raptor+"getHouseRegistered.php");
+			String msg="username="+username;
+			byte[] postDataBytes=msg.getBytes("UTF-8");
+			
+			URLConnection con = url.openConnection();
+			https = (HttpsURLConnection)con;
+			https.setRequestMethod("POST");
+			https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+			https.setDoOutput(true);
+			out=https.getOutputStream();
+			out.write(postDataBytes);
+			
+			String line;
+			in=new InputStreamReader(https.getInputStream(),"UTF-8");
+			reader=new BufferedReader(in);
+			while((line=reader.readLine())!=null) {
+				System.out.println(line+"!!");
+				result.add(line);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try{reader.close();}catch(Exception e) {e.printStackTrace();}
+			try{in.close();}catch(Exception e) {e.printStackTrace();}
+			try{out.close();}catch(Exception e) {e.printStackTrace();}
+			try{https.disconnect();}catch(Exception e) {e.printStackTrace();}
+		}
+		return result;
 	}
 	
 	public static void main(String[] args) {
 		chkLogin("John98","19513FDC9DA4FB72A4A05EB66917548D3C90FF94D5419E1F2363EEA89DFEE1DD");
 		updateTMP(30,1234);
 		updateIntruder(true,1234);
+		System.out.println(getHouseReg("John98"));
 	}
 }

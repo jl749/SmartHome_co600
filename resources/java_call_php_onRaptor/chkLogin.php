@@ -22,6 +22,7 @@ if(isset($_POST["id"]) && $_POST["pass"]){
 	}else{
 		echo "False";
 	}
+
+	mysqli_close($conn);
 }
-mysqli_close($conn);
 ?>
