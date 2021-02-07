@@ -63,6 +63,8 @@ public class FunctionMenu extends Activity {
         });
         UpdateValues u = new UpdateValues();
         u.run(((MyApplication) this.getApplication()));
+        GetAlarmAndTemp at = new GetAlarmAndTemp();
+        at.run(((MyApplication) this.getApplication()),1234);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

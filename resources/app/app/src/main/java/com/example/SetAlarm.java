@@ -37,7 +37,7 @@ public class SetAlarm extends Activity {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                URL url = new URL(raptor+"update_tmp_intruder.php");
+                URL url = new URL(raptor+"updateThreshold.php");
                 int val=(b) ? 1 : 0;
                 String msg="intruder="+val+"&houseID="+houseID;
                 byte[] postDataBytes=msg.getBytes("UTF-8");

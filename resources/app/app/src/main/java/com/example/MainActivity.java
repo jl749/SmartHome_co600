@@ -47,13 +47,14 @@ public class MainActivity extends AppCompatActivity{
 
     public void setValid(String bool){
         final EditText password1 = (EditText) findViewById(R.id.password);
+        final TextView invalid = (TextView) findViewById(R.id.invalid);
         if(bool.equals("True")){
             setContentView(R.layout.pin_page);
             pinFunctionality();
         }
         else{
             password1.setText("");
-            System.out.println("FAIL");
+            invalid.setText("Invalid Username Or Password.");
         }
     }
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity{
         Button submit = (Button) findViewById(R.id.loginbutton);
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText email1 = (EditText) findViewById(R.id.email);
+                EditText email1 = (EditText) findViewById(R.id.username);
                 CharSequence email = email1.getText();
                 EditText password1 = (EditText) findViewById(R.id.password);
                 CharSequence password = password1.getText();

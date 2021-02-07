@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class UpdateValues extends Activity {
 
     public void  run(MyApplication m){
-        getHttp h = new getHttp(m);
+        GetHttp h = new GetHttp(m);
         h.execute();
     }
 
@@ -47,16 +47,15 @@ public class UpdateValues extends Activity {
             m.setLight2(light2);
             m.setLock1(lock1);
             m.setLock2(lock2);
-            System.out.println(array);
         }
     }
 
-    private class getHttp extends AsyncTask<Void, Void, Void> {
+    private class GetHttp extends AsyncTask<Void, Void, Void> {
         ArrayList<String> variables = new ArrayList<String>();
         String result;
         MyApplication m;
 
-        public getHttp(MyApplication m){
+        public GetHttp(MyApplication m){
             super();
             this.m = m;
         }

@@ -11,4 +11,6 @@
     <string name="alarm">Alarm</string>
     <string name="currently_disarmed">Currently Disarmed</string>
     <string name="hello">Hello</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="login">Login</string>
 </resources>

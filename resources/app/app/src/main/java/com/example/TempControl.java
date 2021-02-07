@@ -38,10 +38,10 @@ public class TempControl extends Activity {
             TextView humidity = (TextView) findViewById(R.id.CurrentHumid);
             humidity.setText(((MyApplication) this.getApplication()).getHumidity());
             TextView ttemp = (TextView) findViewById(R.id.TTarget);
-            ttemp.setText("Target Temp: " + 12);//get saved temp
+            ttemp.setText("Target Temp: " + (Integer.parseInt(((MyApplication) this.getApplication()).getTargetTemp())));//get saved temp
 
             SeekBar tempSlider = (SeekBar) findViewById(R.id.tempSlider);
-            tempSlider.setProgress(2);//change to current
+            tempSlider.setProgress(Integer.parseInt(((MyApplication) this.getApplication()).getTargetTemp())-10);//change to current
             update();
             tempSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override

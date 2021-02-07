@@ -38,7 +38,7 @@ public class SetTemperature extends Activity {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                URL url = new URL(raptor + "update_tmp_intruder.php");
+                URL url = new URL(raptor + "updateThreshold.php");
                 String msg = "tmp=" + val + "&houseID=" + houseID;
                 byte[] postDataBytes = msg.getBytes("UTF-8");
 
@@ -50,10 +50,10 @@ public class SetTemperature extends Activity {
                 https.setDoOutput(true);
                 out = https.getOutputStream();
                 out.write(postDataBytes);
-
                 in = new InputStreamReader(https.getInputStream(), "UTF-8");
                 reader = new BufferedReader(in);
                 System.out.println(reader.readLine() + "!!!!");
+
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
