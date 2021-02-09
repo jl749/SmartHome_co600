@@ -4,7 +4,7 @@
 #define JSON_RX 5
 #define JSON_TX 6
 SoftwareSerial s(JSON_RX,JSON_TX);
-StaticJsonBuffer<1000> jsonBuffer;
+StaticJsonDocument<200> doc;
 
 #include <dht.h>
 #define DHT11_PIN 7
@@ -15,9 +15,6 @@ AirQualitySensor sensor(A3);
 
 #define ledPin1 12
 #define ledPin2 13
-
-const long interval = 5000;
-unsigned long previousMillis = 0;
 
 void setup() {
   pinMode(ledPin1, OUTPUT);
@@ -39,15 +36,12 @@ void setup() {
 }
 
 void loop() {
-  unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= interval) { //at every interval
-    previousMillis = currentMillis;
-    sendJSON(); //send sensor values
-  }
   if(s.available()>0){
-    String incomingString = s.readString();
+    String incomingString = s.readStringUntil('\n');
     Serial.println(incomingString);
-    if(incomingString.indexOf(F("LED2/1"))!=-1){
+    if(incomingString.indexOf(F("JSON"))!=-1){
+      sendJSON();
+    }else if(incomingString.indexOf(F("LED2/1"))!=-1){
       Serial.println(F("LED2 on"));
       digitalWrite(ledPin2, HIGH);
     }else if(incomingString.indexOf(F("LED2/0"))!=-1){
@@ -61,19 +55,16 @@ void loop() {
       digitalWrite(ledPin1, LOW);
     }
   }
-  //s.print("sss");
 }
 
 void sendJSON(){
-  JsonObject& root = jsonBuffer.createObject();
-  root["air_quality"] = sensor.getValue();
+  doc["air_quality"] = sensor.getValue();
   int chk=DHT.read11(DHT11_PIN);
-  root["tmp"] = DHT.temperature;
-  root["hum"] = DHT.humidity;
-  root["LED1"] = (digitalRead(ledPin1)==HIGH)?1:0;
-  root["LED2"] = (digitalRead(ledPin2)==HIGH)?1:0;
-  //if(s.available()>0){
+  doc["tmp"] = DHT.temperature;
+  doc["hum"] = DHT.humidity;
+  doc["LED1"] = (digitalRead(ledPin1)==HIGH)?true:false;
+  doc["LED2"] = (digitalRead(ledPin2)==HIGH)?true:false;
+
   Serial.println(F("JSON sent"));
-  root.printTo(s);
-  //}
+  serializeJson(doc, s);
 }

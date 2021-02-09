@@ -3,7 +3,7 @@
 const char* ssid = "BT-FFA25W";
 const char* pass = "cATY9hbJUC4GQi";
 const char* houseID = "1234";
-String phpHost = "raptor.kent.ac.uk/~jl749/getThreshold.php";
+String phpHost = "http://www.cs.kent.ac.uk/people/staff/ds710/co600/getThreshold.php";
 
 WiFiClient client;
 HTTPClient http;
@@ -13,12 +13,13 @@ WiFiServer server(80);
 SoftwareSerial s(D6,D5);
 
 #include <ArduinoJson.h>
-StaticJsonBuffer<1000> jsonBuffer;
-double tmp,hum,air_quality;
+StaticJsonDocument<300> doc;
+int tmp,hum,air_quality;
 bool led1,led2=false;
 
-const long interval = 20000;
+const long interval = 2000;
 unsigned long previousMillis = 0;
+unsigned char count=0;
 
 void setup() {
   // Initialize Serial port
@@ -42,48 +43,61 @@ void setup() {
 }
 
 void loop() {
-  getJSON();
-
   unsigned long currentMillis = millis();
   if(currentMillis - previousMillis >= interval){
     previousMillis = currentMillis;
-    http.begin(client, phpHost);
-    http.setTimeout(1000);
-    http.addHeader("Content-Type","text/plain");
-    int httpCode = http.GET();
-   
-    if(httpCode > 0) {
-      Serial.printf("GET code : %d\n\n", httpCode);
- 
-      if(httpCode == HTTP_CODE_OK) {
-        String payload = http.getString();
-        Serial.println(payload);
-        //s.println("LED1/1");
-      }
-    } 
-    else
-      Serial.printf("GET failed, error: %s\n", http.errorToString(httpCode).c_str());
-    
-    http.end();
+    Serial.println(count);
+    count++;
+    if(s.available()==0) getJSON();
   }
+//  if(count >= 10){
+//    count=0;
+//    http.begin(phpHost);
+//    http.setTimeout(1000);
+//    http.addHeader("Content-Type","application/x-www-form-urlencoded");
+//    String httpRequestData = "houseID=";
+//    httpRequestData+=houseID;
+//    int httpCode = http.POST(httpRequestData);
+//   
+//    if(httpCode > 0) {
+//      Serial.printf("GET code : %d\n\n", httpCode);
+// 
+//      if(httpCode == HTTP_CODE_OK) {
+//        String payload = http.getString();
+//        Serial.println(payload);
+//      }
+//    } 
+//    else
+//      Serial.printf("GET failed, error: %s\n", http.errorToString(httpCode).c_str());
+//    
+//    http.end();
+//  }
 
   webServer();
 }
 
-void getJSON(){ //get sensor values from arduino
-  if(s.available()>0){ //bytes in buffer
-    JsonObject& root = jsonBuffer.parseObject(s);
-    if (root == JsonObject::invalid())
-      return;
-
-    tmp = root["tmp"];
-    hum = root["hum"];
-    air_quality = root["air_quality"];
-    led1 = root["LED1"];
-    led2 = root["LED2"];
-    Serial.println("JSON received and parsed");
-    root.prettyPrintTo(Serial);
-    Serial.println("---------------------xxxxx--------------------");
+void getJSON(){
+  s.println(F("JSON")); delay(3000);
+  DeserializationError err = deserializeJson(doc, s);
+  if (err == DeserializationError::Ok){
+    //Print the values
+    Serial.print(F("air_quality = "));
+    Serial.println(air_quality=doc["air_quality"].as<double>());
+    Serial.print(F("tmp = "));
+    Serial.println(tmp=doc["tmp"].as<double>());
+    Serial.print(F("hum = "));
+    Serial.println(hum=doc["hum"].as<double>());
+    Serial.print(F("LED1 = "));
+    Serial.println(led1=doc["LED1"].as<bool>());
+    Serial.print(F("LED2 = "));
+    Serial.println(led2=doc["LED2"].as<bool>());
+    Serial.println(F("---------------------xxxxx--------------------"));
+  }else{
+    // Print error to the "debug" serial port
+    Serial.print("deserializeJson() returned ");
+    Serial.println(err.c_str());
+    while (s.available() > 0)
+      s.read();
   }
 }
 
@@ -91,25 +105,25 @@ void webServer(){
   client = server.available();
   if(!client) return;
  
-  Serial.println("<new client>");
+  Serial.print(F("<new client>"));
   client.setTimeout(5000);
  
   String request = client.readStringUntil('\n');
-  Serial.println("request: ");
+  Serial.print(F("request: "));
   Serial.println(request);
  
   if(request.indexOf(F("LED2/1"))!=-1){
     Serial.println(F("LED2 on"));
-    s.println("LED2/1");
+    s.println(F("LED2/1"));
   }else if(request.indexOf(F("LED2/0"))!=-1){
     Serial.println(F("LED2 off"));
-    s.println("LED2/0");
+    s.println(F("LED2/0"));
   }else if(request.indexOf(F("LED1/1"))!=-1){
     Serial.println(F("LED1 on"));
-    s.println("LED1/1");
+    s.println(F("LED1/1"));
   }else if(request.indexOf(F("LED1/0"))!=-1){
     Serial.println(F("LED1 off"));
-    s.println("LED1/0");
+    s.println(F("LED1/0"));
   }
   client.flush();
  
@@ -128,5 +142,5 @@ void webServer(){
   client.print(led2);
   client.println(F("</body></html>"));
 
-  delay(1000); //wait until web browser recieve all data
+  //delay(1000); //wait until web browser recieve all data
 }
