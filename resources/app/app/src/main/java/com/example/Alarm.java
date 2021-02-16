@@ -25,11 +25,13 @@ public class Alarm extends Activity {
     static Boolean isTouched = false;
     private static BroadcastReceiver tickReceiver;
     final Handler handler = new Handler(Looper.getMainLooper());
+    private static String houseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_page);
+        houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
         if(!((MyApplication) this.getApplication()).checkNull()) {
             SwitchCompat aSwitch = findViewById(R.id.toggleAlarm);
             update();
@@ -43,14 +45,14 @@ public class Alarm extends Activity {
                         TextView state = (TextView) findViewById(R.id.alarmState);
                         state.setText("Alarm Armed");
                         alarmOn();
-                        alarm.run(true, 1234);
+                        alarm.run(true, Integer.parseInt(houseID));
                     } else {
                         ImageView image = (ImageView) findViewById(R.id.alarmState1);
                         image.setImageResource(R.drawable.alarmoff);
                         TextView state = (TextView) findViewById(R.id.alarmState);
                         state.setText("Alarm Disarmed");
                         alarmOff();
-                        alarm.run(false, 1234);
+                        alarm.run(false, Integer.parseInt(houseID));
                     }
                 }
             });

@@ -27,10 +27,12 @@ public class TempControl extends Activity {
 
     private static BroadcastReceiver tickReceiver;
     final Handler handler = new Handler(Looper.getMainLooper());
+    private static String houseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
         setContentView(R.layout.temperature_control);
         if (!((MyApplication) this.getApplication()).checkNull()) {
             TextView temperature = (TextView) findViewById(R.id.CurrentTemp);
@@ -59,7 +61,7 @@ public class TempControl extends Activity {
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     double progress = seekBar.getProgress() + 10;
                     SetTemperature setTemp = new SetTemperature();
-                    setTemp.run(progress, 1234);
+                    setTemp.run(progress, Integer.parseInt(houseID));
                 }
             });
 

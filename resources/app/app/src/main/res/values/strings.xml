@@ -13,4 +13,6 @@
     <string name="hello">Hello</string>
     <string name="enter_username">Enter Username</string>
     <string name="login">Login</string>
+    <string name="humidity">Humidity</string>
+    <string name="temperature">Temperature</string>
 </resources>

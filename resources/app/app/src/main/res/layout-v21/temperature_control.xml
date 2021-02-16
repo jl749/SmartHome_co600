@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:background="@drawable/back"
-                android:text="Tmeperature" />
+                android:text="Temperature" />
 
         </TableRow>
 

@@ -18,6 +18,11 @@ public class FunctionMenu extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String houseId = getIntent().getStringExtra("HOUSE_SESSION_ID");
+        if(houseId!= null){
+            ((MyApplication) this.getApplication()).setCurrentHouse(houseId);
+            System.out.println("asdasdadsadd");
+        }
         setContentView(R.layout.function_menu);
         ImageButton button1 = (ImageButton) findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
@@ -61,16 +66,18 @@ public class FunctionMenu extends Activity {
                 startActivity(i);
             }
         });
+        System.out.println(((MyApplication) this.getApplication()).getCurrentHouse());
         UpdateValues u = new UpdateValues();
         u.run(((MyApplication) this.getApplication()));
         GetAlarmAndTemp at = new GetAlarmAndTemp();
-        at.run(((MyApplication) this.getApplication()),1234);
+        at.run(((MyApplication) this.getApplication()),Integer.parseInt(((MyApplication) this.getApplication()).getCurrentHouse()));
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 checkConnection();
             }
         }, 5000);
+
 
     }
 

@@ -2,6 +2,8 @@ package com.example;
 
 import android.app.Application;
 
+import java.util.ArrayList;
+
 public class MyApplication extends Application {
 
     private boolean firstOpen = true;
@@ -14,6 +16,8 @@ public class MyApplication extends Application {
     private String light2;
     private String targetTemp;
     private boolean connectionLost = false;
+    private ArrayList<String> houseNumbers = new ArrayList<>();
+    private String currentHouse;
 
     public String getTemperature() {
         return temperature;
@@ -33,6 +37,8 @@ public class MyApplication extends Application {
     public String getLight1() { return light1; }
     public String getLight2() { return  light2; }
     public String getTargetTemp() {return targetTemp; }
+    public ArrayList<String> getHouseNumbers() {return houseNumbers; }
+    public String getCurrentHouse() {return currentHouse; }
 
     public boolean connection(){
         return connectionLost;
@@ -54,6 +60,8 @@ public class MyApplication extends Application {
     public void setLight1(String light1){ this.light1 = light1; }
     public void setLight2(String light2){ this.light2 = light2; }
     public void setTargetTemp(String targetTemp){ this.targetTemp = targetTemp; }
+    public void setHouseNumbers(ArrayList<String> houseNumbers){this.houseNumbers = houseNumbers; }
+    public void setCurrentHouse(String currentHouse){this.currentHouse = currentHouse; }
 
     public void setConnectionT(){ connectionLost = true; }
     public void setConnectionF(){ connectionLost = false; }

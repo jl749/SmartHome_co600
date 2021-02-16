@@ -24,7 +24,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:background="@drawable/back"
-                android:text="Humidity" />
+                android:text="@string/humidity" />
             <TextView
                 android:textStyle="normal|bold"
                 android:layout_width="0dip"
@@ -32,7 +32,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:background="@drawable/back"
-                android:text="Tmeperature" />
+                android:text="@string/temperature" />
 
         </TableRow>
 

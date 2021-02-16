@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -27,6 +29,8 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivity extends AppCompatActivity{
 
     private static final String pin = "2222";
+    private String username;
+    LinearLayout layout;
 
     final Handler handler = new Handler(Looper.getMainLooper());
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +49,13 @@ public class MainActivity extends AppCompatActivity{
         }, 3000);
     }
 
-    public void setValid(String bool){
-        final EditText password1 = (EditText) findViewById(R.id.password);
-        final TextView invalid = (TextView) findViewById(R.id.invalid);
+    public void setValid(String bool,String id){
+        EditText password1 = (EditText) findViewById(R.id.password);
+        TextView invalid = (TextView) findViewById(R.id.invalid);
+        username = id;
         if(bool.equals("True")){
+            GetHouse gh = new GetHouse();
+            gh.run(((MyApplication) this.getApplication()),id);
             setContentView(R.layout.pin_page);
             pinFunctionality();
         }
@@ -80,6 +87,42 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    public void displayHouses(){
+        ArrayList<String> house = (((MyApplication) this.getApplication()).getHouseNumbers());
+        if(house.size()>1){
+            int index = 0;
+            setContentView(R.layout.house_page);
+            TextView welcome = findViewById(R.id.welcome_message);
+            layout = findViewById(R.id.linearLayout);
+            welcome.setText("Welcome " +username +"! Chose which house you would like to control. ");
+            for(String x: house){
+                final Button button = new Button(this);
+                button.setLayoutParams(new LinearLayout.LayoutParams(-1,150));
+                button.setId(index);
+                button.setText(x);
+                layout.addView(button);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //set current house id
+                        finish();
+                        Intent i = new Intent(MainActivity.this, FunctionMenu.class);
+                        i.putExtra("HOUSE_SESSION_ID", button.getText().toString());
+                        startActivity(i);
+                    }
+                });
+                index += 1;
+            }
+
+        }
+        else if(house.size() == 1){
+            finish();
+            Intent i = new Intent(MainActivity.this, FunctionMenu.class);
+            i.putExtra("HOUSE_SESSION_ID",house.get(0));
+            startActivity(i);
+        }
+    }
+
 
     public void pinFunctionality() {
         final EditText text1 = (EditText) findViewById(R.id.digit1);
@@ -99,9 +142,7 @@ public class MainActivity extends AppCompatActivity{
             public void afterTextChanged(Editable s) {
                 if(s.length() == 4){
                     if(text1.getText().toString().equals(pin)){
-                        finish();
-                        Intent i = new Intent(MainActivity.this, FunctionMenu.class);
-                        startActivity(i);
+                        displayHouses();
                     }
                     else{
                         text1.setText("");
@@ -164,7 +205,7 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(Object o) {
-            setValid(result.toString());
+            setValid(result.toString(),id);
 
         }
 
