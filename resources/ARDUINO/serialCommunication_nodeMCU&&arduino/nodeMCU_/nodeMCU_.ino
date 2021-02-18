@@ -3,8 +3,9 @@
 const char* ssid = "BT-FFA25W";
 const char* pass = "cATY9hbJUC4GQi";
 const char* houseID = "1234";
-String phpHost = "http://www.cs.kent.ac.uk/people/staff/ds710/co600/getThreshold.php";
+const char* phpHost = "http://www.cs.kent.ac.uk/people/staff/ds710/co600/getThreshold.php";
 
+#define MOTION_PIN D4
 WiFiClient client;
 HTTPClient http;
 WiFiServer server(80);
@@ -15,7 +16,7 @@ SoftwareSerial s(D6,D5);
 #include <ArduinoJson.h>
 StaticJsonDocument<300> doc;
 int tmp,hum,air_quality;
-bool led1,led2=false;
+bool led1,led2,ALARM=false;
 
 const long interval = 2000;
 unsigned long previousMillis = 0;
@@ -46,33 +47,33 @@ void loop() {
   unsigned long currentMillis = millis();
   if(currentMillis - previousMillis >= interval){
     previousMillis = currentMillis;
-    Serial.println(count);
     count++;
     if(s.available()==0) getJSON();
   }
-//  if(count >= 10){
-//    count=0;
-//    http.begin(phpHost);
-//    http.setTimeout(1000);
-//    http.addHeader("Content-Type","application/x-www-form-urlencoded");
-//    String httpRequestData = "houseID=";
-//    httpRequestData+=houseID;
-//    int httpCode = http.POST(httpRequestData);
-//   
-//    if(httpCode > 0) {
-//      Serial.printf("GET code : %d\n\n", httpCode);
-// 
-//      if(httpCode == HTTP_CODE_OK) {
-//        String payload = http.getString();
-//        Serial.println(payload);
-//      }
-//    } 
-//    else
-//      Serial.printf("GET failed, error: %s\n", http.errorToString(httpCode).c_str());
-//    
-//    http.end();
-//  }
-
+  
+  if(count >= 5){
+    count=0;
+    http.begin(phpHost);
+    http.setTimeout(1000);
+    http.addHeader("Content-Type","application/x-www-form-urlencoded");
+    String httpRequestData = "houseID=";
+    httpRequestData+=houseID; Serial.println(httpRequestData);
+    int httpCode = http.POST(httpRequestData);
+    
+    if(httpCode > 0) {
+      Serial.printf("POST code : %d\n\n", httpCode);
+ String payload = http.getString();
+        Serial.println(payload);
+      if(httpCode == HTTP_CODE_OK) {
+        String payload = http.getString();
+        Serial.println(payload);
+      }
+    } 
+    else
+      Serial.printf("POST failed, error: %s\n", http.errorToString(httpCode).c_str());
+    
+    http.end();
+  }
   webServer();
 }
 
@@ -140,7 +141,9 @@ void webServer(){
   client.print(led1);
   client.println(F("<br>LED2="));
   client.print(led2);
+  client.println(F("<br>ALARM="));
+  client.print(ALARM);
   client.println(F("</body></html>"));
 
-  //delay(1000); //wait until web browser recieve all data
+  delay(1000); //wait until web browser recieve all data
 }
