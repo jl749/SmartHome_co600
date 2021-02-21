@@ -1,8 +1,8 @@
 <?php
 include("connect.php");
-$conn = Connection();
  
 if(isset($_POST["id"]) && $_POST["pass"]){
+	$conn = Connection();
 	$id = $_POST["id"];
 	$pass = $_POST["pass"];
 
