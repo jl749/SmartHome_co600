@@ -15,4 +15,6 @@
     <string name="login">Login</string>
     <string name="humidity">Humidity</string>
     <string name="temperature">Temperature</string>
+    <string name="channel_name">Intrusion Alarm.</string>
+    <string name="channel_description">Intruder has been detected!</string>
 </resources>

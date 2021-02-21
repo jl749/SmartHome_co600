@@ -2,11 +2,18 @@ package com.example;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -31,13 +38,13 @@ public class MainActivity extends AppCompatActivity{
     private static final String pin = "2222";
     private String username;
     LinearLayout layout;
+    private static final String CHANNEL_ID = "intruder";
 
     final Handler handler = new Handler(Looper.getMainLooper());
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.welcome_secreen);
+        createNotificationChannel();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -47,6 +54,22 @@ public class MainActivity extends AppCompatActivity{
                 //pinFunctionality();
             }
         }, 3000);
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     public void setValid(String bool,String id){
@@ -87,7 +110,7 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public void displayHouses(){
+    private void displayHouses(){
         ArrayList<String> house = (((MyApplication) this.getApplication()).getHouseNumbers());
         if(house.size()>1){
             int index = 0;
@@ -125,9 +148,9 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void pinFunctionality() {
-        final EditText text1 = (EditText) findViewById(R.id.digit1);
-        text1.requestFocus();
-        text1.addTextChangedListener(new TextWatcher() {
+        final EditText pinField = (EditText) findViewById(R.id.digit1);
+        pinField.requestFocus();
+        pinField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -141,11 +164,11 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length() == 4){
-                    if(text1.getText().toString().equals(pin)){
+                    if(pinField.getText().toString().equals(pin)){
                         displayHouses();
                     }
                     else{
-                        text1.setText("");
+                        pinField.setText("");
                         TextView textView1 = (TextView) findViewById(R.id.textView1);
                         textView1.setText("Incorrect pin, please try again");
                     }
@@ -155,7 +178,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public class CheckLogin extends AsyncTask {
-        private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
+        private static final String raptor="https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
         StringBuilder result=new StringBuilder();
         HttpsURLConnection https=null;
         OutputStream out=null;

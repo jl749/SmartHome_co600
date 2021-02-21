@@ -15,6 +15,7 @@ public class MyApplication extends Application {
     private String light1;
     private String light2;
     private String targetTemp;
+    private boolean intruder = false;
     private boolean connectionLost = false;
     private ArrayList<String> houseNumbers = new ArrayList<>();
     private String currentHouse;
@@ -39,6 +40,7 @@ public class MyApplication extends Application {
     public String getTargetTemp() {return targetTemp; }
     public ArrayList<String> getHouseNumbers() {return houseNumbers; }
     public String getCurrentHouse() {return currentHouse; }
+    public boolean getIntruder() {return intruder; }
 
     public boolean connection(){
         return connectionLost;
@@ -62,6 +64,12 @@ public class MyApplication extends Application {
     public void setTargetTemp(String targetTemp){ this.targetTemp = targetTemp; }
     public void setHouseNumbers(ArrayList<String> houseNumbers){this.houseNumbers = houseNumbers; }
     public void setCurrentHouse(String currentHouse){this.currentHouse = currentHouse; }
+    public void setIntruderF(){
+        intruder = false;
+    }
+    public void setIntruderT(){
+        intruder = true;
+    }
 
     public void setConnectionT(){ connectionLost = true; }
     public void setConnectionF(){ connectionLost = false; }

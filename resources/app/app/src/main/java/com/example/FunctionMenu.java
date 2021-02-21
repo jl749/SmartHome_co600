@@ -1,7 +1,11 @@
 package com.example;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,13 +19,13 @@ import android.widget.Toast;
 public class FunctionMenu extends Activity {
 
     final Handler handler = new Handler(Looper.getMainLooper());
+    public String houseId;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String houseId = getIntent().getStringExtra("HOUSE_SESSION_ID");
+        houseId = getIntent().getStringExtra("HOUSE_SESSION_ID");
         if(houseId!= null){
             ((MyApplication) this.getApplication()).setCurrentHouse(houseId);
-            System.out.println("asdasdadsadd");
         }
         setContentView(R.layout.function_menu);
         ImageButton button1 = (ImageButton) findViewById(R.id.button1);
@@ -77,8 +81,6 @@ public class FunctionMenu extends Activity {
                 checkConnection();
             }
         }, 5000);
-
-
     }
 
     public void end(){
@@ -91,6 +93,7 @@ public class FunctionMenu extends Activity {
     }
 
     public void checkConnection(){
+        System.out.println("Alarm is on: " + ((MyApplication) this.getApplication()).getAlarm());
         if(((MyApplication) this.getApplication()).connection()){
             final AlertDialog alertDialog = new AlertDialog.Builder(FunctionMenu.this).create();
             alertDialog.setTitle("Connection Error");
@@ -105,6 +108,23 @@ public class FunctionMenu extends Activity {
                     });
             if(!alertDialog.isShowing()) {
                 alertDialog.show();
+            }
+        }
+        else {
+            if(((MyApplication) this.getApplication()).getAlarm().equals("True")){ //start alarm
+                Intent startAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
+                startAlarm.putExtra("HouseID",houseId);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 60000, pendingIntent);
+            }
+            else{
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                Intent stopAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
+                stopAlarm.putExtra("HouseID",houseId);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, stopAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager.cancel(pendingIntent);
+                System.out.println("ALARM TURNED OFF");
             }
         }
     }

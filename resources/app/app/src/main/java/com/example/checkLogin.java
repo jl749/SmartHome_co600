@@ -1,4 +1,5 @@
-package com.example;//import java.net.HttpURLConnection;
+package com.example;
+//import java.net.HttpURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -9,7 +10,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class checkLogin {
-    private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
+    private static final String raptor="https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
 
     public  boolean chkLogin(String id, String pass) {
         StringBuilder result=new StringBuilder();

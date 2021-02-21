@@ -2,9 +2,6 @@ package com.example;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,11 +39,16 @@ public class UpdateValues extends Activity {
 
             m.setTemperature(temperature);
             m.setHumidity(humidity + "%");
-            m.setAlarm(alarm);
             m.setLight1(light1);
             m.setLight2(light2);
             m.setLock1(lock1);
             m.setLock2(lock2);
+            if(alarm.equals("0")){
+                m.setIntruderF();
+            }
+            else if(alarm.equals("1")){
+                m.setIntruderT();
+            }
         }
     }
 
@@ -93,7 +95,7 @@ public class UpdateValues extends Activity {
         }
         @Override
         protected void onPostExecute(Void result){
-            setVariables(variables,m);
+            setVariables(variables, m);
         }
     }
 }

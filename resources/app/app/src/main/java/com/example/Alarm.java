@@ -1,7 +1,9 @@
 package com.example;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,6 +48,14 @@ public class Alarm extends Activity {
                         state.setText("Alarm Armed");
                         alarmOn();
                         alarm.run(true, Integer.parseInt(houseID));
+
+                        //turn alarm on
+                        Intent startAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
+                        startAlarm.putExtra("HouseID",houseID);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 60000, pendingIntent);
+
                     } else {
                         ImageView image = (ImageView) findViewById(R.id.alarmState1);
                         image.setImageResource(R.drawable.alarmoff);
@@ -53,6 +63,14 @@ public class Alarm extends Activity {
                         state.setText("Alarm Disarmed");
                         alarmOff();
                         alarm.run(false, Integer.parseInt(houseID));
+
+                        //turn alarm off
+                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        Intent stopAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
+                        stopAlarm.putExtra("HouseID",houseID);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, stopAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+                        alarmManager.cancel(pendingIntent);
+                        System.out.println("ALARM TURNED OFF");
                     }
                 }
             });
@@ -145,5 +163,11 @@ public class Alarm extends Activity {
         //unregister broadcast receiver.
         if(tickReceiver!=null)
             unregisterReceiver(tickReceiver);
+    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, FunctionMenu.class);
+        startActivity(intent);
+        finish();
     }
 }

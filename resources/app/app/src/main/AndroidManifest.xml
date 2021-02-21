@@ -17,7 +17,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".TempControl" />
         <activity android:name=".Security" />
@@ -32,6 +31,20 @@
         <activity android:name=".SecuritySettings" />
         <activity android:name=".Profile" />
         <activity android:name=".UpdateValues" />
+        <activity
+            android:name=".CloseNotification"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+        </activity>
+        <receiver android:name=".AlarmReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>

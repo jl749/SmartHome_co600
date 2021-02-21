@@ -31,19 +31,20 @@ public class GetAlarmAndTemp extends Activity {
         }
         if(connected) {
             m.setConnectionF();
+            System.out.println(array);
             String alarm = array.get(0).replace("\"", "");
             String ttemp = array.get(1).replace("\"", "");
             m.setTargetTemp(ttemp);
-            if(alarm.equals("1")) {
+            if(alarm.equals("1Lock1")) {
                 m.setAlarm("True");
             }
             else{m.setAlarm("False");}
         }
     }
 
-    private class GetAandT extends AsyncTask<Void, Void, Void> {
+    private  class GetAandT extends AsyncTask<Void, Void, Void> {
 
-        private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
+        private static final String raptor = "https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
         Map<String, String> values = new HashMap<>();
         HttpsURLConnection https = null;
         OutputStream out = null;
