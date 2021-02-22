@@ -143,6 +143,7 @@ public class Security1 extends Activity {
             AlertDialog alertDialog = new AlertDialog.Builder(Security1.this).create();
             alertDialog.setTitle("Connection Error");
             alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.setCancelable(false);
             alertDialog.setMessage("Connection could no be established with the server. Please try again.");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {

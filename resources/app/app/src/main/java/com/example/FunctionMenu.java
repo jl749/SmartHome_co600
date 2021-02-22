@@ -59,7 +59,7 @@ public class FunctionMenu extends Activity {
         ImageButton button5 = (ImageButton) findViewById(R.id.button5);
         button5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), Settings.class);
+                Intent i = new Intent(v.getContext(), AirQuality.class);
                 startActivity(i);
             }
         });
@@ -98,6 +98,7 @@ public class FunctionMenu extends Activity {
             final AlertDialog alertDialog = new AlertDialog.Builder(FunctionMenu.this).create();
             alertDialog.setTitle("Connection Error");
             alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.setCancelable(false);
             alertDialog.setMessage("Connection could no be established with the server. Please try again.");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {

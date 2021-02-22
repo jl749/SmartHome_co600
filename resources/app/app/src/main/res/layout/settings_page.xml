@@ -64,5 +64,13 @@
             android:layout_gravity="center"
             android:text="Device"/>
 
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:text="Log Out"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

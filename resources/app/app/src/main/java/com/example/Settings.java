@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.File;
+
 
 public class Settings extends Activity {
     @Override
@@ -45,6 +47,29 @@ public class Settings extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), Device.class);
                 startActivity(i);
+            }
+        });
+        Button button6 = (Button) findViewById(R.id.logout);
+        button6.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
+                if(f.exists()) {
+                    boolean deleted = f.delete();
+                    Intent i = getBaseContext().getPackageManager().
+                            getLaunchIntentForPackage(getBaseContext().getPackageName());
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    finish();
+                    startActivity(i);
+                }
+                else{
+                    Intent i = getBaseContext().getPackageManager().
+                            getLaunchIntentForPackage(getBaseContext().getPackageName());
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    finish();
+                    startActivity(i);
+                }
             }
         });
     }

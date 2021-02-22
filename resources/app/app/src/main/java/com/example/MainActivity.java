@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.text.BoringLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
@@ -45,15 +47,27 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_secreen);
         createNotificationChannel();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setContentView(R.layout.login_page);
-                //setContentView(R.layout.pin_page);
-                loginFunctionality();
-                //pinFunctionality();
-            }
-        }, 3000);
+        File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
+        if(f.exists()) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String username = BinaryFile.readBinaryOBJ(getApplicationContext()).getID();
+                    String password =  BinaryFile.readBinaryOBJ(getApplicationContext()).getPass();
+                    CheckLogin task = new CheckLogin(username,password,true);
+                    task.execute();
+                }
+            }, 3000);
+        }
+        else{
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setContentView(R.layout.login_page);
+                    loginFunctionality();
+                }
+            }, 3000);
+        }
     }
 
     private void createNotificationChannel() {
@@ -72,7 +86,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    public void setValid(String bool,String id){
+    public void setValid(String bool,String id,String password,boolean fileExists){
         EditText password1 = (EditText) findViewById(R.id.password);
         TextView invalid = (TextView) findViewById(R.id.invalid);
         username = id;
@@ -81,10 +95,17 @@ public class MainActivity extends AppCompatActivity{
             gh.run(((MyApplication) this.getApplication()),id);
             setContentView(R.layout.pin_page);
             pinFunctionality();
+            BinaryFile.writeBinaryOBJ(username,password,getApplicationContext());
         }
         else{
-            password1.setText("");
-            invalid.setText("Invalid Username Or Password.");
+            if(fileExists){
+                setContentView(R.layout.login_page);
+                loginFunctionality();
+            }
+            else {
+                password1.setText("");
+                invalid.setText("Invalid Username Or Password.");
+            }
         }
     }
 
@@ -100,7 +121,7 @@ public class MainActivity extends AppCompatActivity{
                 if (!TextUtils.isEmpty(email)){
                     if(!TextUtils.isEmpty(password)) {
                         String ePassword = (Encryption.encryptPassword(password.toString())).toUpperCase();
-                        CheckLogin task = new CheckLogin(email.toString(),ePassword);
+                        CheckLogin task = new CheckLogin(email.toString(),ePassword,false);
                         task.execute();
                     }
                     else password1.setError("Enter a password");
@@ -186,11 +207,13 @@ public class MainActivity extends AppCompatActivity{
         BufferedReader reader=null;
         String id;
         String pass;
+        Boolean fileExists;
 
-        public CheckLogin(String username, String password){
+        public CheckLogin(String username, String password, boolean fileExists){
             super();
             id = username;
             pass = password;
+            this.fileExists = fileExists;
         }
 
         @Override
@@ -228,7 +251,7 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(Object o) {
-            setValid(result.toString(),id);
+            setValid(result.toString(),id,pass,fileExists);
 
         }
 

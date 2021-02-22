@@ -32,13 +32,15 @@ public class GetAlarmAndTemp extends Activity {
         if(connected) {
             m.setConnectionF();
             System.out.println(array);
-            String alarm = array.get(0).replace("\"", "");
-            String ttemp = array.get(1).replace("\"", "");
+            String lock = array.get(0).replace("\"", "");
+            String alarm = array.get(1).replace("\"", "");
+            String ttemp = array.get(2).replace("\"", "");
             m.setTargetTemp(ttemp);
-            if(alarm.equals("1Lock1")) {
+            if(alarm.equals("1")) {
                 m.setAlarm("True");
             }
-            else{m.setAlarm("False");}
+            else if(alarm.equals(("0"))) {
+                m.setAlarm("False");}
         }
     }
 

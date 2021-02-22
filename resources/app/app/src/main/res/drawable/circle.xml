@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:shape="oval"
+   >
+
+    <size
+        android:width="200dp"
+        android:height="200dp"
+
+        />
+<solid
+    android:color="#2F7379"/>
+    <stroke
+        android:width="3dp"
+        android:color="#f1f05f"
+   />
+
+
+</shape>
