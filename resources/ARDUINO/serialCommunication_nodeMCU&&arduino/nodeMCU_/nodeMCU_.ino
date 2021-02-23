@@ -1,22 +1,23 @@
 #include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+#include <WiFiClientSecure.h>
 const char* ssid = "BT-FFA25W";
 const char* pass = "cATY9hbJUC4GQi";
 const char* houseID = "1234";
-const char* phpHost = "http://www.cs.kent.ac.uk/people/staff/ds710/co600/getThreshold.php";
+const char* phpHost = "www.cs.kent.ac.uk/people/staff/ds710/co600/getThreshold.php";
+//"api.pushbullet.com";
+const char* fingerPRINT = "CA 84 CE 0F 2D 1D 24 F1 44 D7 F1 24 45 64 36 DF 29 9F 9E A7";
 
-#define MOTION_PIN D4
 WiFiClient client;
-HTTPClient http;
+WiFiClientSecure secureClient;
 WiFiServer server(80);
 
 #include <SoftwareSerial.h>
 SoftwareSerial s(D6,D5);
 
 #include <ArduinoJson.h>
-StaticJsonDocument<300> doc;
+StaticJsonDocument<200> doc;
 int tmp,hum,air_quality;
-bool led1,led2,ALARM=false;
+bool led1,led2,ALARM,motion=false;
 
 const long interval = 2000;
 unsigned long previousMillis = 0;
@@ -41,6 +42,8 @@ void setup() {
   Serial.println(WiFi.localIP());
   server.begin();
   Serial.println("Server started");
+
+  secureClient.setInsecure();
 }
 
 void loop() {
@@ -53,28 +56,31 @@ void loop() {
   
   if(count >= 5){
     count=0;
-    http.begin(phpHost);
-    http.setTimeout(1000);
-    http.addHeader("Content-Type","application/x-www-form-urlencoded");
-    String httpRequestData = "houseID=";
-    httpRequestData+=houseID; Serial.println(httpRequestData);
-    int httpCode = http.POST(httpRequestData);
-    
-    if(httpCode > 0) {
-      Serial.printf("POST code : %d\n\n", httpCode);
- String payload = http.getString();
-        Serial.println(payload);
-      if(httpCode == HTTP_CODE_OK) {
-        String payload = http.getString();
-        Serial.println(payload);
-      }
-    } 
-    else
-      Serial.printf("POST failed, error: %s\n", http.errorToString(httpCode).c_str());
-    
-    http.end();
+    String data="houseID=";
+    data+=houseID;
+    httpsPOST(phpHost, data);
   }
   webServer();
+}
+
+void httpsPOST(String url, String data){
+  if(secureClient.connect(phpHost, 443)){
+    Serial.println(data);
+    secureClient.println("POST " + url + " HTTP/1.1");
+    secureClient.println("Host: " + (String)phpHost);
+    secureClient.println("User-Agent: ESP8266/1.0");
+    secureClient.println("Connection: close");
+    secureClient.println("Content-Type: application/x-www-form-urlencoded;");
+    secureClient.print("Content-Length: ");
+    secureClient.println(data.length());
+    secureClient.println();
+    secureClient.println(data);
+    delay(100);
+    String response = secureClient.readString();
+    Serial.println(response);
+  }else {
+    Serial.println("ERROR");
+  }
 }
 
 void getJSON(){
