@@ -93,8 +93,8 @@ public class FunctionMenu extends Activity {
     }
 
     public void checkConnection(){
-        System.out.println("Alarm is on: " + ((MyApplication) this.getApplication()).getAlarm());
-        if(((MyApplication) this.getApplication()).connection()){
+        System.out.println("connection lost =" + ((MyApplication) this.getApplication()).connection());
+        if(((MyApplication) this.getApplication()).checkNull()){
             final AlertDialog alertDialog = new AlertDialog.Builder(FunctionMenu.this).create();
             alertDialog.setTitle("Connection Error");
             alertDialog.setCanceledOnTouchOutside(false);
@@ -128,5 +128,14 @@ public class FunctionMenu extends Activity {
                 System.out.println("ALARM TURNED OFF");
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        finish();
+        startActivity(a);
     }
 }
