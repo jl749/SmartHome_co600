@@ -44,24 +44,21 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(LOCK1, LOW);
-  delay(3000);
-  //digitalWrite(FAN1, HIGH);
-  delay(3000);
-  
   if(ALARM_SET && digitalRead(MOTION_PIN) == HIGH)
     motion=1;
   if(s.available()>0){
     String incomingString = s.readStringUntil('\n');
     Serial.println(incomingString);
-    if(incomingString.indexOf(F("A_ON"))!=-1)
-      ALARM_SET=1;
-    else if(incomingString.indexOf(F("A_OFF"))!=-1)
-      ALARM_SET=0;
-    else if(incomingString.indexOf(F("A_DISMISS"))!=-1)
+    if(incomingString.indexOf(F("A_DISMISS"))!=-1){
       motion=0;
-    if(incomingString.indexOf(F("JSON"))!=-1){
+    }else if(incomingString.indexOf(F("JSON"))!=-1){
       sendJSON();
+    }else if(incomingString.indexOf(F("ALARM_SET/1"))!=-1){
+      Serial.println(F("ALARM_SET = 1"));
+      ALARM_SET=1;
+    }else if(incomingString.indexOf(F("ALARM_SET/0"))!=-1){
+      Serial.println(F("ALARM_SET = 0"));
+      ALARM_SET=0;
     }else if(incomingString.indexOf(F("LED2/1"))!=-1){
       Serial.println(F("LED2 on"));
       digitalWrite(ledPin2, HIGH);
@@ -98,6 +95,9 @@ void sendJSON(){
   doc["LED1"] = (digitalRead(ledPin1)==HIGH)?true:false;
   doc["LED2"] = (digitalRead(ledPin2)==HIGH)?true:false;
   doc["motion"] = motion;
+  doc["FAN1"] = (digitalRead(FAN1)==LOW)?true:false;
+  doc["LOCK1"] = (digitalRead(LOCK1)==LOW)?true:false;
+  doc["ALARM_SET"] = ALARM_SET;
 
   Serial.println(F("JSON sent"));
   serializeJson(doc, s);
