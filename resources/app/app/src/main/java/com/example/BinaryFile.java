@@ -13,12 +13,7 @@ public class BinaryFile{
         ObjectOutputStream objOUT=null;
         FileOutputStream fos=null;
         ObjectOutputStream os = null;
-        //File file = new File(c.getFilesDir() + "BINARY_DIR");
-        System.out.println(c.getFilesDir().getAbsolutePath());
         try{
-            //objOUT=new ObjectOutputStream(new FileOutputStream("BINARY_DIR"));
-            //objOUT.writeObject(record);
-            //objOUT.flush();
             fos = c.openFileOutput("BINARY_DIR.DAT", Context.MODE_PRIVATE);
             os = new ObjectOutputStream(fos);
             os.writeObject(record);
@@ -36,8 +31,6 @@ public class BinaryFile{
         FileInputStream fis = null;
         ObjectInputStream is = null;
         try{
-            // objINPUT = new ObjectInputStream(new FileInputStream(BINARY_DIR));
-            //record = (UserInfo) objINPUT.readObject();
             fis = c.openFileInput("BINARY_DIR.DAT");
             is = new ObjectInputStream(fis);
             record = (UserInfo) is.readObject();

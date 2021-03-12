@@ -37,7 +37,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void checkIntruder(ArrayList<String> array,Context c){
         if(!array.isEmpty()) {
 
-            String alarm = array.get(2).replace("\"", "");
+            String alarm = array.get(7).replace("\"", "");
 
             Intent dial = new Intent(Intent.ACTION_DIAL);
             dial.setData(Uri.parse("tel:999"));
@@ -51,7 +51,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         .setSmallIcon(R.drawable.mainicon)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setContentTitle("Intrusion Alarm.")
-                        .setContentText("Intruder has been detected!")
+                        .setContentText("Intruder has been detected in house: "+houseID)
                         .setAutoCancel(true)
                         .addAction(0, "Call Police", intent)
                         .addAction(0, "Dismiss", dismissIntent)

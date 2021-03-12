@@ -74,7 +74,7 @@ public class Alarm extends Activity {
                     }
                 }
             });
-            if (((MyApplication) this.getApplication()).getAlarm().equals("True")) {
+            if (((MyApplication) this.getApplication()).getAlarm().equals("1")) {
                 ImageView image = (ImageView) findViewById(R.id.alarmState1);
                 TextView state = (TextView) findViewById(R.id.alarmState);
                 aSwitch.setChecked(true);
@@ -151,10 +151,10 @@ public class Alarm extends Activity {
     }
 
     public void alarmOn(){
-        ((MyApplication) this.getApplication()).setAlarm("True");
+        ((MyApplication) this.getApplication()).setAlarm("1");
     }
     public void alarmOff(){
-        ((MyApplication) this.getApplication()).setAlarm("False");
+        ((MyApplication) this.getApplication()).setAlarm("0");
     }
 
     @Override

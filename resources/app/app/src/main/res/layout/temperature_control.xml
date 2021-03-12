@@ -77,8 +77,8 @@
                 android:gravity="center"
                 android:progress="1"
                 android:max="15"
-                android:progressBackgroundTint="#FF0000"
-                android:progressTint="#0000FF"
+                android:progressBackgroundTint="#0000FF"
+                android:progressTint="#FF0000"
                 android:thumbTint="#808080" />
 
             <TextView

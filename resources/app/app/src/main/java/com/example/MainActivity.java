@@ -2,19 +2,15 @@ package com.example;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcelable;
-import android.text.BoringLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -121,8 +116,8 @@ public class MainActivity extends AppCompatActivity{
                 if (!TextUtils.isEmpty(email)){
                     if(!TextUtils.isEmpty(password)) {
                         String ePassword = (Encryption.encryptPassword(password.toString())).toUpperCase();
-                        CheckLogin task = new CheckLogin(email.toString(),ePassword,false);
-                        task.execute();
+                        CheckLogin cl = new CheckLogin(email.toString(),ePassword,false);
+                        cl.execute();
                     }
                     else password1.setError("Enter a password");
                 }
@@ -138,6 +133,7 @@ public class MainActivity extends AppCompatActivity{
             setContentView(R.layout.house_page);
             TextView welcome = findViewById(R.id.welcome_message);
             layout = findViewById(R.id.linearLayout);
+            //String welcomeText = ();
             welcome.setText("Welcome " +username +"! Chose which house you would like to control. ");
             for(String x: house){
                 final Button button = new Button(this);

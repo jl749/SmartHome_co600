@@ -9,7 +9,7 @@ import java.net.URLConnection;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class checkLogin {
+public class CheckLogin {
     private static final String raptor="https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
 
     public  boolean chkLogin(String id, String pass) {

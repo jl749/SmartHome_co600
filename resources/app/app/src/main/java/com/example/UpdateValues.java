@@ -29,20 +29,23 @@ public class UpdateValues extends Activity {
         }
         if(connected) {
             m.setConnectionF();
-            String temperature = array.get(0).replace("\"", "");
-            String humidity = array.get(1).replace("\"", "");
-            String alarm = array.get(2).replace("\"", "");
+            String aqi = array.get(0).replace("\"", "");
+            String temperature = array.get(1).replace("\"", "");
+            String humidity = array.get(2).replace("\"", "");
             String light1 = array.get(3).replace("\"", "");
             String light2 = array.get(4).replace("\"", "");
+            String fan = array.get(5).replace("\"", "");
             String lock1 = array.get(6).replace("\"", "");
-            String lock2 = array.get(7).replace("\"", "");
+            String alarm = array.get(7).replace("\"", "");
 
+            m.setAqi(aqi);
             m.setTemperature(temperature);
             m.setHumidity(humidity + "%");
             m.setLight1(light1);
             m.setLight2(light2);
+            m.setFan(fan);
             m.setLock1(lock1);
-            m.setLock2(lock2);
+            m.setLock2("0");
             if(alarm.equals("0")){
                 m.setIntruderF();
             }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class MyApplication extends Application {
 
     private boolean firstOpen = true;
+    private String aqi;
     private String temperature;
     private String humidity;
     private String lock1;
@@ -14,12 +15,16 @@ public class MyApplication extends Application {
     private String alarm;
     private String light1;
     private String light2;
+    private String fan;
     private String targetTemp;
     private boolean intruder = false;
     private boolean connectionLost = false;
     private ArrayList<String> houseNumbers = new ArrayList<>();
     private String currentHouse;
+    private String APIKey;
 
+
+    public String getAqi(){return aqi;}
     public String getTemperature() {
         return temperature;
     }
@@ -38,8 +43,10 @@ public class MyApplication extends Application {
     public String getLight1() { return light1; }
     public String getLight2() { return  light2; }
     public String getTargetTemp() {return targetTemp; }
+    public String getFan() {return fan; }
     public ArrayList<String> getHouseNumbers() {return houseNumbers; }
     public String getCurrentHouse() {return currentHouse; }
+    public String getAPIKey(){return APIKey; }
     public boolean getIntruder() {return intruder; }
 
     public boolean connection(){
@@ -50,6 +57,7 @@ public class MyApplication extends Application {
         return firstOpen;
     }
 
+    public void setAqi(String aqi){this.aqi = aqi; }
     public void setHumidity(String humidity) {
         this.humidity = humidity;
     }
@@ -70,12 +78,18 @@ public class MyApplication extends Application {
     public void setIntruderT(){
         intruder = true;
     }
+    public void setFan(String fan) { this.fan = fan; }
+    public void setAPIKey(String APIKey) { this.APIKey = APIKey; }
+
+    public void setFirstOpen(boolean firstOpen){
+        this.firstOpen = firstOpen;
+    }
 
     public void setConnectionT(){ connectionLost = true; }
     public void setConnectionF(){ connectionLost = false; }
 
     public boolean checkNull(){
-        return temperature == null || humidity == null || lock1 == null || lock2 == null || alarm == null || light1 == null || light2 == null;
+        return temperature == null || humidity == null || lock1 == null || lock2 == null || alarm == null || light1 == null || light2 == null || aqi == null || fan == null;
     }
 
 

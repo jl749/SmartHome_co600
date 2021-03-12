@@ -26,6 +26,7 @@
             android:textColor="#ffffff" />
 
         <TextView
+            android:id="@+id/aqi"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="4"
@@ -52,19 +53,21 @@
 
 
         <TextView
+            android:id="@+id/good"
             android:layout_width="10dp"
             android:layout_height="100dp"
             android:layout_weight="1"
             android:textStyle="bold"
             android:gravity="center"
-            android:textSize="30sp"
+            android:textSize="13sp"
             android:text="GOOD"
             android:textColor="#ffffff"
-            android:background="@drawable/border"
+            android:background="#45c842"
 
             />
 
         <TextView
+            android:id="@+id/moderate"
             android:layout_width="10dp"
             android:layout_height="100dp"
             android:layout_weight="1"
@@ -75,6 +78,7 @@
             android:textColor="#ffffff" />
 
         <TextView
+            android:id="@+id/unhealthy"
             android:layout_width="10dp"
             android:layout_height="100dp"
             android:layout_weight="1"
@@ -85,19 +89,20 @@
             android:textColor="#ffffff" />
 
         <TextView
+            android:id="@+id/hazardous"
             android:layout_width="10dp"
             android:layout_height="100dp"
             android:layout_weight="1"
             android:background="#ED0621"
             android:gravity="center"
             android:textSize="13sp"
-            android:text="HAZDEROUS"
+            android:text="HAZERDOUS"
             android:textColor="#ffffff" />
 
     </LinearLayout>
     <Switch
 
-        android:id="@+id/simpleSwitch"
+        android:id="@+id/fanSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
@@ -109,5 +114,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_ac" />
+        android:src="@drawable/ic_ac"
+        />
+
 </LinearLayout>

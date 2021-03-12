@@ -2,7 +2,9 @@ package com.example;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.VoiceInteractor;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.icu.text.StringSearch;
@@ -143,6 +145,28 @@ public class Voicerec extends Activity {
                 }
             });
         }
+        else{
+            AlertDialog alertDialog = new AlertDialog.Builder(Voicerec.this).create();
+            alertDialog.setTitle("Connection Error");
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.setCancelable(false);
+            alertDialog.setMessage("Connection could no be established with the server. Please try again.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            end();
+                        }
+                    });
+            alertDialog.show();
+        }
+    }
+
+    public void end(){
+        Intent i = getBaseContext().getPackageManager().
+                getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 
     public String checkSpeech(String match){

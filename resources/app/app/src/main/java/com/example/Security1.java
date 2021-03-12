@@ -25,11 +25,14 @@ public class Security1 extends Activity {
     private static final String led = "2";
     final Handler handler = new Handler(Looper.getMainLooper());
     private static BroadcastReceiver tickReceiver;
+    public String apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.security_page1);
+        apiKey = ((MyApplication) this.getApplication()).getAPIKey();
+        final FanLedLockControl fllc = new FanLedLockControl();
         update();
         SwitchCompat aSwitch = findViewById(R.id.toggleLight2);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -37,20 +40,18 @@ public class Security1 extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
-                LedControl ledControl = new LedControl();
+                TextView state = (TextView) findViewById(R.id.light2Status);
                 if (isChecked) {
-                    TextView state = (TextView) findViewById(R.id.light2Status);
                     state.setText("Light On");
                     setLightOn();
                     update();
-                    ledControl.run(led,true);
+                    fllc.run(led, true,apiKey,"LED");
                 }
                 else {
-                    TextView state = (TextView) findViewById(R.id.light2Status);
                     state.setText("Light Off");
                     setLightOff();
                     update();
-                    ledControl.run(led,false);
+                    fllc.run(led, false,apiKey,"LED");
                 }
             }
         });
@@ -91,7 +92,7 @@ public class Security1 extends Activity {
                 }
             }
         });
-        if(((MyApplication) this.getApplication()).getLock2().equals("True")){
+        if(((MyApplication) this.getApplication()).getLock2().equals("1")){
             TextView state = (TextView) findViewById(R.id.currentState1);
             ImageView image = (ImageView) findViewById(R.id.currentState);
             image.setImageResource(R.drawable.locked);
@@ -105,7 +106,7 @@ public class Security1 extends Activity {
             state.setText("Currently Unlocked");
         }
 
-        if(((MyApplication) this.getApplication()).getLight2().equals("True")){
+        if(((MyApplication) this.getApplication()).getLight2().equals("1")){
             aSwitch.setChecked(true);
             TextView state = (TextView) findViewById(R.id.light2Status);
             state.setText("Light On");
@@ -166,16 +167,16 @@ public class Security1 extends Activity {
     }
 
     public void setOpen(){
-        ((MyApplication) this.getApplication()).setLock2("False");
+        ((MyApplication) this.getApplication()).setLock2("0");
     }
     public void setClose(){
-        ((MyApplication) this.getApplication()).setLock2("True");
+        ((MyApplication) this.getApplication()).setLock2("1");
     }
     public void setLightOn(){
-        ((MyApplication) this.getApplication()).setLight2("True");
+        ((MyApplication) this.getApplication()).setLight2("1");
     }
     public void setLightOff(){
-        ((MyApplication) this.getApplication()).setLight2("False");
+        ((MyApplication) this.getApplication()).setLight2("1");
     }
 
     public boolean onTouchEvent(MotionEvent touchEvent) {
@@ -190,7 +191,6 @@ public class Security1 extends Activity {
                 if (x1 < x2) {
                     Intent i = new Intent(Security1.this, Security.class);
                     startActivity(i);
-
                 }
                 break;
 

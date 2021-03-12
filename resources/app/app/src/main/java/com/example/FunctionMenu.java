@@ -24,8 +24,12 @@ public class FunctionMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         houseId = getIntent().getStringExtra("HOUSE_SESSION_ID");
+        setAPIKey();
         if(houseId!= null){
             ((MyApplication) this.getApplication()).setCurrentHouse(houseId);
+        }
+        else{
+            houseId = ((MyApplication) this.getApplication()).getCurrentHouse();
         }
         setContentView(R.layout.function_menu);
         ImageButton button1 = (ImageButton) findViewById(R.id.button1);
@@ -92,6 +96,14 @@ public class FunctionMenu extends Activity {
         startActivity(i);
     }
 
+    public void setAPIKey(){
+        GetAPIKey gak = new GetAPIKey();
+        if(((MyApplication) this.getApplication()).getFirstOpen()) {
+            gak.run(((MyApplication)this.getApplication()),houseId);
+            ((MyApplication) this.getApplication()).setFirstOpen(false);
+        }
+    }
+
     public void checkConnection(){
         System.out.println("connection lost =" + ((MyApplication) this.getApplication()).connection());
         if(((MyApplication) this.getApplication()).checkNull()){
@@ -112,7 +124,8 @@ public class FunctionMenu extends Activity {
             }
         }
         else {
-            if(((MyApplication) this.getApplication()).getAlarm().equals("True")){ //start alarm
+
+            if(((MyApplication) this.getApplication()).getAlarm().equals("1")){ //start alarm
                 Intent startAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
                 startAlarm.putExtra("HouseID",houseId);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);

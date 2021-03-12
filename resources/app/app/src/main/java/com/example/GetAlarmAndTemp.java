@@ -37,10 +37,10 @@ public class GetAlarmAndTemp extends Activity {
             String ttemp = array.get(2).replace("\"", "");
             m.setTargetTemp(ttemp);
             if(alarm.equals("1")) {
-                m.setAlarm("True");
+                m.setAlarm("1");
             }
             else if(alarm.equals(("0"))) {
-                m.setAlarm("False");}
+                m.setAlarm("0");}
         }
     }
 
