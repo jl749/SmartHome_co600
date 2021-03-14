@@ -84,7 +84,7 @@ public class FunctionMenu extends Activity {
             public void run() {
                 checkConnection();
             }
-        }, 3000);
+        }, 10000);
     }
 
     public void end(){

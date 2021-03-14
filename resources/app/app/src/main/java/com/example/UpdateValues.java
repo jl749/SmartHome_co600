@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -67,13 +68,16 @@ public class UpdateValues extends Activity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            HttpURLConnection con=null;
+            URL url=null;
             try {
-                URL url;
-                url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
-                URLConnection con = url.openConnection();
-                con.setConnectTimeout(1000);
-                con.setReadTimeout(1000);
+                url = new URL(MainActivity.nodMCUwebServer); //https://raptor.kent.ac.uk/~jl749/status.html
+                con = (HttpURLConnection) url.openConnection();
+                //con.setConnectTimeout(5000);
+                //con.setReadTimeout(5000);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+
                 try {
                     String stringBuffer;
                     String string = "";
@@ -87,7 +91,7 @@ public class UpdateValues extends Activity {
             } catch (IOException e){
                 e.printStackTrace();
                 result = e.toString();
-            }
+            }finally{con.disconnect();}
 
 
             Pattern p = Pattern.compile("\"([^\"]*)\"");
@@ -97,6 +101,7 @@ public class UpdateValues extends Activity {
         }
         @Override
         protected void onPostExecute(Void result){
+            System.out.println(variables);
             setVariables(variables, m);
         }
     }

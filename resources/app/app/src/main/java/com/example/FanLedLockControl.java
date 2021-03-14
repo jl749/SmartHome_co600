@@ -15,7 +15,6 @@ public class FanLedLockControl {
 
     private class SetFLC extends AsyncTask<Void, Void, Void> {
 
-        HttpURLConnection request = null;
         String val;
         String state;
         String apiKey;
@@ -35,18 +34,20 @@ public class FanLedLockControl {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            URL url=null;
+            HttpURLConnection request = null;
             try {
-                URL url = new URL(ip + function + val + "/" + state + "/" +apiKey);
-                HttpURLConnection request=(HttpURLConnection) url.openConnection();
-                request.setConnectTimeout(2000);
+                url = new URL(ip + function + val + "/" + state + "/" +apiKey);
+                System.out.println(ip + function + val + "/" + state + "/" +apiKey);
+                request=(HttpURLConnection) url.openConnection();
+                //request.setConnectTimeout(10000);
                 request.connect();
+                request.getInputStream().close();
 
+                request.disconnect();
 
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally {
-                try{request.disconnect();}catch(Exception e) {e.printStackTrace();}
             }
             return null;
         }

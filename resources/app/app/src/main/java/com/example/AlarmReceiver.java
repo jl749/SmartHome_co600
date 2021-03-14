@@ -82,10 +82,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         protected Void doInBackground(Void... voids) {
             try {
                 URL url;
-                url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
+                url = new URL(MainActivity.nodMCUwebServer); //"https://raptor.kent.ac.uk/~jl749/status.html"
                 URLConnection con = url.openConnection();
-                con.setConnectTimeout(1000);
-                con.setReadTimeout(1000);
+                //con.setConnectTimeout(10000);
+                //con.setReadTimeout(10000);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 try {
                     String stringBuffer;

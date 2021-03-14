@@ -12,7 +12,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class CheckLogin {
     private static final String raptor="https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
 
-    public  boolean chkLogin(String id, String pass) {
+    public  boolean ChkLogin(String id, String pass) {
         StringBuilder result=new StringBuilder();
 
         OutputStream out=null;
@@ -55,6 +55,6 @@ public class CheckLogin {
     }
 
     public  void main(String[] args) {
-        chkLogin("John98","19513FDC9DA4FB72A4A05EB66917548D3C90FF94D5419E1F2363EEA89DFEE1DD");
+        ChkLogin("John98","19513FDC9DA4FB72A4A05EB66917548D3C90FF94D5419E1F2363EEA89DFEE1DD");
     }
 }

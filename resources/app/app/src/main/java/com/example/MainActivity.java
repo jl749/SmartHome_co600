@@ -32,6 +32,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity{
 
+    static final String nodMCUwebServer="http://192.168.1.72/";
     private static final String pin = "2222";
     private String username;
     LinearLayout layout;
