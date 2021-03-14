@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
     private static final String CHANNEL_ID = "intruder";
 
     final Handler handler = new Handler(Looper.getMainLooper());
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_secreen);
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity{
                 setContentView(R.layout.login_page);
                 loginFunctionality();
             }
-            else {
+            else{
                 password1.setText("");
                 invalid.setText("Invalid Username Or Password.");
             }
@@ -133,8 +134,8 @@ public class MainActivity extends AppCompatActivity{
             setContentView(R.layout.house_page);
             TextView welcome = findViewById(R.id.welcome_message);
             layout = findViewById(R.id.linearLayout);
-            //String welcomeText = ();
-            welcome.setText("Welcome " +username +"! Chose which house you would like to control. ");
+            String welcomeText = ("Welcome " +username +"! Chose which house you would like to control. ");
+            welcome.setText(welcomeText);
             for(String x: house){
                 final Button button = new Button(this);
                 button.setLayoutParams(new LinearLayout.LayoutParams(-1,150));
@@ -169,15 +170,9 @@ public class MainActivity extends AppCompatActivity{
         pinField.requestFocus();
         pinField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length() == 4){

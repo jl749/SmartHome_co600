@@ -1,10 +1,11 @@
 package com.example;
 
-import android.app.Activity;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -16,14 +17,16 @@ import java.net.URL;
 public class CloseNotification extends AppCompatActivity {
 
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
-    private static String apiKey;
-
+    public static  String apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.cancel(getIntent().getIntExtra(NOTIFICATION_ID, -1));
+        apiKey = ((MyApplication)this.getApplication()).getAPIKey();
+        DismissAlarm da = new DismissAlarm(apiKey);
+        da.execute();
         finish(); // since finish() is called in onCreate(), onDestroy() will be called immediately
     }
 
@@ -32,7 +35,39 @@ public class CloseNotification extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(NOTIFICATION_ID, notificationId);
         PendingIntent dismissIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        System.out.println("API KEY FROM NOTIFICATION: " + apiKey);
         return dismissIntent;
+    }
+
+    private class DismissAlarm extends AsyncTask<Void, Void, Void> {
+
+        HttpURLConnection request = null;
+        String val;
+        String state;
+        String apiKey;
+        String function;
+        private static final String ip = "http://192.168.1.72/";
+
+        public DismissAlarm(String apiKey) {
+            super();
+            this.apiKey = apiKey;
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                URL url = new URL(ip + "/A_DISMISS/" + apiKey);
+                HttpURLConnection request=(HttpURLConnection) url.openConnection();
+                request.setConnectTimeout(2000);
+                request.connect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally {
+                try{request.disconnect();}catch(Exception e) {e.printStackTrace();}
+            }
+            return null;
+        }
     }
 }

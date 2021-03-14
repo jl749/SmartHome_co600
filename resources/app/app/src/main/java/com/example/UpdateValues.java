@@ -70,7 +70,6 @@ public class UpdateValues extends Activity {
             try {
                 URL url;
                 url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
-                //BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
                 URLConnection con = url.openConnection();
                 con.setConnectTimeout(1000);
                 con.setReadTimeout(1000);

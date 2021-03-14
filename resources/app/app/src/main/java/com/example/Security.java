@@ -41,6 +41,7 @@ public class Security extends Activity {
             SwitchCompat aSwitch = findViewById(R.id.toggleLight1);
             final FanLedLockControl fllc = new FanLedLockControl();
             update();
+            updateUi();
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -92,27 +93,6 @@ public class Security extends Activity {
                 }
             });
 
-            if (((MyApplication) this.getApplication()).getLock1().equals("1")) {
-                TextView state = (TextView) findViewById(R.id.currentState1);
-                ImageView image = (ImageView) findViewById(R.id.currentState);
-                image.setImageResource(R.drawable.locked);
-                state.setText("Currently Locked");
-            } else {
-                TextView state = (TextView) findViewById(R.id.currentState1);
-                ImageView image = (ImageView) findViewById(R.id.currentState);
-                image.setImageResource(R.drawable.unlocked);
-                state.setText("Currently Unlocked");
-            }
-
-            if (((MyApplication) this.getApplication()).getLight1().equals("1")) {
-                aSwitch.setChecked(true);
-                TextView state = (TextView) findViewById(R.id.light1Status);
-                state.setText("Light On");
-            } else {
-                aSwitch.setChecked(false);
-                TextView state = (TextView) findViewById(R.id.light1Status);
-                state.setText("Light Off");
-            }
         }
         else {
             final AlertDialog alertDialog = new AlertDialog.Builder(Security.this).create();
@@ -150,8 +130,34 @@ public class Security extends Activity {
             @Override
             public void run() {
                 checkConnection();
+                updateUi();
             }
         }, 2500);
+    }
+
+    public void updateUi(){
+        SwitchCompat aSwitch = findViewById(R.id.toggleLight1);
+        if (((MyApplication) this.getApplication()).getLock1().equals("1")) {
+            TextView state = (TextView) findViewById(R.id.currentState1);
+            ImageView image = (ImageView) findViewById(R.id.currentState);
+            image.setImageResource(R.drawable.locked);
+            state.setText("Currently Locked");
+        } else {
+            TextView state = (TextView) findViewById(R.id.currentState1);
+            ImageView image = (ImageView) findViewById(R.id.currentState);
+            image.setImageResource(R.drawable.unlocked);
+            state.setText("Currently Unlocked");
+        }
+
+        if (((MyApplication) this.getApplication()).getLight1().equals("1")) {
+            aSwitch.setChecked(true);
+            TextView state = (TextView) findViewById(R.id.light1Status);
+            state.setText("Light On");
+        } else {
+            aSwitch.setChecked(false);
+            TextView state = (TextView) findViewById(R.id.light1Status);
+            state.setText("Light Off");
+        }
     }
 
     public void checkConnection() {

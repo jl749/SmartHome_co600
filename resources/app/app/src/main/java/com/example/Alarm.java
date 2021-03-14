@@ -33,10 +33,11 @@ public class Alarm extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_page);
-        houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
         if(!((MyApplication) this.getApplication()).checkNull()) {
             SwitchCompat aSwitch = findViewById(R.id.toggleAlarm);
+            houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
             update();
+            updateUi();
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -74,20 +75,6 @@ public class Alarm extends Activity {
                     }
                 }
             });
-            if (((MyApplication) this.getApplication()).getAlarm().equals("1")) {
-                ImageView image = (ImageView) findViewById(R.id.alarmState1);
-                TextView state = (TextView) findViewById(R.id.alarmState);
-                aSwitch.setChecked(true);
-                image.setImageResource(R.drawable.alarmon);
-                state.setText("Alarm Armed");
-
-            } else {
-                ImageView image = (ImageView) findViewById(R.id.alarmState1);
-                TextView state = (TextView) findViewById(R.id.alarmState);
-                aSwitch.setChecked(false);
-                image.setImageResource(R.drawable.alarmoff);
-                state.setText("Alarm Disarmed");
-            }
             tickReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -111,6 +98,24 @@ public class Alarm extends Activity {
                         }
                     });
             alertDialog.show();
+        }
+    }
+
+    public void updateUi(){
+        SwitchCompat aSwitch = findViewById(R.id.toggleAlarm);
+        if (((MyApplication) this.getApplication()).getAlarm().equals("1")) {
+            ImageView image = (ImageView) findViewById(R.id.alarmState1);
+            TextView state = (TextView) findViewById(R.id.alarmState);
+            aSwitch.setChecked(true);
+            image.setImageResource(R.drawable.alarmon);
+            state.setText("Alarm Armed");
+
+        } else {
+            ImageView image = (ImageView) findViewById(R.id.alarmState1);
+            TextView state = (TextView) findViewById(R.id.alarmState);
+            aSwitch.setChecked(false);
+            image.setImageResource(R.drawable.alarmoff);
+            state.setText("Alarm Disarmed");
         }
     }
 
@@ -145,9 +150,9 @@ public class Alarm extends Activity {
             @Override
             public void run() {
                 checkConnection();
+                updateUi();
             }
         }, 2500);
-        System.out.println(((MyApplication) this.getApplication()).getTemperature());
     }
 
     public void alarmOn(){

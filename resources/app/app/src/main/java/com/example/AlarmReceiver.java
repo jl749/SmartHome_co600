@@ -2,12 +2,14 @@ package com.example;
 
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -25,6 +27,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     
     private static final String CHANNEL_ID = "intruder";
     private String houseID;
+    private String apiKey;
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -32,7 +36,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         houseID = intent.getStringExtra("HouseID");
         h.execute();
     }
-
 
     public void checkIntruder(ArrayList<String> array,Context c){
         if(!array.isEmpty()) {
