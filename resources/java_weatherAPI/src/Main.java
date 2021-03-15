@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 public class Main {
     private static final String apiKey = "414a72d3e6793b70712631f53c6de000";
-    static String yourLocation;
     //http://www.geonames.org/postalcode-search.html?q=ME7+1RF&country=GB
     //http://api.openweathermap.org/data/2.5/weather?q=medway&appid=414a72d3e6793b70712631f53c6de000
 
@@ -48,7 +47,7 @@ public class Main {
                 allMatches.add(removeTag(m.group().replaceAll("\\([A-Za-z 0-9]+\\)","")));
 
             System.out.println(allMatches);
-            yourLocation=allMatches.get(0);
+            String yourLocation=allMatches.get(0);
             if((result=callWeatherAPI(allMatches.get(0))) == null){
                 for(int i=5;i>=3;i--)
                     if((result=callWeatherAPI(allMatches.get(i))) != null) {
@@ -56,6 +55,7 @@ public class Main {
                         break;
                     }
             }
+            //result.put("yourLocation", yourLocation);
 
             System.out.println("weather in "+yourLocation);
         }catch(Exception e){
@@ -71,7 +71,7 @@ public class Main {
         Map<String, String> result = new HashMap<>();
         city.replaceAll(" ","+");
         try{
-            String sURL="http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey;
+            String sURL="http://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&appid="+apiKey;
             URL url=new URL(sURL);
             HttpURLConnection request=(HttpURLConnection) url.openConnection();
             request.connect();
@@ -87,10 +87,13 @@ public class Main {
 
                 JSONObject weather = (JSONObject) ((JSONArray) jobj.get("weather")).get(0);
                 result.put("description", weather.get("description").toString());
+                result.put("icon",weather.get("icon").toString());
 
                 JSONObject wind = (JSONObject) jobj.get("wind");
                 result.put("speed", wind.get("speed").toString());
                 result.put("deg", wind.get("deg").toString());
+
+                result.put("city", jobj.get("name").toString());
             }else{
                 JSONObject jobj=(JSONObject)(new JSONParser().parse(new InputStreamReader(request.getErrorStream())) );
                 System.out.println(jobj.get("message"));
@@ -106,5 +109,6 @@ public class Main {
         //http://api.openweathermap.org/data/2.5/weather?q=kent&appid=414a72d3e6793b70712631f53c6de000
         System.out.println(getCurrentW("TD8 6HX"));
         System.out.println(getCurrentW("ME7 1RF"));
+        //System.out.println(getCurrentW("null"));
     }
 }
