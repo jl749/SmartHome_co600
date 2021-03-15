@@ -46,7 +46,7 @@ public class GetAlarmAndTemp extends Activity {
 
     private  class GetAandT extends AsyncTask<Void, Void, Void> {
 
-        private static final String raptor = "https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
+        private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
         Map<String, String> values = new HashMap<>();
         HttpsURLConnection https = null;
         OutputStream out = null;

@@ -26,7 +26,7 @@ public class SetAlarm extends Activity {
         BufferedReader reader=null;
         boolean b;
         int houseID;
-        private static final String raptor = "https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
+        private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
 
         public UpdateIntruder(boolean b,int houseID){
             super();

@@ -22,6 +22,7 @@ public class MyApplication extends Application {
     private ArrayList<String> houseNumbers = new ArrayList<>();
     private String currentHouse;
     private String APIKey;
+    private String postCode;
 
 
     public String getAqi(){return aqi;}
@@ -48,6 +49,7 @@ public class MyApplication extends Application {
     public String getCurrentHouse() {return currentHouse; }
     public String getAPIKey(){return APIKey; }
     public boolean getIntruder() {return intruder; }
+    public String getPostCode() {return postCode; }
 
     public boolean connection(){
         return connectionLost;
@@ -80,6 +82,7 @@ public class MyApplication extends Application {
     }
     public void setFan(String fan) { this.fan = fan; }
     public void setAPIKey(String APIKey) { this.APIKey = APIKey; }
+    public void setPostCode(String postCode) {this.postCode = postCode; }
 
     public void setFirstOpen(boolean firstOpen){
         this.firstOpen = firstOpen;

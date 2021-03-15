@@ -24,7 +24,7 @@ public class SetTemperature extends Activity {
         OutputStream out = null;
         InputStreamReader in = null;
         BufferedReader reader = null;
-        private static final String raptor = "https://www.cs.kent.ac.uk/people/staff/ds710/co600/";
+        private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
         Double val;
         int houseID;
 

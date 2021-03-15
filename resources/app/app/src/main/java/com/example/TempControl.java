@@ -35,12 +35,15 @@ public class TempControl extends Activity {
         houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
         setContentView(R.layout.temperature_control);
         if (!((MyApplication) this.getApplication()).checkNull()) {
+            System.out.println(((MyApplication)this.getApplication()).getPostCode());
             TextView temperature = (TextView) findViewById(R.id.CurrentTemp);
-            temperature.setText(((MyApplication) this.getApplication()).getTemperature() + " °C");
+            String tempText = ((MyApplication) this.getApplication()).getTemperature() + "°C";
+            temperature.setText(tempText);
             TextView humidity = (TextView) findViewById(R.id.CurrentHumid);
             humidity.setText(((MyApplication) this.getApplication()).getHumidity());
             TextView ttemp = (TextView) findViewById(R.id.TTarget);
-            ttemp.setText("Target Temp: " + (Integer.parseInt(((MyApplication) this.getApplication()).getTargetTemp())));//get saved temp
+            String ttempText = "Target Temp: " + (Integer.parseInt(((MyApplication) this.getApplication()).getTargetTemp()));
+            ttemp.setText(ttempText);//get saved temp
 
             SeekBar tempSlider = (SeekBar) findViewById(R.id.tempSlider);
             tempSlider.setProgress(Integer.parseInt(((MyApplication) this.getApplication()).getTargetTemp())-10);//change to current
@@ -49,7 +52,8 @@ public class TempControl extends Activity {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     TextView ttemp = (TextView) findViewById(R.id.TTarget);
-                    ttemp.setText("Target Temp: " + (progress + 10));
+                    String ttempText = "Target Temp: " + (progress + 10);
+                    ttemp.setText(ttempText);
                 }
 
                 @Override
@@ -125,7 +129,8 @@ public class TempControl extends Activity {
     public void updateUi(){
         TextView temperature = (TextView) findViewById(R.id.CurrentTemp);
         TextView humidity = (TextView) findViewById(R.id.CurrentHumid);
-        temperature.setText(((MyApplication) this.getApplication()).getTemperature()+ " °C");
+        String temmpText = ((MyApplication) this.getApplication()).getTemperature()+ "°C";
+        temperature.setText(temmpText);
         humidity.setText(((MyApplication) this.getApplication()).getHumidity());
     }
 
