@@ -51,11 +51,7 @@ public class Alarm extends Activity {
                         alarm.run(true, Integer.parseInt(houseID));
 
                         //turn alarm on
-                        Intent startAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
-                        startAlarm.putExtra("HouseID",houseID);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 60000, pendingIntent);
+                        //deprecated
 
                     } else {
                         ImageView image = (ImageView) findViewById(R.id.alarmState1);
@@ -66,12 +62,7 @@ public class Alarm extends Activity {
                         alarm.run(false, Integer.parseInt(houseID));
 
                         //turn alarm off
-                        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                        Intent stopAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
-                        stopAlarm.putExtra("HouseID",houseID);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, stopAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-                        alarmManager.cancel(pendingIntent);
-                        System.out.println("ALARM TURNED OFF");
+                        //deprecated
                     }
                 }
             });
@@ -99,6 +90,11 @@ public class Alarm extends Activity {
                     });
             alertDialog.show();
         }
+    }
+
+    public void update(){
+        checkConnection();
+        updateUi();
     }
 
     public void updateUi(){
@@ -143,18 +139,6 @@ public class Alarm extends Activity {
         }
     }
 
-    public void update(){
-        UpdateValues u = new UpdateValues();
-        u.run(((MyApplication) this.getApplication()));
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkConnection();
-                updateUi();
-            }
-        }, 2500);
-    }
-
     public void alarmOn(){
         ((MyApplication) this.getApplication()).setAlarm("1");
     }
@@ -170,6 +154,7 @@ public class Alarm extends Activity {
         if(tickReceiver!=null)
             unregisterReceiver(tickReceiver);
     }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, FunctionMenu.class);

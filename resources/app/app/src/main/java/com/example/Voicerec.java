@@ -4,8 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.VoiceInteractor;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.icu.text.StringSearch;
 import android.os.Bundle;
@@ -16,8 +19,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
@@ -31,6 +36,7 @@ public class Voicerec extends Activity {
     private Intent intentRecognizer;
     private SpeechRecognizer speechRecognizer;
     private TextView status;
+    private static BroadcastReceiver tickReceiver;
 
     private ArrayList<String> tempPage = new ArrayList<String>(
             Arrays.asList("temperature", "humidity", "weather","degree","degrees"));
@@ -144,12 +150,37 @@ public class Voicerec extends Activity {
                     return false;
                 }
             });
+            tickReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
+                        checkConnection();
+                    }
+                }
+            };
+            registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         }
         else{
             AlertDialog alertDialog = new AlertDialog.Builder(Voicerec.this).create();
             alertDialog.setTitle("Connection Error");
             alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.setCancelable(false);
+            alertDialog.setMessage("Connection could no be established with the server. Please try again.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            end();
+                        }
+                    });
+            alertDialog.show();
+        }
+    }
+
+    public void checkConnection() {
+        if (((MyApplication) this.getApplication()).connection()) {
+            AlertDialog alertDialog = new AlertDialog.Builder(Voicerec.this).create();
+            alertDialog.setTitle("Connection Error");
+            alertDialog.setCanceledOnTouchOutside(false);
             alertDialog.setMessage("Connection could no be established with the server. Please try again.");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
@@ -196,6 +227,15 @@ public class Voicerec extends Activity {
             }
         }
         return("false");
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        //unregister broadcast receiver.
+        if(tickReceiver!=null)
+            unregisterReceiver(tickReceiver);
     }
 
     @Override

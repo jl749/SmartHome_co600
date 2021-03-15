@@ -68,16 +68,15 @@ public class UpdateValues extends Activity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             HttpURLConnection con=null;
             URL url=null;
+
             try {
-                url = new URL(MainActivity.nodMCUwebServer); //https://raptor.kent.ac.uk/~jl749/status.html
+                url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
+                //url = new URL(MainActivity.nodMCUwebServer);
                 con = (HttpURLConnection) url.openConnection();
-                //con.setConnectTimeout(5000);
-                //con.setReadTimeout(5000);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-
                 try {
                     String stringBuffer;
                     String string = "";
@@ -88,11 +87,12 @@ public class UpdateValues extends Activity {
                 }finally {
                     bufferedReader.close();
                 }
-            } catch (IOException e){
+            }
+            catch (IOException e){
                 e.printStackTrace();
                 result = e.toString();
-            }finally{con.disconnect();}
-
+            }
+            finally{con.disconnect();}
 
             Pattern p = Pattern.compile("\"([^\"]*)\"");
             Matcher m = p.matcher(result);
@@ -101,8 +101,8 @@ public class UpdateValues extends Activity {
         }
         @Override
         protected void onPostExecute(Void result){
-            System.out.println(variables);
             setVariables(variables, m);
+            System.out.println(variables);
         }
     }
 }

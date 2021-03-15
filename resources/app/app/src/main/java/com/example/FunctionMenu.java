@@ -74,20 +74,23 @@ public class FunctionMenu extends Activity {
                 startActivity(i);
             }
         });
-        System.out.println(((MyApplication) this.getApplication()).getCurrentHouse());
-        UpdateValues u = new UpdateValues();
-        u.run(((MyApplication) this.getApplication()));
-        GetAlarmAndTemp at = new GetAlarmAndTemp();
-        at.run(((MyApplication) this.getApplication()),Integer.parseInt(((MyApplication) this.getApplication()).getCurrentHouse()));
+        if(((MyApplication)this.getApplication()).getFirstOpen()) {
+            UpdateValues u = new UpdateValues();
+            u.run(((MyApplication) this.getApplication()));
+            GetAlarmAndTemp at = new GetAlarmAndTemp();
+            at.run(((MyApplication) this.getApplication()), ((MyApplication) this.getApplication()).getCurrentHouse());
+            ((MyApplication)this.getApplication()).setFirstOpen(false);
+        }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 checkConnection();
             }
-        }, 10000);
+        }, 10000);//TODO: SET FREEZE
     }
 
     public void end(){
+        ((MyApplication)this.getApplication()).setFirstOpen(true);
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -100,12 +103,11 @@ public class FunctionMenu extends Activity {
         GetAPIKey gak = new GetAPIKey();
         if(((MyApplication) this.getApplication()).getFirstOpen()) {
             gak.run(((MyApplication)this.getApplication()),houseId);
-            ((MyApplication) this.getApplication()).setFirstOpen(false);
         }
     }
 
     public void checkConnection(){
-        System.out.println("connection lost =" + ((MyApplication) this.getApplication()).connection());
+        System.out.println("connection lost = " + ((MyApplication) this.getApplication()).connection());
         if(((MyApplication) this.getApplication()).checkNull()){
             final AlertDialog alertDialog = new AlertDialog.Builder(FunctionMenu.this).create();
             alertDialog.setTitle("Connection Error");
@@ -124,22 +126,19 @@ public class FunctionMenu extends Activity {
             }
         }
         else {
-
-            if(((MyApplication) this.getApplication()).getAlarm().equals("1")){ //start alarm
-                Intent startAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
-                startAlarm.putExtra("HouseID",houseId);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 60000, pendingIntent);
-            }
-            else{
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                Intent stopAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
-                stopAlarm.putExtra("HouseID",houseId);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, stopAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-                alarmManager.cancel(pendingIntent);
-                System.out.println("ALARM TURNED OFF");
-            }
+            Intent startAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
+            startAlarm.putExtra("HouseID",houseId);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 60000, pendingIntent);
+            //else{
+                //AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                //Intent stopAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
+                //stopAlarm.putExtra("HouseID",houseId);
+                //PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, stopAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+                //alarmManager.cancel(pendingIntent);
+                //System.out.println("ALARM TURNED OFF");
+            //}
         }
     }
 

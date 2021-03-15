@@ -17,7 +17,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class GetAlarmAndTemp extends Activity {
 
-    public void  run(MyApplication m,int houseID){
+    public void  run(MyApplication m,String houseID){
         GetAandT alramandtemp = new GetAandT(houseID,m);
         alramandtemp.execute();
     }
@@ -52,10 +52,10 @@ public class GetAlarmAndTemp extends Activity {
         OutputStream out = null;
         InputStreamReader in = null;
         BufferedReader reader = null;
-        int houseID;
+        String houseID;
         MyApplication m;
 
-        public GetAandT(int houseID,MyApplication m) {
+        public GetAandT(String houseID,MyApplication m) {
             super();
             this.houseID = houseID;
             this.m = m;
@@ -81,7 +81,6 @@ public class GetAlarmAndTemp extends Activity {
                 in = new InputStreamReader(https.getInputStream(), "UTF-8");
                 reader = new BufferedReader(in);
                 while ((line = reader.readLine()) != null) {
-                    System.out.println(line + "!!");
                     String[] tmp = line.split("=");
                     values.put(tmp[0], tmp[1]);
                 }

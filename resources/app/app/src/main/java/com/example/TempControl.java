@@ -91,17 +91,9 @@ public class TempControl extends Activity {
         }
     }
 
-
     public void update(){
-        UpdateValues u = new UpdateValues();
-        u.run(((MyApplication) this.getApplication()));
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkConnection();
-                updateUi();
-            }
-        }, 2500);
+        checkConnection();
+        updateUi();
         System.out.println(((MyApplication) this.getApplication()).getTemperature());
     }
 
@@ -122,13 +114,13 @@ public class TempControl extends Activity {
     }
 
     public void end(){
+        ((MyApplication)this.getApplication()).setFirstOpen(true);
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
-
 
     public void updateUi(){
         TextView temperature = (TextView) findViewById(R.id.CurrentTemp);

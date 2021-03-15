@@ -40,7 +40,7 @@ public class Security extends Activity {
             System.out.println(apiKey);
             SwitchCompat aSwitch = findViewById(R.id.toggleLight1);
             final FanLedLockControl fllc = new FanLedLockControl();
-            //update();
+            update();
             updateUi();
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -120,19 +120,12 @@ public class Security extends Activity {
                 }
             }
         };
-        //registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+        registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
     public void update(){
-        UpdateValues u = new UpdateValues();
-        u.run(((MyApplication) this.getApplication()));
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkConnection();
-                updateUi();
-            }
-        }, 2500);
+        checkConnection();
+        updateUi();
     }
 
     public void updateUi(){

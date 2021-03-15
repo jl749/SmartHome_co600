@@ -107,15 +107,8 @@ public class Security1 extends Activity {
     }
 
     public void update(){
-        UpdateValues u = new UpdateValues();
-        u.run(((MyApplication) this.getApplication()));
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkConnection();
-                updateUi();
-            }
-        }, 2500);
+        checkConnection();
+        updateUi();
     }
 
     public void checkConnection() {
@@ -152,7 +145,6 @@ public class Security1 extends Activity {
             ImageView image = (ImageView) findViewById(R.id.currentState);
             image.setImageResource(R.drawable.locked);
             state.setText("Currently Locked");
-
         }
         else{
             TextView state = (TextView) findViewById(R.id.currentState1);

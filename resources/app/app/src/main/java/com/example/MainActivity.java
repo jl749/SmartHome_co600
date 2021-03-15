@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_secreen);
+        ((MyApplication)this.getApplication()).setFirstOpen(true);
         createNotificationChannel();
         File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
         if(f.exists()) {

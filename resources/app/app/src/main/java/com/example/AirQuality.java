@@ -78,15 +78,8 @@ public class AirQuality extends Activity {
     }
 
     public void update(){
-        UpdateValues u = new UpdateValues();
-        u.run(((MyApplication) this.getApplication()));
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkConnection();
-                updateUI();
-            }
-        }, 2500);
+        checkConnection();
+        updateUI();
     }
 
     public void updateUI(){
