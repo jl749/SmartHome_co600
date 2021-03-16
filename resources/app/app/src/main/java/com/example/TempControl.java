@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +37,6 @@ public class TempControl extends Activity {
         houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
         setContentView(R.layout.temperature_control);
         if (!((MyApplication) this.getApplication()).checkNull()) {
-            System.out.println(((MyApplication)this.getApplication()).getPostCode());
             TextView temperature = (TextView) findViewById(R.id.CurrentTemp);
             String tempText = ((MyApplication) this.getApplication()).getTemperature() + "°C";
             temperature.setText(tempText);
@@ -78,6 +79,14 @@ public class TempControl extends Activity {
                 }
             };
             registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+            WeatherAPI wapi = new WeatherAPI();
+            wapi.run(((MyApplication) this.getApplication()),((MyApplication) this.getApplication()).getPostCode());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    updateWeatherUi();
+                }
+            }, 3000);//TODO: SET FREEZE
         }
         else{
             AlertDialog alertDialog = new AlertDialog.Builder(TempControl.this).create();
@@ -132,6 +141,44 @@ public class TempControl extends Activity {
         String temmpText = ((MyApplication) this.getApplication()).getTemperature()+ "°C";
         temperature.setText(temmpText);
         humidity.setText(((MyApplication) this.getApplication()).getHumidity());
+    }
+
+    public void updateWeatherUi(){
+        String[] directions = {"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"};
+        Map<String,String> weather = ((MyApplication) this.getApplication()).getWeather();
+        TextView temperature = (TextView)findViewById(R.id.WeatherTemperature);
+        TextView description = (TextView)findViewById(R.id.WeatherDescription);
+        TextView low = (TextView)findViewById(R.id.Low);
+        TextView high = (TextView)findViewById(R.id.High);
+        TextView feelsLike = (TextView)findViewById(R.id.FeelsLike);
+        TextView humidity = (TextView)findViewById(R.id.Humidity);
+        TextView windSpeed = (TextView)findViewById(R.id.WindSpeed);
+        TextView windDirection = (TextView)findViewById(R.id.WindDirection);
+        if(weather!= null){
+            System.out.println(weather);
+            int tempTemperature = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp"))));
+            int tempHigh = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp_max"))));
+            int tempLow = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp_min"))));
+            int tempFeelsLike = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("feels_like"))));
+            int tempWindDirections = Integer.parseInt(Objects.requireNonNull(weather.get("deg")));
+            String temperatureMessage = tempTemperature + "°C";
+            String temperatureDescription = weather.get("description");
+            String highMessage = tempHigh + "°C";
+            String lowMessage = tempLow + "°C";
+            String feelsLikeMessage = tempFeelsLike + "°C";
+            String humidityMessage = weather.get("humidity") + "%";
+            String windSpeedMessage = weather.get("speed") + "m/s";
+            String windDirectionMessage = directions[ (int)Math.round((  ((double)tempWindDirections % 360) / 45)) ];
+            temperature.setText(temperatureMessage);
+            description.setText(temperatureDescription);
+            high.setText(highMessage);
+            low.setText(lowMessage);
+            feelsLike.setText(feelsLikeMessage);
+            humidity.setText(humidityMessage);
+            windSpeed.setText(windSpeedMessage);
+            windDirection.setText(windDirectionMessage);
+            //change location
+        }
     }
 
     @Override

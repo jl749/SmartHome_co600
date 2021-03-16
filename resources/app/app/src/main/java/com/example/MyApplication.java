@@ -3,6 +3,8 @@ package com.example;
 import android.app.Application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyApplication extends Application {
 
@@ -23,6 +25,7 @@ public class MyApplication extends Application {
     private String currentHouse;
     private String APIKey;
     private String postCode;
+    private Map<String, String> weather;
 
 
     public String getAqi(){return aqi;}
@@ -50,6 +53,7 @@ public class MyApplication extends Application {
     public String getAPIKey(){return APIKey; }
     public boolean getIntruder() {return intruder; }
     public String getPostCode() {return postCode; }
+    public Map<String, String> getWeather() {return weather; }
 
     public boolean connection(){
         return connectionLost;
@@ -83,6 +87,7 @@ public class MyApplication extends Application {
     public void setFan(String fan) { this.fan = fan; }
     public void setAPIKey(String APIKey) { this.APIKey = APIKey; }
     public void setPostCode(String postCode) {this.postCode = postCode; }
+    public void setWeather(Map<String, String> weather){this.weather = weather; }
 
     public void setFirstOpen(boolean firstOpen){
         this.firstOpen = firstOpen;
