@@ -28,8 +28,10 @@ public class WeatherAPI {
     //http://api.openweathermap.org/data/2.5/weather?q=medway&appid=414a72d3e6793b70712631f53c6de000
 
     public void run(MyApplication m, String postCode){
-        GetLocationAndWeather glaw = new GetLocationAndWeather(postCode,m);
-        glaw.execute();
+        if(postCode!=null) {
+            GetLocationAndWeather glaw = new GetLocationAndWeather(postCode, m);
+            glaw.execute();
+        }
 
     }
 
@@ -113,15 +115,16 @@ public class WeatherAPI {
         }
         @Override
         protected void onPostExecute(Void result){
-            if(allMatches == null){
+            System.out.println(allMatches);
+            if(allMatches.isEmpty()){
                 setVariables(null,m);
             }
             else {
                 ArrayList<String> locations = new ArrayList<>();
                 locations.add(allMatches.get(0));
-                locations.add(allMatches.get(5));
-                locations.add(allMatches.get(4));
-                locations.add(allMatches.get(3));
+                for(int i= allMatches.size()-1;i>=2;i--){
+                    locations.add(allMatches.get(i));
+                }
                 GetWeather gw = new GetWeather(locations, m);
                 gw.execute();
             }

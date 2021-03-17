@@ -193,11 +193,8 @@ public class MainActivity extends AppCompatActivity{
     private class CheckLogin extends AsyncTask<Void, Void, Void> {
         //private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
         private String raptor = MainActivity.raptor;
+
         StringBuilder result=new StringBuilder();
-        HttpURLConnection http=null;
-        OutputStream out=null;
-        InputStreamReader in=null;
-        BufferedReader reader=null;
         String id;
         String pass;
         Boolean fileExists;
@@ -211,7 +208,10 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         protected Void doInBackground(Void... voids) {
-
+            HttpURLConnection http=null;
+            OutputStream out=null;
+            InputStreamReader in=null;
+            BufferedReader reader=null;
             try {
                 URL url = new URL(raptor+"chkLogin.php");
                 String msg="id="+id+"&pass="+pass;
@@ -221,10 +221,10 @@ public class MainActivity extends AppCompatActivity{
                 http = (HttpURLConnection)con;
                 http.setRequestMethod("POST");
                 http.setConnectTimeout(3000);
-                http.setReadTimeout(2000);
+                //http.setReadTimeout(2000);
                 http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 http.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-                http.setDoOutput(true);
+                //http.setDoOutput(true);
                 out=http.getOutputStream();
                 out.write(postDataBytes);
 
@@ -244,8 +244,8 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(Void results) {
+            System.out.println(result.toString());
             setValid(result.toString(),id,pass,fileExists);
-
         }
 
     }
