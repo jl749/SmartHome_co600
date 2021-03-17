@@ -23,15 +23,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import javax.net.ssl.HttpsURLConnection;
-
 
 public class MainActivity extends AppCompatActivity{
-
+    static final String raptor = "http://192.168.1.75/co600/";
     static final String nodMCUwebServer="http://192.168.1.72/";
     private static final String pin = "2222";
     private String username;
@@ -192,9 +191,10 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private class CheckLogin extends AsyncTask<Void, Void, Void> {
-        private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
+        //private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
+        private String raptor = MainActivity.raptor;
         StringBuilder result=new StringBuilder();
-        HttpsURLConnection https=null;
+        HttpURLConnection http=null;
         OutputStream out=null;
         InputStreamReader in=null;
         BufferedReader reader=null;
@@ -218,17 +218,17 @@ public class MainActivity extends AppCompatActivity{
                 byte[] postDataBytes=msg.getBytes("UTF-8");
 
                 URLConnection con = url.openConnection();
-                https = (HttpsURLConnection)con;
-                https.setRequestMethod("POST");
-                https.setConnectTimeout(3000);
-                https.setReadTimeout(2000);
-                https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-                https.setDoOutput(true);
-                out=https.getOutputStream();
+                http = (HttpURLConnection)con;
+                http.setRequestMethod("POST");
+                http.setConnectTimeout(3000);
+                http.setReadTimeout(2000);
+                http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                http.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+                http.setDoOutput(true);
+                out=http.getOutputStream();
                 out.write(postDataBytes);
 
-                in=new InputStreamReader(https.getInputStream(),"UTF-8");
+                in=new InputStreamReader(http.getInputStream(),"UTF-8");
                 reader=new BufferedReader(in);
                 result.append(reader.readLine());
             }catch(Exception e) {
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity{
                 try{reader.close();}catch(Exception e) {e.printStackTrace();}
                 try{in.close();}catch(Exception e) {e.printStackTrace();}
                 try{out.close();}catch(Exception e) {e.printStackTrace();}
-                try {https.disconnect();}catch(Exception e) {e.printStackTrace();}
+                try {http.disconnect();}catch(Exception e) {e.printStackTrace();}
             }
             return null;
         }

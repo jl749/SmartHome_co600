@@ -28,7 +28,8 @@ public class GetPostcode {
         MyApplication m;
         String postCode;
 
-        private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
+        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
+        private String raptor = MainActivity.raptor;
 
         public GetPC(String houseID,MyApplication m) {
             super();

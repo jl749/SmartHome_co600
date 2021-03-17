@@ -5,11 +5,9 @@ import android.os.AsyncTask;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class GetAPIKey extends Activity {
 
@@ -24,9 +22,9 @@ public class GetAPIKey extends Activity {
 
 
     private  class GetAPIK extends AsyncTask<Void, Void, Void> {
-
-        private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        HttpsURLConnection https = null;
+        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
+        private String raptor = MainActivity.raptor;
+        HttpURLConnection http = null;
         OutputStream out = null;
         InputStreamReader in = null;
         BufferedReader reader = null;
@@ -48,18 +46,18 @@ public class GetAPIKey extends Activity {
                 byte[] postDataBytes=msg.getBytes("UTF-8");
 
                 URLConnection con = url.openConnection();
-                https = (HttpsURLConnection)con;
-                https.setRequestMethod("POST");
-                https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-                https.setConnectTimeout(1000);
-                https.setReadTimeout(1000);
-                https.setDoOutput(true);
-                https.setDoInput(true);
-                out=https.getOutputStream();
+                http = (HttpURLConnection)con;
+                http.setRequestMethod("POST");
+                http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                http.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+                http.setConnectTimeout(1000);
+                http.setReadTimeout(1000);
+                http.setDoOutput(true);
+                http.setDoInput(true);
+                out=http.getOutputStream();
                 out.write(postDataBytes);
 
-                in=new InputStreamReader(https.getInputStream(),"UTF-8");
+                in=new InputStreamReader(http.getInputStream(),"UTF-8");
                 reader=new BufferedReader(in);
                 apiKey=reader.readLine();
             }catch(Exception e) {
@@ -68,7 +66,7 @@ public class GetAPIKey extends Activity {
                 try{reader.close();}catch(Exception e) {e.printStackTrace();}
                 try{in.close();}catch(Exception e) {e.printStackTrace();}
                 try{out.close();}catch(Exception e) {e.printStackTrace();}
-                try{https.disconnect();}catch(Exception e) {e.printStackTrace();}
+                try{http.disconnect();}catch(Exception e) {e.printStackTrace();}
             }
             return null;
         }

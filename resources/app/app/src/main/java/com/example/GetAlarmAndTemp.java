@@ -6,14 +6,13 @@ import android.os.AsyncTask;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class GetAlarmAndTemp extends Activity {
 
@@ -46,9 +45,10 @@ public class GetAlarmAndTemp extends Activity {
 
     private  class GetAandT extends AsyncTask<Void, Void, Void> {
 
-        private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
+        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
+        private String raptor = MainActivity.raptor;
         Map<String, String> values = new HashMap<>();
-        HttpsURLConnection https = null;
+        HttpURLConnection http = null;
         OutputStream out = null;
         InputStreamReader in = null;
         BufferedReader reader = null;
@@ -69,16 +69,16 @@ public class GetAlarmAndTemp extends Activity {
                 byte[] postDataBytes = msg.getBytes("UTF-8");
 
                 URLConnection con = url.openConnection();
-                https = (HttpsURLConnection) con;
-                https.setRequestMethod("POST");
-                https.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                https.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-                https.setDoOutput(true);
-                out = https.getOutputStream();
+                http = (HttpURLConnection) con;
+                http.setRequestMethod("POST");
+                http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                http.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+                http.setDoOutput(true);
+                out = http.getOutputStream();
                 out.write(postDataBytes);
 
                 String line;
-                in = new InputStreamReader(https.getInputStream(), "UTF-8");
+                in = new InputStreamReader(http.getInputStream(), "UTF-8");
                 reader = new BufferedReader(in);
                 while ((line = reader.readLine()) != null) {
                     String[] tmp = line.split("=");
@@ -103,7 +103,7 @@ public class GetAlarmAndTemp extends Activity {
                     e.printStackTrace();
                 }
                 try {
-                    https.disconnect();
+                    http.disconnect();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

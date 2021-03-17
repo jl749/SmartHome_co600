@@ -80,15 +80,19 @@ public class FunctionMenu extends Activity {
             GetAlarmAndTemp at = new GetAlarmAndTemp();
             at.run(((MyApplication) this.getApplication()), ((MyApplication) this.getApplication()).getCurrentHouse());
             ((MyApplication)this.getApplication()).setFirstOpen(false);
-            GetPostcode gpc = new GetPostcode();
-            gpc.run(houseId,((MyApplication) this.getApplication()));
         }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 checkConnection();
+                //getPostCode();
             }
-        }, 10000);//TODO: SET FREEZE
+        }, 20000);//TODO: SET FREEZE
+    }
+
+    public void getPostCode(){
+        GetPostcode gpc = new GetPostcode();
+        gpc.run(houseId,((MyApplication) this.getApplication()));
     }
 
     public void end(){

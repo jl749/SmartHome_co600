@@ -73,8 +73,8 @@ public class UpdateValues extends Activity {
             URL url=null;
 
             try {
-                url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
-                //url = new URL(MainActivity.nodMCUwebServer);
+                //url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
+                url = new URL(MainActivity.nodMCUwebServer);
                 con = (HttpURLConnection) url.openConnection();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 try {
