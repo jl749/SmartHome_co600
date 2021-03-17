@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public class CheckLogin extends AsyncTask {
+    private class CheckLogin extends AsyncTask<Void, Void, Void> {
         private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
         StringBuilder result=new StringBuilder();
         HttpsURLConnection https=null;
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
         @Override
-        protected Void doInBackground(Object... objects) {
+        protected Void doInBackground(Void... voids) {
 
             try {
                 URL url = new URL(raptor+"chkLogin.php");
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(Void results) {
             setValid(result.toString(),id,pass,fileExists);
 
         }

@@ -7,35 +7,33 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.SparseIntArray;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.ArrayList;
+import org.w3c.dom.Text;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TempControl extends Activity {
 
     private static BroadcastReceiver tickReceiver;
     final Handler handler = new Handler(Looper.getMainLooper());
     private static String houseID;
+    Map<String,Integer> icons = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
         setContentView(R.layout.temperature_control);
+        setIcons();
         if (!((MyApplication) this.getApplication()).checkNull()) {
             TextView temperature = (TextView) findViewById(R.id.CurrentTemp);
             String tempText = ((MyApplication) this.getApplication()).getTemperature() + "°C";
@@ -154,6 +152,8 @@ public class TempControl extends Activity {
         TextView humidity = (TextView)findViewById(R.id.Humidity);
         TextView windSpeed = (TextView)findViewById(R.id.WindSpeed);
         TextView windDirection = (TextView)findViewById(R.id.WindDirection);
+        TextView location = (TextView)findViewById(R.id.City);
+        ImageView weatherIcon = (ImageView)findViewById(R.id.WeatherIcon);
         if(weather!= null){
             System.out.println(weather);
             int tempTemperature = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp"))));
@@ -161,6 +161,7 @@ public class TempControl extends Activity {
             int tempLow = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp_min"))));
             int tempFeelsLike = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("feels_like"))));
             int tempWindDirections = Integer.parseInt(Objects.requireNonNull(weather.get("deg")));
+            String iconCode = weather.get("icon");
             String temperatureMessage = tempTemperature + "°C";
             String temperatureDescription = weather.get("description");
             String highMessage = tempHigh + "°C";
@@ -169,6 +170,7 @@ public class TempControl extends Activity {
             String humidityMessage = weather.get("humidity") + "%";
             String windSpeedMessage = weather.get("speed") + "m/s";
             String windDirectionMessage = directions[ (int)Math.round((  ((double)tempWindDirections % 360) / 45)) ];
+            String cityMessage = weather.get("city") + ", UK";
             temperature.setText(temperatureMessage);
             description.setText(temperatureDescription);
             high.setText(highMessage);
@@ -177,8 +179,30 @@ public class TempControl extends Activity {
             humidity.setText(humidityMessage);
             windSpeed.setText(windSpeedMessage);
             windDirection.setText(windDirectionMessage);
-            //change location
+            weatherIcon.setImageResource(icons.get(iconCode));
+            location.setText(cityMessage);
+            //change location and image
         }
+    }
+
+
+    private void setIcons(){
+        icons.put("01d",R.drawable.clearskyd);
+        icons.put("01n",R.drawable.clearskyn);
+        icons.put("02d",R.drawable.fewcloudsd);
+        icons.put("02n",R.drawable.fewcloudsn);
+        icons.put("03d",R.drawable.scatteredcloudsd);
+        icons.put("03n",R.drawable.scatteredcloudsn);
+        icons.put("04d",R.drawable.brokencloudsd);
+        icons.put("04n",R.drawable.brokencloudsn);
+        icons.put("09d",R.drawable.showerraind);
+        icons.put("09n",R.drawable.showerrainn);
+        icons.put("10d",R.drawable.raind);
+        icons.put("10n",R.drawable.rainn);
+        icons.put("11d", R.drawable.thunderstormd);
+        icons.put("11n", R.drawable.thunderstormn);
+        icons.put("50d", R.drawable.mistd);
+        icons.put("50n", R.drawable.mistn);
     }
 
     @Override

@@ -106,6 +106,7 @@
             android:background="@drawable/bordernobottom">
 
             <TextView
+                android:id="@+id/City"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="6"
@@ -126,7 +127,7 @@
                 android:layout_width="0dp"
                 android:layout_height="130dip"
                 android:layout_weight="1"
-                android:src="@drawable/elevennight" />
+                android:src="@drawable/showerraind" />
 
             <LinearLayout
 
@@ -181,7 +182,7 @@
                     android:layout_weight="5"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
-                    android:text="20°C"
+                    android:text=""
                     android:textColor="#00001a" />
 
                 <TextView
@@ -190,7 +191,7 @@
                     android:layout_weight="5"
                     android:textSize="12sp"
                     android:gravity="center|top"
-                    android:text="High"
+                    android:text="@string/high"
                     android:textColor="#000033"
                     android:textStyle="bold" />
 
@@ -217,7 +218,7 @@
                     android:layout_weight="5"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
-                    android:text="20°C"
+                    android:text=""
                     android:textColor="#00001a" />
 
                 <TextView
@@ -226,7 +227,7 @@
                     android:layout_weight="5"
                     android:textSize="12sp"
                     android:gravity="center|top"
-                    android:text="Feels Like"
+                    android:text="@string/feels_like"
                     android:textColor="#000033"
                     android:textStyle="bold" />
 
@@ -253,7 +254,7 @@
                     android:layout_weight="5"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
-                    android:text="20°C"
+                    android:text=""
                     android:textColor="#00001a" />
 
                 <TextView
@@ -262,7 +263,7 @@
                     android:layout_weight="5"
                     android:gravity="center|top"
                     android:textSize="12sp"
-                    android:text="Wind Speed"
+                    android:text="@string/wind_speed"
                     android:textColor="#000033"
                     android:textStyle="bold" />
 
@@ -298,7 +299,7 @@
                     android:layout_weight="6"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
-                    android:text="20°C"
+                    android:text=""
                     android:textColor="#00001a" />
 
                 <TextView
@@ -307,7 +308,7 @@
                     android:layout_weight="4"
                     android:gravity="center|top"
                     android:textSize="12sp"
-                    android:text="Low"
+                    android:text="@string/low"
                     android:textColor="#000033"
                     android:textStyle="bold" />
 
@@ -334,7 +335,7 @@
                     android:layout_weight="6"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
-                    android:text="20°C"
+                    android:text=""
                     android:textColor="#00001a" />
 
                 <TextView
@@ -343,7 +344,7 @@
                     android:layout_weight="4"
                     android:textSize="12sp"
                     android:gravity="center|top"
-                    android:text="Humidity"
+                    android:text="@string/humidity2"
                     android:textColor="#000033"
                     android:textStyle="bold" />
 
@@ -370,7 +371,7 @@
                     android:layout_weight="6"
                     android:textSize="20sp"
                     android:gravity="center|bottom"
-                    android:text="20°C"
+                    android:text=""
                     android:textColor="#00001a" />
 
                 <TextView
@@ -379,7 +380,7 @@
                     android:layout_weight="4"
                     android:textSize="12sp"
                     android:gravity="center|top"
-                    android:text="Wind Direction"
+                    android:text="@string/wind_direction"
                     android:textColor="#000033"
                     android:textStyle="bold" />
 
