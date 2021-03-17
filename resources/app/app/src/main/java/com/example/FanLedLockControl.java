@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class FanLedLockControl {
-    //private static final String ip = "http://192.168.1.72/";
+
     private static final String ip = MainActivity.nodMCUwebServer;
 
     public void run(String val, boolean on,String apiKey,String function) {
@@ -16,6 +16,8 @@ public class FanLedLockControl {
 
     private class SetFLC extends AsyncTask<Void, Void, Void> {
 
+        URL url = null;
+        HttpURLConnection request = null;
         String val;
         String state;
         String apiKey;
@@ -35,9 +37,6 @@ public class FanLedLockControl {
 
         @Override
         protected Void doInBackground(Void... voids) {
-
-            URL url = null;
-            HttpURLConnection request = null;
 
             try {
                 url = new URL(ip + function + val + "/" + state + "/" +apiKey);

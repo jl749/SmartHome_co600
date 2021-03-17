@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+
+
 public class GetAPIKey extends Activity {
 
     public void run(MyApplication m,String houseID){
@@ -22,8 +24,8 @@ public class GetAPIKey extends Activity {
 
 
     private  class GetAPIK extends AsyncTask<Void, Void, Void> {
-        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+
+        private static final String raptor = MainActivity.raptor;
         HttpURLConnection http = null;
         OutputStream out = null;
         InputStreamReader in = null;

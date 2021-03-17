@@ -73,18 +73,12 @@ public class TempControl extends Activity {
                 public void onReceive(Context context, Intent intent) {
                     if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
                         update();
+                        updateWeather();
                     }
                 }
             };
             registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
-            WeatherAPI wapi = new WeatherAPI();
-            wapi.run(((MyApplication) this.getApplication()),((MyApplication) this.getApplication()).getPostCode());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    updateWeatherUi();
-                }
-            }, 3000);//TODO: SET FREEZE
+            updateWeatherUi();
         }
         else{
             AlertDialog alertDialog = new AlertDialog.Builder(TempControl.this).create();
@@ -141,6 +135,19 @@ public class TempControl extends Activity {
         humidity.setText(((MyApplication) this.getApplication()).getHumidity());
     }
 
+    public void updateWeather(){
+        if(((MyApplication) this.getApplication()).getPostCode()!=null) {
+            WeatherAPI wapi = new WeatherAPI();
+            wapi.run(((MyApplication) this.getApplication()), ((MyApplication) this.getApplication()).getPostCode());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    updateWeatherUi();
+                }
+            }, 4000);
+        }
+    }
+
     public void updateWeatherUi(){
         String[] directions = {"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"};
         Map<String,String> weather = ((MyApplication) this.getApplication()).getWeather();
@@ -182,6 +189,10 @@ public class TempControl extends Activity {
             weatherIcon.setImageResource(icons.get(iconCode));
             location.setText(cityMessage);
             //change location and image
+        }
+        else {
+            location.setText("Invalid Postcode");
+            System.out.println("INVALID POSTCODE: "+((MyApplication) this.getApplication()).getPostCode());
         }
     }
 

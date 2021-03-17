@@ -17,7 +17,7 @@ public class GetPostcode {
     }
 
     public void setPostcode(String postcode,MyApplication m){
-        if(!postcode.equals(null)){
+        if(postcode != null){
             m.setPostCode(postcode);
         }
     }
@@ -28,8 +28,7 @@ public class GetPostcode {
         MyApplication m;
         String postCode;
 
-        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+        private static final String raptor = MainActivity.raptor;
 
         public GetPC(String houseID,MyApplication m) {
             super();

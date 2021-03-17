@@ -29,9 +29,12 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 
+
 public class MainActivity extends AppCompatActivity{
-    static final String raptor = "http://192.168.1.75/co600/";
+
     static final String nodMCUwebServer="http://192.168.1.72/";
+    static final String raptor ="http://192.168.1.72/c600/";
+    //static final String raptor ="https://raptor.kent.ac.uk/~jl749/";
     private static final String pin = "2222";
     private String username;
     LinearLayout layout;
@@ -191,8 +194,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private class CheckLogin extends AsyncTask<Void, Void, Void> {
-        //private static final String raptor="https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+
+        private static final String raptor=MainActivity.raptor;
         StringBuilder result=new StringBuilder();
         HttpURLConnection http=null;
         OutputStream out=null;

@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,6 +58,7 @@ public class UpdateValues extends Activity {
         ArrayList<String> variables = new ArrayList<String>();
         String result;
         MyApplication m;
+        private static final String raptor = MainActivity.raptor;
 
         public GetHttp(MyApplication m){
             super();
@@ -73,8 +72,7 @@ public class UpdateValues extends Activity {
             URL url=null;
 
             try {
-                //url = new URL("https://raptor.kent.ac.uk/~jl749/status.html");
-                url = new URL(MainActivity.nodMCUwebServer);
+                url = new URL(raptor+"status.html");
                 con = (HttpURLConnection) url.openConnection();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 try {

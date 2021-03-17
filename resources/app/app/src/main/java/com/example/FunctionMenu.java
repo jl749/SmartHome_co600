@@ -80,19 +80,21 @@ public class FunctionMenu extends Activity {
             GetAlarmAndTemp at = new GetAlarmAndTemp();
             at.run(((MyApplication) this.getApplication()), ((MyApplication) this.getApplication()).getCurrentHouse());
             ((MyApplication)this.getApplication()).setFirstOpen(false);
+            GetPostcode gpc = new GetPostcode();
+            gpc.run(houseId,((MyApplication) this.getApplication()));
         }
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 checkConnection();
-                //getPostCode();
+                updateWeather();
             }
-        }, 20000);//TODO: SET FREEZE
+        }, 5000);//TODO: SET FREEZE
     }
 
-    public void getPostCode(){
-        GetPostcode gpc = new GetPostcode();
-        gpc.run(houseId,((MyApplication) this.getApplication()));
+    public void updateWeather(){
+        WeatherAPI wapi = new WeatherAPI();
+        wapi.run(((MyApplication) this.getApplication()),((MyApplication) this.getApplication()).getPostCode());
     }
 
     public void end(){
@@ -137,14 +139,6 @@ public class FunctionMenu extends Activity {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 60000, pendingIntent);
-            //else{
-                //AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                //Intent stopAlarm = new Intent(getApplicationContext(), AlarmReceiver.class);
-                //stopAlarm.putExtra("HouseID",houseId);
-                //PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, stopAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-                //alarmManager.cancel(pendingIntent);
-                //System.out.println("ALARM TURNED OFF");
-            //}
         }
     }
 

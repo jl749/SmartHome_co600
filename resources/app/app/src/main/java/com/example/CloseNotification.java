@@ -41,11 +41,10 @@ public class CloseNotification extends AppCompatActivity {
     private class DismissAlarm extends AsyncTask<Void, Void, Void> {
 
         HttpURLConnection request = null;
-        String val;
-        String state;
+        URL url = null;
         String apiKey;
-        String function;
-        private static final String ip = "http://192.168.1.72/";
+
+        private static final String ip = MainActivity.nodMCUwebServer;
 
         public DismissAlarm(String apiKey) {
             super();
@@ -56,10 +55,10 @@ public class CloseNotification extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                URL url = new URL(ip + "/A_DISMISS/" + apiKey);
-                HttpURLConnection request=(HttpURLConnection) url.openConnection();
-                request.setConnectTimeout(2000);
+                url = new URL(ip + "/A_DISMISS/" + apiKey);
+                request=(HttpURLConnection) url.openConnection();
                 request.connect();
+                request.getInputStream().close();
 
             } catch (Exception e) {
                 e.printStackTrace();

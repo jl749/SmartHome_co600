@@ -42,6 +42,9 @@ public class Profile extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
                 updatePostCode(m_Text);
+                if(m_Text!=null) {
+                    updateWeather(m_Text);
+                }
 
             }
         });
@@ -60,6 +63,11 @@ public class Profile extends Activity {
         String houseID = ((MyApplication)this.getApplication()).getCurrentHouse();
         UpdatePostcode upc = new UpdatePostcode();
         upc.run(houseID,postCode);
+    }
+
+    public void updateWeather(String postCode){
+        WeatherAPI wapi = new WeatherAPI();
+        wapi.run(((MyApplication) this.getApplication()),postCode);
     }
 
 }

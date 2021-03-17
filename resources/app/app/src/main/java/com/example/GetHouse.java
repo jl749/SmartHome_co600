@@ -12,6 +12,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class GetHouse extends Activity {
 
     public void run(MyApplication m,String username){
@@ -27,8 +28,7 @@ public class GetHouse extends Activity {
 
     private class GetH extends AsyncTask<Void, Void, Void>{
 
-        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+        private static final String raptor = MainActivity.raptor;
         List<String> numbers =new ArrayList<>();
         HttpURLConnection http=null;
         OutputStream out=null;
