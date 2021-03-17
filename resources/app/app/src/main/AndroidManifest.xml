@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/mainicon"
+        android:label="SmartHomeSystem"
+        android:roundIcon="@drawable/mainicon"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        android:name=".MyApplication">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".TempControl" android:screenOrientation="portrait" />
+        <activity android:name=".Security" android:screenOrientation="portrait" />
+        <activity android:name=".Security1" android:screenOrientation="portrait" />
+        <activity android:name=".Settings" android:screenOrientation="portrait" />
+        <activity android:name=".FunctionMenu" android:screenOrientation="portrait" />
+        <activity android:name=".Alarm" android:screenOrientation="portrait" />
+        <activity android:name=".Voicerec" android:screenOrientation="portrait" />
+        <activity android:name=".Deeplearning" android:screenOrientation="portrait" />
+        <activity android:name=".Device" android:screenOrientation="portrait" />
+        <activity android:name=".Notifications" android:screenOrientation="portrait" />
+        <activity android:name=".SecuritySettings" android:screenOrientation="portrait" />
+        <activity android:name=".Profile" android:screenOrientation="portrait" />
+        <activity android:name=".UpdateValues" android:screenOrientation="portrait" />
+        <activity android:name=".AirQuality" android:screenOrientation="portrait" />
+        <activity
+            android:name=".CloseNotification"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+        </activity>
+        <receiver android:name=".AlarmReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+
+        </receiver>
+    </application>
+
+</manifest>

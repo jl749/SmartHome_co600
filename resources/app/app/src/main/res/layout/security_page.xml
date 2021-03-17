@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/back"
+            android:layout_weight="0.2" >
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Room 1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="40sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" >
+
+            <TextView
+                android:id="@+id/currentState1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="bottom|center_horizontal"
+                android:textAlignment="center"
+                android:text="@string/currently_locked" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2" >
+
+
+            <ImageView
+                android:id="@+id/currentState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/locked" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/back"
+            android:layout_weight="0.2" >
+
+            <TextView
+                android:id="@+id/light1Status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:text="Lights Off" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/toggleLight1"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity=""
+                android:checked="false"
+                android:gravity="center"
+                android:scaleX="2"
+                android:scaleY="2"
+                app:showText="false" />
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/back"
+            android:layout_weight="1" >
+
+            <ImageButton
+                android:id="@+id/lockbutton"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/locked"
+                android:text="Button" />
+
+            <ImageButton
+                android:id="@+id/unlockbutton"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:src="@drawable/unlocked"
+                android:text="Button" />
+        </TableRow>
+
+
+
+    </TableLayout>
+
+</RelativeLayout>
