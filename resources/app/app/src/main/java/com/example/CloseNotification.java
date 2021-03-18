@@ -41,10 +41,9 @@ public class CloseNotification extends AppCompatActivity {
     private class DismissAlarm extends AsyncTask<Void, Void, Void> {
 
         HttpURLConnection request = null;
-        String val;
-        String state;
+        URL url = null;
         String apiKey;
-        String function;
+
         private static final String ip = MainActivity.nodMCUwebServer;
 
         public DismissAlarm(String apiKey) {
@@ -55,7 +54,6 @@ public class CloseNotification extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            URL url = null;
             try {
                 url = new URL(ip + "/A_DISMISS/" + apiKey);
                 request=(HttpURLConnection) url.openConnection();

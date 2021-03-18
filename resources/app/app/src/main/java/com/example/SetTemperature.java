@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+
 public class SetTemperature extends Activity {
 
     public void run(Double val, int houseID){
@@ -23,8 +24,7 @@ public class SetTemperature extends Activity {
         OutputStream out = null;
         InputStreamReader in = null;
         BufferedReader reader = null;
-        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+        private static final String raptor = MainActivity.raptor;
         Double val;
         int houseID;
 

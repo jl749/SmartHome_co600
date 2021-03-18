@@ -136,7 +136,8 @@ public class TempControl extends Activity {
     }
 
     public void updateWeather(){
-        if(((MyApplication) this.getApplication()).getPostCode()!=null) {
+        System.out.println(((MyApplication) this.getApplication()).validPostCode());
+        if(((MyApplication) this.getApplication()).validPostCode()) {
             WeatherAPI wapi = new WeatherAPI();
             wapi.run(((MyApplication) this.getApplication()), ((MyApplication) this.getApplication()).getPostCode());
             handler.postDelayed(new Runnable() {

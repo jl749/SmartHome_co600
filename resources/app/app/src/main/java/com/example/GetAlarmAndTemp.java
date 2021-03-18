@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class GetAlarmAndTemp extends Activity {
 
     public void  run(MyApplication m,String houseID){
@@ -45,8 +46,7 @@ public class GetAlarmAndTemp extends Activity {
 
     private  class GetAandT extends AsyncTask<Void, Void, Void> {
 
-        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+        private static final String raptor = MainActivity.raptor;
         Map<String, String> values = new HashMap<>();
         HttpURLConnection http = null;
         OutputStream out = null;

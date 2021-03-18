@@ -41,8 +41,8 @@ public class Profile extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                updatePostCode(m_Text);
-                if(m_Text!=null) {
+                if(!m_Text.isEmpty()) {
+                    updatePostCode(m_Text);
                     updateWeather(m_Text);
                 }
 
@@ -54,7 +54,6 @@ public class Profile extends Activity {
                 dialog.cancel();
             }
         });
-
         builder.show();
     }
 

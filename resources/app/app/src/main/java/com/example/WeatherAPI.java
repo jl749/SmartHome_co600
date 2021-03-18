@@ -80,6 +80,7 @@ public class WeatherAPI {
         @Override
         protected Void doInBackground(Void... voids) {
             try{
+                m.validPostCode(true);
                 //Stream<String> lines = new BufferedReader(new InputStreamReader(request.getInputStream())).lines(); //stream one time instance, closed after use
                 InputStreamReader reader = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -87,6 +88,8 @@ public class WeatherAPI {
                     Stream<String> lines = new BufferedReader(reader).lines(); //stream one time instance, closed after use
                     if(lines.skip(130).findFirst().get().contains("No rows found")){
                         System.out.println("not a valid postCode");
+                        m.validPostCode(false);
+                        allMatches = null;
                         return null;
                     }
                 }

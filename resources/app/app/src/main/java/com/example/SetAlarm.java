@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+
 public class SetAlarm extends Activity {
 
     public void run(boolean b,int houseID){
@@ -25,8 +26,8 @@ public class SetAlarm extends Activity {
         BufferedReader reader=null;
         boolean b;
         int houseID;
-        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+
+        private static final String raptor = MainActivity.raptor;
 
         public UpdateIntruder(boolean b,int houseID){
             super();

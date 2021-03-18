@@ -44,7 +44,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             public void run() {
                 checkIntruder(context);
             }
-        }, 3000);//increase time
+        }, 5000);//increase time
     }
 
     public void checkIntruder(Context c){

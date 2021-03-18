@@ -45,13 +45,11 @@ public class Security1 extends Activity {
                 if (isChecked) {
                     state.setText("Light On");
                     setLightOn();
-                    update();
                     fllc.run(led, true,apiKey,"LED");
                 }
                 else {
                     state.setText("Light Off");
                     setLightOff();
-                    update();
                     fllc.run(led, false,apiKey,"LED");
                 }
             }
@@ -68,7 +66,6 @@ public class Security1 extends Activity {
                     ImageView image = (ImageView) findViewById(R.id.currentState);
                     image.setImageResource(R.drawable.locked);
                     state.setText("Currently Locked");
-                    update();
                     //call arduino to lock door
                     setClose();
                 }
@@ -87,7 +84,6 @@ public class Security1 extends Activity {
                     ImageView image = (ImageView) findViewById(R.id.currentState);
                     image.setImageResource(R.drawable.unlocked);
                     state.setText("Currently Unlocked");
-                    update();
                     //call arduino to lock door
                     setOpen();
                 }
@@ -175,7 +171,7 @@ public class Security1 extends Activity {
         ((MyApplication) this.getApplication()).setLight2("1");
     }
     public void setLightOff(){
-        ((MyApplication) this.getApplication()).setLight2("1");
+        ((MyApplication) this.getApplication()).setLight2("0");
     }
 
     public boolean onTouchEvent(MotionEvent touchEvent) {

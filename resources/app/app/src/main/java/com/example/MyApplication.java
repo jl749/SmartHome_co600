@@ -25,6 +25,7 @@ public class MyApplication extends Application {
     private String currentHouse;
     private String APIKey;
     private String postCode;
+    private boolean validPostCode;
     private Map<String, String> weather;
 
 
@@ -54,6 +55,7 @@ public class MyApplication extends Application {
     public boolean getIntruder() {return intruder; }
     public String getPostCode() {return postCode; }
     public Map<String, String> getWeather() {return weather; }
+    public boolean validPostCode() {return validPostCode; }
 
     public boolean connection(){
         return connectionLost;
@@ -88,6 +90,7 @@ public class MyApplication extends Application {
     public void setAPIKey(String APIKey) { this.APIKey = APIKey; }
     public void setPostCode(String postCode) {this.postCode = postCode; }
     public void setWeather(Map<String, String> weather){this.weather = weather; }
+    public void validPostCode(Boolean validPostCode){ this.validPostCode = validPostCode; }
 
     public void setFirstOpen(boolean firstOpen){
         this.firstOpen = firstOpen;

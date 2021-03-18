@@ -21,8 +21,7 @@ public class UpdatePostcode {
 
         String houseID;
         String postCode;
-        //private static final String raptor = "https://raptor.kent.ac.uk/~jl749/";
-        private String raptor = MainActivity.raptor;
+        private static final String raptor = MainActivity.raptor;
 
         public UpdatePC(String houseID, String postCode) {
             super();
