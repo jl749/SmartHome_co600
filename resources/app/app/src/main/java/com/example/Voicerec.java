@@ -25,6 +25,8 @@ import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,26 +38,26 @@ public class Voicerec extends Activity {
     private Intent intentRecognizer;
     private SpeechRecognizer speechRecognizer;
     private TextView status;
+    private String houseID;
+    private String apiKey;
+    private final String errorM = "Command not recognized: ";
     private static BroadcastReceiver tickReceiver;
-
-    private ArrayList<String> tempPage = new ArrayList<String>(
-            Arrays.asList("temperature", "humidity", "weather","degree","degrees"));
-    private ArrayList<String> locklightPage = new ArrayList<String>(
-            Arrays.asList("light","lights","lock","security"));
-    private ArrayList<String> alarmPage = new ArrayList<String>(
-            Arrays.asList("alarm","intruder"));
-    private ArrayList<String> airqualityPage = new ArrayList<String>(
-            Arrays.asList("fan","air","quality"));
-    private ArrayList<String> settingsPage = new ArrayList<String>(
-            Arrays.asList("settings","password"));
+    private ArrayList<String> popularCommands = new ArrayList<>(
+            Arrays.asList("Change temperature to 20","Turn lights off","Alarm on","Turn fan off"));
 
 
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.voicerec_page);
+
+        StringBuilder builder = new StringBuilder();
+        for(String command:popularCommands){
+            builder.append(command+"\n");
+        }
+        TextView popularCmds = (TextView) findViewById(R.id.popularCommands);
+        popularCmds.setText(builder);
 
         ActivityCompat.requestPermissions(this,new String[]{RECORD_AUDIO}, PackageManager.PERMISSION_GRANTED);
 
@@ -102,26 +104,18 @@ public class Voicerec extends Activity {
                 ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 System.out.println("Word found " + matches.get(0));
                 String match = "";
-                String errorM = "Command not recognized";
-                if(matches!=null){
+                if(!matches.isEmpty()){
                     match = matches.get(0);
-                    String className = checkSpeech(match);
-                    if(className.equals("false")){
-                        status.setText(errorM);
+                    CheckSpeech speech = new CheckSpeech();
+                    speech.checkSpeech(match);
+                    String command = speech.checkSpeech(match);
+                    if(command.equals("false")){
+                        status.setText(errorM + match);
                     }
                     else {
                         status.setText(match);
-                        try {
-                            Class<?> c = Class.forName("com.example."+className);
-                            Intent intent = new Intent(Voicerec.this, c);
-                            startActivity(intent);
-                            if (speechRecognizer != null) {
-                                speechRecognizer.destroy();
-                            }
-                            finish();
-                        } catch (ClassNotFoundException ignored) {
-                            status.setText(errorM);
-                        }
+                        executeCommand(command);
+
                     }
                 }
             }
@@ -138,6 +132,8 @@ public class Voicerec extends Activity {
         });
 
         if (!((MyApplication) this.getApplication()).checkNull()) {
+            houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
+            apiKey = ((MyApplication) this.getApplication()).getAPIKey();
             ImageButton recordVoice = (ImageButton) findViewById(R.id.recordVoice);
             recordVoice.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -200,33 +196,199 @@ public class Voicerec extends Activity {
         startActivity(i);
     }
 
-    public String checkSpeech(String match){
-        for(String word: tempPage){
-            if(match.contains(word)){
-                return("TempControl");
-            }
+    private void executeCommand(String command){
+        int changeTemp = tryParseInt(command,0);
+        if(changeTemp!=0){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to set temperature to " +changeTemp +"?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setTemp(changeTemp);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
         }
-        for(String word: locklightPage){
-            if(match.contains(word)){
-                return("Security");
-            }
+        else if(command.equals("lightson")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to turn the lights on?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setLights(true);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
         }
-        for(String word: alarmPage){
-            if(match.contains(word)){
-                return("Alarm");
-            }
+        else if(command.equals("lightsoff")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to turn the lights off?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setLights(false);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
         }
-        for(String word: airqualityPage){
-            if(match.contains(word)){
-                return("AirQuality");
-            }
+        else if(command.equals("lockon")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to lock all doors?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setLock(true);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
         }
-        for(String word: settingsPage){
-            if(match.contains(word)){
-                return("Settings");
-            }
+        else if(command.equals("lockoff")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to unlock all doors?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setLock(false);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
         }
-        return("false");
+        else if(command.equals("fanon")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to turn the fan on?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setFan(true);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
+        }
+        else if(command.equals("fanoff")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to turn the fan off?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setFan(false);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
+        }
+        else if(command.equals("alarmoff")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to turn intruder alarm off?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setAlarm(false);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
+        }
+        else if(command.equals("alarmon")){
+            AlertDialog alertDialog = displayConfirmationAlert("Are you sure you want to turn intruder alarm on?");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            setAlarm(true);
+                            System.out.println("GREAT SUCCESS!!!");
+                        }
+                    });
+            alertDialog.show();
+        }
+        else {
+            AlertDialog alertDialog = displayConfirmationAlert("You will be navigated to "+command);
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                Class<?> c = Class.forName("com.example."+command);
+                                Intent intent = new Intent(Voicerec.this, c);
+                                startActivity(intent);
+                                if (speechRecognizer != null) {
+                                    speechRecognizer.destroy();
+                                }
+                                finish();
+                            } catch (ClassNotFoundException ignored) {
+                                status.setText(errorM);
+                            }
+                        }
+                    });
+            alertDialog.show();
+        }
+    }
+
+    private AlertDialog displayConfirmationAlert(String message){
+        AlertDialog alertDialog = new AlertDialog.Builder(Voicerec.this).create();
+        alertDialog.setTitle("Confirm command");
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.cancel();
+                    }
+                });
+        return alertDialog;
+    }
+
+    public int tryParseInt(String value, int defaultVal) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultVal;
+        }
+    }
+
+    private void setTemp(int targetTemp){
+        SetTemperature setTemp = new SetTemperature();
+        setTemp.run(targetTemp, houseID);
+        ((MyApplication)this.getApplication()).setTargetTemp(Integer.toString(targetTemp));
+    }
+
+    private void setLights(boolean state){
+        final FanLedLockControl fllc = new FanLedLockControl();
+        fllc.run("1", state,apiKey,"LED");
+        if(state) {
+            ((MyApplication)this.getApplication()).setLight1("1");
+        }
+        else{
+            ((MyApplication)this.getApplication()).setLight1("0");
+        }
+    }
+
+    private void setLock(boolean state){
+        final FanLedLockControl fllc = new FanLedLockControl();
+        fllc.run("1", state,apiKey,"LOCK");
+        if(state) {
+            ((MyApplication)this.getApplication()).setLock1("1");
+        }
+        else{
+            ((MyApplication)this.getApplication()).setLock1("0");
+        }
+    }
+
+    private void setFan(boolean state){
+        final FanLedLockControl fllc = new FanLedLockControl();
+        fllc.run("1", state,apiKey,"FAN");
+        if(state) {
+            ((MyApplication)this.getApplication()).setFan("1");
+        }
+        else{
+            ((MyApplication)this.getApplication()).setFan("0");
+        }
+    }
+
+    private void setAlarm(boolean state) {
+        SetAlarm alarm = new SetAlarm();
+        alarm.run(state,houseID);
+        if(state) {
+            ((MyApplication)this.getApplication()).setAlarm("1");
+        }
+        else{
+            ((MyApplication)this.getApplication()).setAlarm("0");
+        }
     }
 
     @Override

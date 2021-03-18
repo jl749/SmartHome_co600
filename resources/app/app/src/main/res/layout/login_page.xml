@@ -3,6 +3,7 @@
     xmlns:tools = "http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height = "match_parent"
     android:orientation="vertical"
+    android:background="#C0C0C0"
     android:gravity="center_horizontal"
     tools:context = ".MainActivity">
 
@@ -10,6 +11,7 @@
         android:text = "@string/login"
         android:layout_width="wrap_content"
         android:layout_height = "wrap_content"
+        android:textColor="#00001a"
         android:id = "@+id/textview"
         android:textSize = "40sp"
         android:layout_marginTop="20dp" />
@@ -37,6 +39,7 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#00001a"
         android:layout_marginTop="25dp"
         android:focusable="true"
         android:gravity="center_horizontal"
@@ -44,8 +47,8 @@
         android:inputType="text"
         android:maxLines="1"
         android:nextFocusForward="@id/password"
-        android:textColorHighlight="#A9A9A9"
-        android:textColorHint="#A9A9A9" />
+        android:textColorHighlight="#00001a"
+        android:textColorHint="#00001a" />
 
 
     <EditText
@@ -59,17 +62,14 @@
         android:inputType="textPassword"
         android:maxLines="1"
         android:nextFocusForward="@id/loginbutton"
-        android:textColorHint="#A9A9A9" />
+        android:textColorHint="#00001a" />
 
     <Button
         android:id="@+id/loginbutton"
         android:layout_width="123dp"
         android:layout_height="60dp"
         android:focusable="false"
-        android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
-        android:layout_toStartOf="@+id/textview"
-        android:layout_toLeftOf="@+id/textview"
         android:text="login" />
 
 </LinearLayout>

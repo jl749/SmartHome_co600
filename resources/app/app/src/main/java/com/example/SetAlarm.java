@@ -13,7 +13,7 @@ import java.net.URLConnection;
 
 public class SetAlarm extends Activity {
 
-    public void run(boolean b,int houseID){
+    public void run(boolean b,String houseID){
         UpdateIntruder update = new UpdateIntruder(b,houseID);
         update.execute();
     }
@@ -25,11 +25,11 @@ public class SetAlarm extends Activity {
         InputStreamReader in=null;
         BufferedReader reader=null;
         boolean b;
-        int houseID;
+        String houseID;
 
         private static final String raptor = MainActivity.raptor;
 
-        public UpdateIntruder(boolean b,int houseID){
+        public UpdateIntruder(boolean b,String houseID){
             super();
             this.b = b;
             this.houseID = houseID;

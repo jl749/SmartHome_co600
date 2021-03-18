@@ -62,9 +62,9 @@ public class TempControl extends Activity {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-                    double progress = seekBar.getProgress() + 10;
+                    int progress = seekBar.getProgress() + 10;
                     SetTemperature setTemp = new SetTemperature();
-                    setTemp.run(progress, Integer.parseInt(houseID));
+                    setTemp.run(progress, houseID);
                 }
             });
 
@@ -225,6 +225,7 @@ public class TempControl extends Activity {
         if(tickReceiver!=null)
             unregisterReceiver(tickReceiver);
     }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, FunctionMenu.class);

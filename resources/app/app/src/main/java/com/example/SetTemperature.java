@@ -13,7 +13,7 @@ import java.net.URLConnection;
 
 public class SetTemperature extends Activity {
 
-    public void run(Double val, int houseID){
+    public void run(Integer val, String houseID){
         setTemp set = new setTemp(val,houseID);
         set.execute();
     }
@@ -25,11 +25,11 @@ public class SetTemperature extends Activity {
         InputStreamReader in = null;
         BufferedReader reader = null;
         private static final String raptor = MainActivity.raptor;
-        Double val;
-        int houseID;
+        Integer val;
+        String houseID;
 
 
-        public setTemp(Double val, int houseID) {
+        public setTemp(Integer val, String houseID) {
             super();
             this.val = val;
             this.houseID = houseID;

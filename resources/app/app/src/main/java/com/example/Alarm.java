@@ -48,7 +48,7 @@ public class Alarm extends Activity {
                         TextView state = (TextView) findViewById(R.id.alarmState);
                         state.setText("Alarm Armed");
                         alarmOn();
-                        alarm.run(true, Integer.parseInt(houseID));
+                        alarm.run(true, houseID);
 
                         //turn alarm on
                         //deprecated
@@ -59,7 +59,7 @@ public class Alarm extends Activity {
                         TextView state = (TextView) findViewById(R.id.alarmState);
                         state.setText("Alarm Disarmed");
                         alarmOff();
-                        alarm.run(false, Integer.parseInt(houseID));
+                        alarm.run(false, houseID);
 
                         //turn alarm off
                         //deprecated

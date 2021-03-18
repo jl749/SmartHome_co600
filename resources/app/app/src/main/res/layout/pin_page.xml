@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#C0C0C0"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -41,7 +42,8 @@
         android:layout_height="51dp"
         android:gravity="center_horizontal"
         android:text="@string/please_enter_your_pin"
-        android:textSize="15sp"
+        android:textSize="20sp"
+        android:textColor="#00001a"
         app:layout_constraintBottom_toTopOf="@+id/hello"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

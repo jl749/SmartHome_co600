@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000000"
     android:orientation="vertical" >
 
 
@@ -18,7 +18,7 @@
             android:id="@+id/tableRow1"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:background="@drawable/back"
+            android:background="@drawable/backc"
             android:layout_weight="0.2" >
 
             <TextView
@@ -36,6 +36,7 @@
             android:id="@+id/tableRow2"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
+            android:background="@drawable/borderleftright"
             android:layout_weight="0.2" >
 
             <TextView
@@ -52,6 +53,7 @@
             android:id="@+id/tableRow3"
             android:layout_width="fill_parent"
             android:layout_height="310dp"
+            android:background="@drawable/borderleftright"
             android:layout_weight="0.2">
 
             <ImageView
@@ -68,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/back">
+            android:background="@drawable/backc">
 
             <TextView
                 android:id="@+id/textView"
@@ -85,7 +87,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:checked="false"
-                app:showText="false"
                 android:gravity="center"
                 android:scaleX="2"
                 android:scaleY="2" />

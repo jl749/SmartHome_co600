@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,6 +21,8 @@ public class FunctionMenu extends Activity {
 
     final Handler handler = new Handler(Looper.getMainLooper());
     public String houseId;
+    private ProgressDialog working_dialog;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,7 @@ public class FunctionMenu extends Activity {
             }
         });
         if(((MyApplication)this.getApplication()).getFirstOpen()) {
+            showWorkingDialog();
             UpdateValues u = new UpdateValues();
             u.run(((MyApplication) this.getApplication()));
             GetAlarmAndTemp at = new GetAlarmAndTemp();
@@ -89,7 +93,13 @@ public class FunctionMenu extends Activity {
                 checkConnection();
                 updateWeather();
             }
-        }, 5000);//TODO: SET FREEZE
+        }, 5000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                removeWorkingDialog();
+            }
+        }, 7000);
     }
 
     public void updateWeather(){
@@ -139,6 +149,17 @@ public class FunctionMenu extends Activity {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, startAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(), 60000, pendingIntent);
+        }
+    }
+
+    private void showWorkingDialog() {
+        working_dialog = ProgressDialog.show(this, "","Working please wait...", true);
+    }
+
+    private void removeWorkingDialog() {
+        if (working_dialog != null) {
+            working_dialog.dismiss();
+            working_dialog = null;
         }
     }
 
