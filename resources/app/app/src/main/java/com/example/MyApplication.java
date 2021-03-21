@@ -27,7 +27,7 @@ public class MyApplication extends Application {
     private String postCode;
     private boolean validPostCode;
     private Map<String, String> weather;
-    private String currentPin;
+    private String currentPin = "null";
 
     public String getCurrentPin(){ return currentPin; }
     public String getAqi(){return aqi;}

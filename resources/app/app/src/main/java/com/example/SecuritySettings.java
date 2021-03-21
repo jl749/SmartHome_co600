@@ -16,7 +16,8 @@ import android.widget.Toast;
 public class SecuritySettings extends Activity {
 
     private String m_Text = "";
-    private final String currentPin = ((MyApplication)this.getApplication()).getCurrentPin();
+    private String n_Text = "";
+    private  String currentPin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,9 @@ public class SecuritySettings extends Activity {
     }
 
     private void inputCurrentPinDialog(String message){
+        currentPin = ((MyApplication)this.getApplication()).getCurrentPin();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(message);
-
         // Set up the input
         final EditText input = new EditText(this);
         InputFilter[] FilterArray = new InputFilter[1];
@@ -91,9 +92,9 @@ public class SecuritySettings extends Activity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                m_Text = input.getText().toString();
-                if(!m_Text.isEmpty()) {
-                    setNewPin(m_Text);
+                n_Text = input.getText().toString();
+                if(!n_Text.isEmpty()) {
+                    setNewPin(n_Text);
                 }
                 else{
                     inputNewPinDialog();
@@ -111,11 +112,13 @@ public class SecuritySettings extends Activity {
     }
 
     private void setNewPin(String pin){
+        System.out.println(pin);
         ((MyApplication)this.getApplication()).setCurrentPin(pin);
         Context context = getApplicationContext();
         CharSequence text = "Pin Has Been Changed Successfully";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
+        PinFile.writeBinaryOBJ(pin,getApplicationContext());
         toast.show();
     }
 }

@@ -53,9 +53,6 @@ public class Alarm extends Activity {
                         alarmOn();
                         alarm.run(true, houseID);
 
-                        //turn alarm on
-                        //deprecated
-
                     } else {
                         ImageView image = (ImageView) findViewById(R.id.alarmState1);
                         image.setImageResource(R.drawable.alarmoff);
@@ -64,9 +61,6 @@ public class Alarm extends Activity {
                         alarmOff();
                         alarm.run(false, houseID);
                         da.run(apiKey);
-
-                        //turn alarm off
-                        //deprecated
                     }
                 }
             });
