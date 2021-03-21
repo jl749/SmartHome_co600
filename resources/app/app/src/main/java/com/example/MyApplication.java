@@ -27,8 +27,9 @@ public class MyApplication extends Application {
     private String postCode;
     private boolean validPostCode;
     private Map<String, String> weather;
+    private String currentPin;
 
-
+    public String getCurrentPin(){ return currentPin; }
     public String getAqi(){return aqi;}
     public String getTemperature() {
         return temperature;
@@ -65,6 +66,7 @@ public class MyApplication extends Application {
         return firstOpen;
     }
 
+    public void setCurrentPin(String pin){this.currentPin = pin;}
     public void setAqi(String aqi){this.aqi = aqi; }
     public void setHumidity(String humidity) {
         this.humidity = humidity;

@@ -28,6 +28,7 @@ public class Alarm extends Activity {
     private static BroadcastReceiver tickReceiver;
     final Handler handler = new Handler(Looper.getMainLooper());
     private static String houseID;
+    private static String apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +37,14 @@ public class Alarm extends Activity {
         if(!((MyApplication) this.getApplication()).checkNull()) {
             SwitchCompat aSwitch = findViewById(R.id.toggleAlarm);
             houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
+            apiKey = ((MyApplication) this.getApplication()).getAPIKey();
             update();
             updateUi();
             aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     SetAlarm alarm = new SetAlarm();
+                    DismissAlarm da = new DismissAlarm();
                     if (isChecked) {
                         ImageView image = (ImageView) findViewById(R.id.alarmState1);
                         image.setImageResource(R.drawable.alarmon);
@@ -60,6 +63,7 @@ public class Alarm extends Activity {
                         state.setText("Alarm Disarmed");
                         alarmOff();
                         alarm.run(false, houseID);
+                        da.run(apiKey);
 
                         //turn alarm off
                         //deprecated

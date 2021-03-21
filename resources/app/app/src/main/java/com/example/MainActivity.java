@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity{
     //static final String raptor ="http://192.168.1.72/c600/";
     static final String raptor ="https://raptor.kent.ac.uk/~jl749/";
     private static final String pin = "2222";
+    private String customPin = null;
     private String username;
     LinearLayout layout;
     private static final String CHANNEL_ID = "intruder";
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity{
         ((MyApplication)this.getApplication()).setFirstOpen(true);
         createNotificationChannel();
         File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
+        File p = new File(getApplicationContext().getFilesDir()+"/BINARY_PIN.DAT");
+        checkPinFile(p);
         if(f.exists()) {
             handler.postDelayed(new Runnable() {
                 @Override
@@ -86,14 +89,20 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    public void checkPinFile(File p){
+        if(p.exists()){
+            customPin = PinFile.readBinaryOBJ(getApplicationContext()).getPin();
+        }
+    }
+
     public void setValid(String bool,String id,String password,boolean fileExists){
         EditText password1 = (EditText) findViewById(R.id.password);
         TextView invalid = (TextView) findViewById(R.id.invalid);
         username = id;
         if(bool.equals("True")){
+            setContentView(R.layout.pin_page);
             GetHouse gh = new GetHouse();
             gh.run(((MyApplication) this.getApplication()),id);
-            setContentView(R.layout.pin_page);
             pinFunctionality();
             BinaryFile.writeBinaryOBJ(username,password,getApplicationContext());
         }
@@ -170,8 +179,9 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void pinFunctionality() {
+        setContentView(R.layout.pin_page);
         final EditText pinField = (EditText) findViewById(R.id.digit1);
-        pinField.requestFocus();
+        TextView textView1 = (TextView) findViewById(R.id.textView1);
         pinField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -179,18 +189,33 @@ public class MainActivity extends AppCompatActivity{
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() == 4){
+                if(s.length() == 4) {
+                    if (!customPin.equals(null)) {
+                        if (pinField.getText().toString().equals(customPin)) {
+                            displayHouses();
+                            setCurrentPin(pinField.getText().toString());
+                        } else {
+                            pinField.setText("");
+                            textView1.setText("Incorrect pin, please try again");
+                        }
+                    }
+                }
+                else{
                     if(pinField.getText().toString().equals(pin)){
                         displayHouses();
+                        setCurrentPin("2222");
                     }
                     else{
                         pinField.setText("");
-                        TextView textView1 = (TextView) findViewById(R.id.textView1);
                         textView1.setText("Incorrect pin, please try again");
                     }
                 }
             }
         });
+    }
+
+    private void setCurrentPin(String pin){
+        ((MyApplication) this.getApplication()).setCurrentPin(pin);
     }
 
     private class CheckLogin extends AsyncTask<Void, Void, Void> {
