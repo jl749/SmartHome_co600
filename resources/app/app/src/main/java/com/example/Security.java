@@ -27,7 +27,6 @@ public class Security extends Activity {
 
     float x1,x2,y1,y2;
     private static final String led = "1";
-    final Handler handler = new Handler(Looper.getMainLooper());
     private static BroadcastReceiver tickReceiver;
     public String apiKey;
 
@@ -37,7 +36,6 @@ public class Security extends Activity {
         setContentView(R.layout.security_page);
         if (!((MyApplication) this.getApplication()).checkNull()) {
             apiKey = ((MyApplication) this.getApplication()).getAPIKey();
-            System.out.println(apiKey);
             SwitchCompat aSwitch = findViewById(R.id.toggleLight1);
             final FanLedLockControl fllc = new FanLedLockControl();
             update();
@@ -203,6 +201,7 @@ public class Security extends Activity {
                 if (x1 > x2) {
                     Intent i = new Intent(Security.this, Security1.class);
                     startActivity(i);
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 }
                 break;
         }

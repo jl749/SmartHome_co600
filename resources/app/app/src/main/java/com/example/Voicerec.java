@@ -135,16 +135,13 @@ public class Voicerec extends Activity {
             houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
             apiKey = ((MyApplication) this.getApplication()).getAPIKey();
             ImageButton recordVoice = (ImageButton) findViewById(R.id.recordVoice);
-            recordVoice.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                        speechRecognizer.startListening(intentRecognizer);
-                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                        speechRecognizer.stopListening();
-                    }
-                    return false;
+            recordVoice.setOnTouchListener((v, event) -> {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    speechRecognizer.startListening(intentRecognizer);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    speechRecognizer.stopListening();
                 }
+                return false;
             });
             tickReceiver = new BroadcastReceiver() {
                 @Override

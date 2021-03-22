@@ -5,7 +5,6 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 
 public class FunctionMenu extends Activity {
@@ -40,6 +38,7 @@ public class FunctionMenu extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), TempControl.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.zoom_enter_temp,R.anim.zoom_exit_functionmenu);
             }
         });
         ImageButton button2 = (ImageButton) findViewById(R.id.button2);
@@ -47,6 +46,7 @@ public class FunctionMenu extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), Security.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.zoom_enter_security,R.anim.zoom_exit_functionmenu);
             }
         });
         ImageButton button3 = (ImageButton) findViewById(R.id.button3);
@@ -54,6 +54,7 @@ public class FunctionMenu extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), Alarm.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.zoom_enter_alarm,R.anim.zoom_exit_functionmenu);
             }
         });
         ImageButton button4 = (ImageButton) findViewById(R.id.button4);
@@ -61,6 +62,7 @@ public class FunctionMenu extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), Voicerec.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.zoom_enter_voicerec,R.anim.zoom_exit_functionmenu);
             }
         });
         ImageButton button5 = (ImageButton) findViewById(R.id.button5);
@@ -68,6 +70,7 @@ public class FunctionMenu extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), AirQuality.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.zoom_enter_aqi,R.anim.zoom_exit_functionmenu);
             }
         });
         ImageButton button6 = (ImageButton) findViewById(R.id.button6);
@@ -75,6 +78,7 @@ public class FunctionMenu extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(v.getContext(), Settings.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.zoom_enter_settings,R.anim.zoom_exit_functionmenu);
             }
         });
         if(((MyApplication)this.getApplication()).getFirstOpen()) {

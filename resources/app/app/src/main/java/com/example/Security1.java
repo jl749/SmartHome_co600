@@ -23,7 +23,6 @@ public class Security1 extends Activity {
 
     float x1,x2,y1,y2;
     private static final String led = "2";
-    final Handler handler = new Handler(Looper.getMainLooper());
     private static BroadcastReceiver tickReceiver;
     public String apiKey;
 
@@ -186,6 +185,7 @@ public class Security1 extends Activity {
                 if (x1 < x2) {
                     Intent i = new Intent(Security1.this, Security.class);
                     startActivity(i);
+                    overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
                 }
                 break;
 

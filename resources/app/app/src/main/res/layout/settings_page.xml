@@ -13,11 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:weightSum="7"
         android:layout_margin="10dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:padding="15dp"
             android:text="Settings"
             android:gravity="center"
@@ -27,15 +29,17 @@
         <Button
             android:id="@+id/deeplearning"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
             android:padding="5dp"
+            android:layout_weight="1"
             android:layout_gravity="center"
             android:text="DeepLearning Feature"/>
 
         <Button
             android:id="@+id/profile"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center"
             android:text="Your Profile"/>
@@ -43,7 +47,8 @@
         <Button
             android:id="@+id/security"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center"
             android:text="Security"/>
@@ -51,7 +56,8 @@
         <Button
             android:id="@+id/notifications"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center"
             android:text="Notification's"/>
@@ -59,7 +65,8 @@
         <Button
             android:id="@+id/device"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center"
             android:text="Device"/>
@@ -67,7 +74,8 @@
         <Button
             android:id="@+id/logout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center"
             android:text="Log Out"/>

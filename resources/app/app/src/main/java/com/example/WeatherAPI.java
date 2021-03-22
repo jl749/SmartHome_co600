@@ -119,7 +119,7 @@ public class WeatherAPI {
         @Override
         protected void onPostExecute(Void result){
             System.out.println(allMatches);
-            if(allMatches.isEmpty()){
+            if(allMatches == null || allMatches.isEmpty()){
                 setVariables(null,m);
             }
             else {
