@@ -3,6 +3,7 @@ const char* ssid = "BT-FFA25W";
 const char* pass = "cATY9hbJUC4GQi";
 const String houseID="houseID=1234";
 const char* phpHost = "http://192.168.1.75/co600/getThreshold.php";
+String apiKey;
 WiFiClient client;
 
 #include <ESP8266HTTPClient.h>
@@ -13,16 +14,17 @@ WiFiServer server(80);
 SoftwareSerial s(D6,D5);
 
 #include <ArduinoJson.h>
-StaticJsonDocument<200> doc;
+//DynamicJsonDocument doc(2048);
+//StaticJsonDocument<500> doc;
 int tmp,hum,air_quality;
 bool led1,led2,motion,fan1,lock1=false;
 
 int tmp_set;  bool intruder_Alarm_set,lock1_set=0;
 bool ALARM_SET=0; //arduino ALARM_SET
 
-const long interval = 2000;
+const long interval = 5500;
 unsigned long previousMillis = 0;
-unsigned char count=0;
+unsigned long count = 0;
 
 const char* delimiter1 = "\n";
 const char* delimiter2 = "=";
@@ -46,6 +48,22 @@ void setup() {
   Serial.println(WiFi.localIP());
   server.begin();
   Serial.println("Server started");
+
+  http.begin(F("http://192.168.1.75/co600/getAPIKey.php"));
+  http.setTimeout(1000);
+  http.addHeader("Content-Type","application/x-www-form-urlencoded");
+  int httpCode = http.POST(houseID);
+  if(httpCode > 0) {
+    Serial.printf("POST code : %d\n\n", httpCode);
+    if(httpCode == HTTP_CODE_OK) {
+      apiKey = http.getString();
+      Serial.println(apiKey);
+    }
+  }
+  else
+    Serial.printf("POST failed, error: %s\n", http.errorToString(httpCode).c_str());
+
+  http.end();
 }
 
 void loop() {
@@ -53,17 +71,18 @@ void loop() {
   if(currentMillis - previousMillis >= interval){
     previousMillis = currentMillis;
     count++;
-    if(s.available()==0) getJSON();
+    if(s.available()==0) getJSON(); //readJSON
   }
   
-  if(count >= 5){
+  if(count >= 2){
     count=0;
-    httpPOST(phpHost, houseID);
-  }
-  if(intruder_Alarm_set != ALARM_SET){
-    String command = "ALARM_SET/";
-    command += !ALARM_SET;
-    s.println(command);
+    httpPOST(phpHost, houseID); //read db
+    
+    if(intruder_Alarm_set != ALARM_SET){
+      String command = "A/";
+      command += !ALARM_SET;
+      s.println(command); //update alarm
+    }
   }
   webServer();
 }
@@ -112,40 +131,42 @@ void webServer(){
   if(!client) return;
  
   Serial.print(F("<new client>"));
-  client.setTimeout(5000);
+  client.setTimeout(1000);
  
   String request = client.readStringUntil('\n');
   Serial.print(F("request: "));
   Serial.println(request);
- 
-  if(request.indexOf(F("LED2/1"))!=-1){
-    Serial.println(F("LED2 on"));
-    s.println(F("LED2/1"));
-  }else if(request.indexOf(F("LED2/0"))!=-1){
-    Serial.println(F("LED2 off"));
-    s.println(F("LED2/0"));
-  }else if(request.indexOf(F("LED1/1"))!=-1){
-    Serial.println(F("LED1 on"));
-    s.println(F("LED1/1"));
-  }else if(request.indexOf(F("LED1/0"))!=-1){
-    Serial.println(F("LED1 off"));
-    s.println(F("LED1/0"));
-  }else if(request.indexOf(F("FAN1/1"))!=-1){
-    Serial.println(F("FAN1 on"));
-    s.println(F("FAN1/1"));
-  }else if(request.indexOf(F("FAN1/0"))!=-1){
-    Serial.println(F("FAN1 off"));
-    s.println(F("FAN1/0"));
-  }else if(request.indexOf(F("LOCK1/1"))!=-1){
-    Serial.println(F("LOCK1 on"));
-    s.println(F("LOCK1/1"));
-  }else if(request.indexOf(F("LOCK1/0"))!=-1){
-    Serial.println(F("LOCK1 off"));
-    s.println(F("LOCK1/0"));
-  }else if(request.indexOf(F("A_DISMISS"))!=-1){
-    Serial.println(F("Alarm Dismiss"));
-    motion=0;
-    s.println(F("A_DISMISS"));
+
+  if(request.indexOf(apiKey) != -1){
+    if(request.indexOf(F("LED2/1"))!=-1){
+      Serial.println(F("LED2 on"));
+      s.println(F("LED2/1"));
+    }else if(request.indexOf(F("LED2/0"))!=-1){
+      Serial.println(F("LED2 off"));
+      s.println(F("LED2/0"));
+    }else if(request.indexOf(F("LED1/1"))!=-1){
+      Serial.println(F("LED1 on"));
+      s.println(F("LED1/1"));
+    }else if(request.indexOf(F("LED1/0"))!=-1){
+      Serial.println(F("LED1 off"));
+      s.println(F("LED1/0"));
+    }else if(request.indexOf(F("FAN1/1"))!=-1){
+      Serial.println(F("FAN1 on"));
+      s.println(F("FAN1/1"));
+    }else if(request.indexOf(F("FAN1/0"))!=-1){
+      Serial.println(F("FAN1 off"));
+      s.println(F("FAN1/0"));
+    }else if(request.indexOf(F("LOCK1/1"))!=-1){
+      Serial.println(F("LOCK1 on"));
+      s.println(F("LOCK1/1"));
+    }else if(request.indexOf(F("LOCK1/0"))!=-1){
+      Serial.println(F("LOCK1 off"));
+      s.println(F("LOCK1/0"));
+    }else if(request.indexOf(F("A_DISMISS"))!=-1){
+      Serial.println(F("Alarm Dismiss"));
+      motion=0;
+      s.println(F("A_DISMISS"));
+    }
   }
   client.flush();
  
@@ -154,48 +175,51 @@ void webServer(){
   client.println();
   client.println(F("<html>"));
   client.println(F("<body>"));
-  client.print(F("Air_Quality="));
+  client.print(F("Air_Quality=\""));
   client.print(air_quality);
-  client.print(F("<br>Temperature="));
+  client.print(F("\"<br>Temperature=\""));
   client.print(tmp);
-  client.print(F("<br>Humidity="));
+  client.print(F("\"<br>Humidity=\""));
   client.print(hum);
-  client.println(F("<br>LED1="));
+  client.println(F("\"<br>LED1=\""));
   client.print(led1);
-  client.println(F("<br>LED2="));
+  client.println(F("\"<br>LED2=\""));
   client.print(led2);
-  client.println(F("<br>FAN1="));
+  client.println(F("\"<br>FAN1=\""));
   client.print(fan1);
-  client.println(F("<br>LOCK1="));
+  client.println(F("\"<br>LOCK1=\""));
   client.print(lock1);
-  client.println(F("<br>ALARM="));
+  client.println(F("\"<br>ALARM=\""));
   client.print(motion);
-  client.println(F("</body></html>"));
+  client.println(F("\"</body></html>"));
 
   delay(1000); //wait until web browser recieve all data
 }
 
 void getJSON(){
-  s.println(F("JSON")); delay(3000);
+  StaticJsonDocument<500> doc;
+  s.println(F("JSON")); delay(300);
+  
   DeserializationError err = deserializeJson(doc, s);
   if (err == DeserializationError::Ok){
     Serial.print(F("air_quality = "));
-    Serial.println(air_quality=doc["air_quality"].as<double>());
+    Serial.println(air_quality = doc[0].as<double>());
     Serial.print(F("tmp = "));
-    Serial.println(tmp=doc["tmp"].as<double>());
+    Serial.println(tmp = doc[1].as<double>());
     Serial.print(F("hum = "));
-    Serial.println(hum=doc["hum"].as<double>());
+    Serial.println(hum = doc[2].as<double>());
     Serial.print(F("LED1 = "));
-    Serial.println(led1=doc["LED1"].as<bool>());
+    Serial.println(led1 = doc[3].as<bool>());
     Serial.print(F("LED2 = "));
-    Serial.println(led2=doc["LED2"].as<bool>());
+    Serial.println(led2 = doc[4].as<bool>());
     Serial.print(F("FAN1 = "));
-    Serial.println(fan1=doc["FAN1"].as<bool>());
+    Serial.println(fan1 = doc[5].as<bool>());
     Serial.print(F("LOCK1 = "));
-    Serial.println(lock1=doc["LOCK1"].as<bool>());
+    Serial.println(lock1 = doc[6].as<bool>());
+
     Serial.print(F("motion = "));
-    Serial.println(motion=doc["motion"].as<bool>());
-    ALARM_SET=doc["ALARM_SET"].as<bool>();
+    Serial.println(motion = doc[7].as<bool>());
+    ALARM_SET = doc[8].as<bool>();
     Serial.println(F("---------------------xxxxx--------------------"));
   }else{
     Serial.print("deserializeJson() returned ");
