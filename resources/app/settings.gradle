@@ -1,2 +1,3 @@
+include ':weka-android'
 include ':app'
 rootProject.name = "SmartHomeSystem"
