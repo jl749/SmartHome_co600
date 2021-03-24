@@ -31,6 +31,7 @@ public class DismissAlarm {
             try {
                 url = new URL(ip + "/A_DISMISS/" + apiKey);
                 request=(HttpURLConnection) url.openConnection();
+                request.setConnectTimeout(5000);
                 request.connect();
                 request.getInputStream().close();
 

@@ -13,11 +13,11 @@ import java.net.URLConnection;
 public class UpdatePostcode {
 
     public void run(String houseID, String postcode){
-        UpdatePC upc = new UpdatePC(houseID,postcode);
+        UpdatePC upc = new UpdatePC(houseID, postcode);
         upc.execute();
     }
 
-    public class UpdatePC extends AsyncTask<Void, Void, Void> {
+    public static class UpdatePC extends AsyncTask<Void, Void, Void> {
 
         String houseID;
         String postCode;

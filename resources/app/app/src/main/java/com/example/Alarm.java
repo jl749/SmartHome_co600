@@ -143,11 +143,10 @@ public class Alarm extends Activity {
     public void alarmOff(){
         ((MyApplication) this.getApplication()).setAlarm("0");
     }
-
+    
     @Override
-    public void onStop()
-    {
-        super.onStop();
+    public void onDestroy(){
+        super.onDestroy();
         //unregister broadcast receiver.
         if(tickReceiver!=null)
             unregisterReceiver(tickReceiver);

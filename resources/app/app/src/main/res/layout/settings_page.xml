@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="7"
+        android:weightSum="5"
         android:layout_margin="10dp">
 
         <TextView
@@ -36,40 +36,23 @@
             android:text="DeepLearning Feature"/>
 
         <Button
-            android:id="@+id/profile"
+            android:id="@+id/setPostcode"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center"
-            android:text="Your Profile"/>
+            android:text="Change postcode"/>
 
         <Button
-            android:id="@+id/security"
+            android:id="@+id/changePin"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="5dp"
             android:layout_gravity="center"
-            android:text="Security"/>
+            android:text="Change Pin"/>
 
-        <Button
-            android:id="@+id/notifications"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="Notification's"/>
-
-        <Button
-            android:id="@+id/device"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="Device"/>
 
         <Button
             android:id="@+id/logout"

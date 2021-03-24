@@ -10,11 +10,11 @@ public class FanLedLockControl {
     private static final String ip = MainActivity.nodMCUwebServer;
 
     public void run(String val, boolean on,String apiKey,String function) {
-        SetFLC set = new SetFLC(val, on, apiKey,function);
+        SetFLC set = new SetFLC(val, on, apiKey, function);
         set.execute();
     }
 
-    private class SetFLC extends AsyncTask<Void, Void, Void> {
+    private static class SetFLC extends AsyncTask<Void, Void, Void> {
 
         URL url = null;
         HttpURLConnection request = null;
@@ -41,6 +41,7 @@ public class FanLedLockControl {
             try {
                 url = new URL(ip + function + val + "/" + state + "/" +apiKey);
                 request=(HttpURLConnection) url.openConnection();
+                request.setConnectTimeout(5000);
                 request.connect();
                 request.getInputStream().close();
                 request.disconnect();

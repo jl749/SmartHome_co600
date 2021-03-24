@@ -215,9 +215,8 @@ public class TempControl extends Activity {
     }
 
     @Override
-    public void onStop()
-    {
-        super.onStop();
+    public void onDestroy(){
+        super.onDestroy();
         //unregister broadcast receiver.
         if(tickReceiver!=null)
             unregisterReceiver(tickReceiver);

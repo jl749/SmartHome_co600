@@ -14,11 +14,11 @@ import java.net.URLConnection;
 public class SetTemperature extends Activity {
 
     public void run(Integer val, String houseID){
-        setTemp set = new setTemp(val,houseID);
+        setTemp set = new setTemp(val, houseID);
         set.execute();
     }
 
-    public class setTemp extends AsyncTask<Void, Void, Void> {
+    public static class setTemp extends AsyncTask<Void, Void, Void> {
 
         HttpURLConnection http = null;
         OutputStream out = null;

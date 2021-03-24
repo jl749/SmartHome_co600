@@ -14,11 +14,11 @@ import java.net.URLConnection;
 public class SetAlarm extends Activity {
 
     public void run(boolean b,String houseID){
-        UpdateIntruder update = new UpdateIntruder(b,houseID);
+        UpdateIntruder update = new UpdateIntruder(b, houseID);
         update.execute();
     }
 
-    private class UpdateIntruder extends AsyncTask<Void,Void,Void>{
+    private static class UpdateIntruder extends AsyncTask<Void,Void,Void>{
 
         HttpURLConnection http=null;
         OutputStream out=null;
