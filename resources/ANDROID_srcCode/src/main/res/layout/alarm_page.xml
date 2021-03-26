@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:background="#000000"
+    android:orientation="vertical" >
+
+
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/backc"
+            android:layout_weight="0.2" >
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/alarm"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="40sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/borderleftright"
+            android:layout_weight="0.2" >
+
+            <TextView
+                android:id="@+id/alarmState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="bottom|center_horizontal"
+                android:textAlignment="center"
+                android:text="@string/currently_disarmed" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="fill_parent"
+            android:layout_height="310dp"
+            android:background="@drawable/borderleftright"
+            android:layout_weight="0.2">
+
+            <ImageView
+                android:id="@+id/alarmState1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/alarmoff" />
+        </TableRow>
+
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/backc">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:text="@string/toggle_alarm" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/toggleAlarm"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:checked="false"
+                android:gravity="center"
+                android:scaleX="2"
+                android:scaleY="2" />
+
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>

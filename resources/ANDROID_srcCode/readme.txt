@@ -1,0 +1,1 @@
+this folder contains android app source code only
