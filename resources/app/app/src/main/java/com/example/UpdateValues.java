@@ -39,7 +39,7 @@ public class UpdateValues extends Activity {
 
             m.setAqi(aqi);
             m.setTemperature(temperature);
-            m.setHumidity(humidity + "%");
+            m.setHumidity(humidity);
             m.setLight1(light1);
             m.setLight2(light2);
             m.setFan(fan);

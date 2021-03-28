@@ -27,7 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_secreen);
+        DataMining.setPath(getApplicationContext().getFilesDir().toString()+"/");
         ((MyApplication)this.getApplication()).setFirstOpen(true);
         createNotificationChannel();
         File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity{
             }, 3000);
         }
     }
+
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -117,13 +119,14 @@ public class MainActivity extends AppCompatActivity{
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText email1 = (EditText) findViewById(R.id.username);
-                CharSequence email = email1.getText();
+                String emailRaw = email1.getText().toString();
+                String email = emailRaw.replaceAll("[^a-zA-Z0-9]", "");
                 EditText password1 = (EditText) findViewById(R.id.password);
                 CharSequence password = password1.getText();
                 if (!TextUtils.isEmpty(email)){
                     if(!TextUtils.isEmpty(password)) {
                         String ePassword = (Encryption.encryptPassword(password.toString())).toUpperCase();
-                        CheckLogin cl = new CheckLogin(email.toString(),ePassword,false);
+                        CheckLogin cl = new CheckLogin(email,ePassword,false);
                         cl.execute();
                     }
                     else password1.setError("Enter a password");
@@ -134,13 +137,17 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void displayHouses(){
+        if(!DataMining.getFileExists(username)){
+            DataMining.GET().initARFF_file(username);
+        }
         ArrayList<String> house = (((MyApplication) this.getApplication()).getHouseNumbers());
+        ((MyApplication)this.getApplication()).setUsername(username);
         if(house.size()>1){
             int index = 0;
             setContentView(R.layout.house_page);
             TextView welcome = findViewById(R.id.welcome_message);
             layout = findViewById(R.id.linearLayout);
-            String welcomeText = ("Welcome " +username +"! Chose which house you would like to control. ");
+            String welcomeText = ("Welcome " +username +"! Choose which house you would like to control. ");
             welcome.setText(welcomeText);
             for(String x: house){
                 final Button button = new Button(this);

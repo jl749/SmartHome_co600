@@ -28,6 +28,9 @@ public class MyApplication extends Application {
     private boolean validPostCode;
     private Map<String, String> weather;
     private String currentPin = "null";
+    private String username;
+    private String tempOutside;
+    private boolean dataminingStatus = false;
 
     public String getCurrentPin(){ return currentPin; }
     public String getAqi(){return aqi;}
@@ -57,6 +60,11 @@ public class MyApplication extends Application {
     public String getPostCode() {return postCode; }
     public Map<String, String> getWeather() {return weather; }
     public boolean validPostCode() {return validPostCode; }
+    public String getUsername() {
+        return username;
+    }
+    public String getTempOutside() {return tempOutside; }
+    public boolean getDataminingStatus(){ return dataminingStatus;}
 
     public boolean connection(){
         return connectionLost;
@@ -93,6 +101,11 @@ public class MyApplication extends Application {
     public void setPostCode(String postCode) {this.postCode = postCode; }
     public void setWeather(Map<String, String> weather){this.weather = weather; }
     public void validPostCode(Boolean validPostCode){ this.validPostCode = validPostCode; }
+    public void setUsername(String username){
+        this.username= username;
+    }
+    public void setTempOutside(String tempOutside){this.tempOutside = tempOutside; }
+    public void setDataminingStatus(Boolean status){this.dataminingStatus = status; }
 
     public void setFirstOpen(boolean firstOpen){
         this.firstOpen = firstOpen;

@@ -31,7 +31,7 @@ public class Settings extends Activity {
         Button button1 = (Button) findViewById(R.id.deeplearning);
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), Deeplearning.class);
+                Intent i = new Intent(v.getContext(), DataminingSettings.class);
                 startActivity(i);
             }
         });
@@ -50,8 +50,12 @@ public class Settings extends Activity {
         Button button6 = (Button) findViewById(R.id.logout);
         button6.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                File x = new File(getApplicationContext().getFilesDir() + "/John98_trainingSet.arff");
                 File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
                 if(f.exists()) {
+                    if(x.exists()){
+                        System.out.println(x.delete());
+                    }
                     boolean deleted = f.delete();
                     Intent i = getBaseContext().getPackageManager().
                             getLaunchIntentForPackage(getBaseContext().getPackageName());

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -38,10 +39,13 @@ public class WeatherAPI {
     private void setVariables(Map<String, String> result,MyApplication m){
         if(result==null){
             m.setWeather(null);
+            m.setTempOutside("?");
         }
         else{
             System.out.println(result);
             m.setWeather(result);
+            int tmp = (int) Math.round(Double.parseDouble(Objects.requireNonNull(result.get("temp"))));
+            m.setTempOutside(Integer.toString(tmp));
         }
 
     }

@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,12 +25,15 @@ public class TempControl extends Activity {
     private static BroadcastReceiver tickReceiver;
     final Handler handler = new Handler(Looper.getMainLooper());
     private static String houseID;
-    Map<String,Integer> icons = new HashMap<>();
+    private Map<String,Integer> icons = new HashMap<>();
+    private String temperatureOutside;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
+        username = ((MyApplication)this.getApplication()).getUsername();
         setContentView(R.layout.temperature_control);
         setIcons();
         if (!((MyApplication) this.getApplication()).checkNull()) {
@@ -36,11 +41,11 @@ public class TempControl extends Activity {
             String tempText = ((MyApplication) this.getApplication()).getTemperature() + "°C";
             temperature.setText(tempText);
             TextView humidity = (TextView) findViewById(R.id.CurrentHumid);
-            humidity.setText(((MyApplication) this.getApplication()).getHumidity());
+            String humidityText = ((MyApplication) this.getApplication()).getHumidity() + "%";
+            humidity.setText(humidityText);
             TextView ttemp = (TextView) findViewById(R.id.TTarget);
             String ttempText = "Target Temp: " + (Integer.parseInt(((MyApplication) this.getApplication()).getTargetTemp()));
             ttemp.setText(ttempText);//get saved temp
-
             SeekBar tempSlider = (SeekBar) findViewById(R.id.tempSlider);
             tempSlider.setProgress(Integer.parseInt(((MyApplication) this.getApplication()).getTargetTemp())-10);//change to current
             update();
@@ -62,6 +67,8 @@ public class TempControl extends Activity {
                     int progress = seekBar.getProgress() + 10;
                     SetTemperature setTemp = new SetTemperature();
                     setTemp.run(progress, houseID);
+                    writeInstance(username,Integer.toString(progress));
+
                 }
             });
 
@@ -70,7 +77,7 @@ public class TempControl extends Activity {
                 public void onReceive(Context context, Intent intent) {
                     if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
                         update();
-                        updateWeather();
+                        updateWeatherUi();
                     }
                 }
             };
@@ -90,6 +97,22 @@ public class TempControl extends Activity {
                         }
                     });
             alertDialog.show();
+        }
+    }
+
+    public void writeInstance(String username,String temperatureSet){
+        String[] arr = new String[5];
+        arr[0] = temperatureOutside;
+        arr[1] = ((MyApplication)this.getApplication()).getTemperature();
+        arr[2] = temperatureSet;
+        arr[3] = ((MyApplication)this.getApplication()).getHumidity();
+        arr[4] = classifyTime();
+
+        try {
+            DataMining.GET().writeInstance(arr,username);
+        }
+        catch (IOException e){
+            e.printStackTrace();
         }
     }
 
@@ -127,23 +150,10 @@ public class TempControl extends Activity {
     public void updateUi(){
         TextView temperature = (TextView) findViewById(R.id.CurrentTemp);
         TextView humidity = (TextView) findViewById(R.id.CurrentHumid);
-        String temmpText = ((MyApplication) this.getApplication()).getTemperature()+ "°C";
-        temperature.setText(temmpText);
-        humidity.setText(((MyApplication) this.getApplication()).getHumidity());
-    }
-
-    public void updateWeather(){
-        System.out.println(((MyApplication) this.getApplication()).validPostCode());
-        if(((MyApplication) this.getApplication()).validPostCode()) {
-            WeatherAPI wapi = new WeatherAPI();
-            wapi.run(((MyApplication) this.getApplication()), ((MyApplication) this.getApplication()).getPostCode());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    updateWeatherUi();
-                }
-            }, 4000);
-        }
+        String tempText = ((MyApplication) this.getApplication()).getTemperature()+ "°C";
+        String humidityText = ((MyApplication) this.getApplication()).getHumidity()+ "%";
+        temperature.setText(tempText);
+        humidity.setText(humidityText);
     }
 
     public void updateWeatherUi(){
@@ -162,6 +172,7 @@ public class TempControl extends Activity {
         if(weather!= null){
             System.out.println(weather);
             int tempTemperature = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp"))));
+            temperatureOutside = Integer.toString(tempTemperature);
             int tempHigh = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp_max"))));
             int tempLow = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("temp_min"))));
             int tempFeelsLike = (int) Math.round(Double.parseDouble(Objects.requireNonNull(weather.get("feels_like"))));
@@ -186,9 +197,9 @@ public class TempControl extends Activity {
             windDirection.setText(windDirectionMessage);
             weatherIcon.setImageResource(icons.get(iconCode));
             location.setText(cityMessage);
-            //change location and image
         }
         else {
+            temperatureOutside = "?";
             location.setText("Invalid Postcode");
             System.out.println("INVALID POSTCODE: "+((MyApplication) this.getApplication()).getPostCode());
         }
@@ -212,6 +223,26 @@ public class TempControl extends Activity {
         icons.put("11n", R.drawable.thunderstormn);
         icons.put("50d", R.drawable.mistd);
         icons.put("50n", R.drawable.mistn);
+    }
+
+    public String classifyTime(){
+        Calendar rightNow = Calendar.getInstance();
+        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
+        if(currentHourIn24Format >= 6 && currentHourIn24Format <=10){
+            return "6~10";
+        }
+        else if(currentHourIn24Format >= 11 && currentHourIn24Format <=13){
+            return "11~13";
+        }
+        else if(currentHourIn24Format >= 14 && currentHourIn24Format <=17){
+            return "14~17";
+        }
+        else if(currentHourIn24Format >= 18 && currentHourIn24Format <=22){
+            return "18~22";
+        }
+        else{
+            return "others";
+        }
     }
 
     @Override
