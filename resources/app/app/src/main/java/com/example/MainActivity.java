@@ -27,7 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
+
 
 
 public class MainActivity extends AppCompatActivity{
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.welcome_secreen);
         DataMining.setPath(getApplicationContext().getFilesDir().toString()+"/");
         ((MyApplication)this.getApplication()).setFirstOpen(true);
+        ((MyApplication)this.getApplication()).setDataminingStatus(false);
         createNotificationChannel();
         File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
         File p = new File(getApplicationContext().getFilesDir()+"/BINARY_PIN.DAT");
@@ -269,9 +270,7 @@ public class MainActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(Void results) {
             setValid(result.toString(),id,pass,fileExists);
-
         }
-
     }
 }
 

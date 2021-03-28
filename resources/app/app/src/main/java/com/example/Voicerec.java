@@ -27,8 +27,10 @@ import androidx.core.app.ActivityCompat;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -193,6 +195,42 @@ public class Voicerec extends Activity {
         startActivity(i);
     }
 
+    public String classifyTime(){
+        Calendar rightNow = Calendar.getInstance();
+        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
+        if(currentHourIn24Format >= 6 && currentHourIn24Format <=10){
+            return "6~10";
+        }
+        else if(currentHourIn24Format >= 11 && currentHourIn24Format <=13){
+            return "11~13";
+        }
+        else if(currentHourIn24Format >= 14 && currentHourIn24Format <=17){
+            return "14~17";
+        }
+        else if(currentHourIn24Format >= 18 && currentHourIn24Format <=22){
+            return "18~22";
+        }
+        else{
+            return "others";
+        }
+    }
+
+    public void writeInstance(String temperatureSet){
+        String[] arr = new String[5];
+        arr[0] = ((MyApplication)this.getApplication()).getTempOutside();
+        arr[1] = ((MyApplication)this.getApplication()).getTemperature();
+        arr[2] = temperatureSet;
+        arr[3] = ((MyApplication)this.getApplication()).getHumidity();
+        arr[4] = classifyTime();
+
+        try {
+            DataMining.GET().writeInstance(arr,((MyApplication) this.getApplication()).getUsername());
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     private void executeCommand(String command){
         int changeTemp = tryParseInt(command,0);
         if(changeTemp!=0){
@@ -201,6 +239,7 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setTemp(changeTemp);
+                            writeInstance(Integer.toString(changeTemp));
                             System.out.println("GREAT SUCCESS!!!");
                         }
                     });
