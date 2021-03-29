@@ -22,10 +22,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     private String houseID;
 
 
+    /*Alarm receiver class that runs when a broadcast is sent every minute.
+    * This class is responsible for updating all the values from the arduino.
+    */
     @Override
     public void onReceive(final Context context, Intent intent) {
         houseID = intent.getStringExtra("HouseID");
-
         UpdateValues uv = new UpdateValues();
         uv.run(((MyApplication)context.getApplicationContext()));
         GetAlarmAndTemp gat = new GetAlarmAndTemp();
@@ -40,7 +42,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         }, 5000);
     }
 
-    public void updateWeather(Context context){
+    /*Updates the weather*/
+    private void updateWeather(Context context){
         System.out.println(((MyApplication) context.getApplicationContext()).validPostCode());
         if(((MyApplication) context.getApplicationContext()).validPostCode()) {
             WeatherAPI wapi = new WeatherAPI();
@@ -48,11 +51,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    public void updateDataset(Context c){
+    /*Runs the data mining algorithm*/
+    private void updateDataset(Context c){
         boolean status = ((MyApplication)c.getApplicationContext()).getDataminingStatus();
         String apiKey = ((MyApplication)c.getApplicationContext()).getAPIKey();
+        String weather = ((MyApplication)c.getApplicationContext()).getTempOutside();
         String[] arr = new String[5];
-        arr[0] = ((MyApplication)c.getApplicationContext()).getTempOutside();
+        arr[0] = (weather==null)?"":weather;
         arr[1] = ((MyApplication)c.getApplicationContext()).getTemperature();
         arr[2] = "?";
         arr[3] = ((MyApplication)c.getApplicationContext()).getHumidity();
@@ -81,21 +86,24 @@ public class AlarmReceiver extends BroadcastReceiver {
         System.out.println(action);
     }
 
-    public void coolingOn(String apiKey){
+    /*Turn on cooling if data mining algorithm deems it fit*/
+    private void coolingOn(String apiKey){
         FanLedLockControl flc = new FanLedLockControl();
         flc.run("1", true,apiKey,"FAN");
         flc.run("", false,apiKey,"HEAT");
         System.out.println("cooling on");
     }
 
-    public void heatingOn(String apiKey){
+    /*Turn on heating if data mining algorithm deems it fit*/
+    private void heatingOn(String apiKey){
         FanLedLockControl flc = new FanLedLockControl();
         flc.run("1", false,apiKey,"FAN");
         flc.run("", true,apiKey,"HEAT");
         System.out.println("Heating on");
     }
 
-    public void checkIntruder(Context c){
+    /*Checks if intruder alarm is on and motion has been detected and sends notification to phone*/
+    private void checkIntruder(Context c){
         boolean intruder = ((MyApplication)c.getApplicationContext()).getIntruder();
         String alarm = ((MyApplication)c.getApplicationContext()).getAlarm();
 
@@ -123,7 +131,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
     }
 
-    public String classifyTime(){
+    /*Time classification for data mining algorithm */
+    private String classifyTime(){
         Calendar rightNow = Calendar.getInstance();
         int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format >= 6 && currentHourIn24Format <=10){

@@ -9,8 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -20,9 +18,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 
-import java.util.concurrent.locks.Lock;
 
-
+/**Security (Lock and led control) page class
+ * This activity is called when the user navigates to the Security page
+ */
 public class Security extends Activity {
 
     float x1,x2,y1,y2;
@@ -30,6 +29,10 @@ public class Security extends Activity {
     private static BroadcastReceiver tickReceiver;
     public String apiKey;
 
+    /*Sets view to security page loads all values and sets onclick listeners unless
+    *null values found. If null values found show connection lost error message.
+    *Sets up a loop that checks connection and updates ui every minute.
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,12 +124,14 @@ public class Security extends Activity {
         registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
-    public void update(){
+    /*Checks if connection lost and updates UI (every minute)*/
+    private void update(){
         checkConnection();
         updateUi();
     }
 
-    public void updateUi(){
+    /*Checks arduino values and updates UI*/
+    private void updateUi(){
         SwitchCompat aSwitch = findViewById(R.id.toggleLight1);
         if (((MyApplication) this.getApplication()).getLock1().equals("1")) {
             TextView state = (TextView) findViewById(R.id.currentState1);
@@ -151,7 +156,8 @@ public class Security extends Activity {
         }
     }
 
-    public void checkConnection() {
+    /*Runs connection lost alert if null values found*/
+    private void checkConnection() {
         if (((MyApplication) this.getApplication()).connection()) {
             AlertDialog alertDialog = new AlertDialog.Builder(Security.this).create();
             alertDialog.setTitle("Connection Error");
@@ -167,7 +173,8 @@ public class Security extends Activity {
         }
     }
 
-    public void end(){
+    /*Restarts app when connection lost*/
+    private void end(){
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -176,19 +183,22 @@ public class Security extends Activity {
         startActivity(i);
     }
 
-    public void setOpen(){
+
+    /*Mutator for the light and lock global variables */
+    private void setOpen(){
         ((MyApplication) this.getApplication()).setLock1("0");
     }
-    public void setClose(){
+    private void setClose(){
         ((MyApplication) this.getApplication()).setLock1("1");
     }
-    public void setLightOn(){
+    private void setLightOn(){
         ((MyApplication) this.getApplication()).setLight1("1");
     }
-    public void setLightOff(){
+    private void setLightOff(){
         ((MyApplication) this.getApplication()).setLight1("0");
     }
 
+    /*Checks for swipe right motion event to redirect to second security page*/
     public boolean onTouchEvent(MotionEvent touchEvent) {
         switch (touchEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:

@@ -2,6 +2,7 @@ package com.example;
 
 import java.io.Serializable;
 
+/*Class that sets and gets the user info file binary object*/
 public class UserInfo implements Serializable {
     private static final long serialVersionUID=1L;
     private String id;

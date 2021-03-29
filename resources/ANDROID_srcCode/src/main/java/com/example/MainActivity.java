@@ -29,6 +29,9 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 
+/**Main activity class
+ * This activity is called when the app is started
+ */
 
 public class MainActivity extends AppCompatActivity{
 
@@ -39,9 +42,11 @@ public class MainActivity extends AppCompatActivity{
     private String username;
     LinearLayout layout;
     private static final String CHANNEL_ID = "intruder";
-
     final Handler handler = new Handler(Looper.getMainLooper());
 
+    /*Shows welcome screen and checks if log in binary files exists.
+    * If binary file exists it will attempt to log in with the credentials stores
+    * and redirect you to pin page, else it displays the log in page */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_secreen);
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity{
         ((MyApplication)this.getApplication()).setFirstOpen(true);
         ((MyApplication)this.getApplication()).setDataminingStatus(false);
         createNotificationChannel();
-        File f = new File(getApplicationContext().getFilesDir() + "/BINARY_DIR.DAT");
+        File f = new File(getApplicationContext().getFilesDir() +"/BINARY_DIR.DAT");
         File p = new File(getApplicationContext().getFilesDir()+"/BINARY_PIN.DAT");
         checkCustomPin(p);
         if(f.exists()) {
@@ -74,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
+    /*Create notification channel for intrusion alert notification*/
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -84,13 +89,12 @@ public class MainActivity extends AppCompatActivity{
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
 
+    /*Redirects to pin page upon valid log in attempt*/
     public void setValid(String bool,String id,String password,boolean fileExists){
         EditText password1 = (EditText) findViewById(R.id.password);
         TextView invalid = (TextView) findViewById(R.id.invalid);
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
+    /*Displays log in page*/
     public void loginFunctionality(){
         Button submit = (Button) findViewById(R.id.loginbutton);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +141,10 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    /*If user has more than 1 house, page to choose house dynamically created.
+    *If user only has 1 house it redirects straight to menu.
+    * Also creates .arff file used for dataming if not created yet
+    */
     private void displayHouses(){
         if(!DataMining.getFileExists(username)){
             DataMining.GET().initARFF_file(username);
@@ -178,7 +186,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
+    /*Displays pin page*/
     public void pinFunctionality() {
         final EditText pinField = (EditText) findViewById(R.id.digit1);
         pinField.requestFocus();
@@ -204,17 +212,20 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    /*Current pin global variable setter and writes current pin to binary file*/
     private void setCurrentPin(String pin){
         ((MyApplication)this.getApplication()).setCurrentPin(pin);
         PinFile.writeBinaryOBJ(pin,getApplicationContext());
     }
 
+    /*Checks if pin has been changed and is stored in binary file*/
     private void checkCustomPin(File p){
         if(p.exists()){
             pin = PinFile.readBinaryOBJ(getApplicationContext()).getPin();
         }
     }
 
+    /*Checks login credentials with database values*/
     private class CheckLogin extends AsyncTask<Void, Void, Void> {
 
         private static final String raptor=MainActivity.raptor;

@@ -20,15 +20,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**Temperature and weather page class
+ * This activity is called when the user navigates to the temperature control page
+ */
+
 public class TempControl extends Activity {
 
     private static BroadcastReceiver tickReceiver;
-    final Handler handler = new Handler(Looper.getMainLooper());
     private static String houseID;
     private Map<String,Integer> icons = new HashMap<>();
     private String temperatureOutside;
     private String username;
 
+    /*
+    Sets view to temp control page loads all values and sets onclick listeners unless
+    null values found. If null values found show connection lost error message.
+    Sets up a loop that checks updates ui every minute.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +108,8 @@ public class TempControl extends Activity {
         }
     }
 
-    public void writeInstance(String username,String temperatureSet){
+    /*Writes a new instance every time target temp adjusted with current values*/
+    private void writeInstance(String username,String temperatureSet){
         String[] arr = new String[5];
         arr[0] = temperatureOutside;
         arr[1] = ((MyApplication)this.getApplication()).getTemperature();
@@ -116,13 +125,15 @@ public class TempControl extends Activity {
         }
     }
 
-    public void update(){
+    /*Checks if connection lost and updates UI (every minute)*/
+    private void update(){
         checkConnection();
         updateUi();
         System.out.println(((MyApplication) this.getApplication()).getTemperature());
     }
 
-    public void checkConnection() {
+    /*Runs connection lost alert if null values found*/
+    private void checkConnection() {
         if (((MyApplication) this.getApplication()).connection()) {
             AlertDialog alertDialog = new AlertDialog.Builder(TempControl.this).create();
             alertDialog.setTitle("Connection Error");
@@ -138,7 +149,8 @@ public class TempControl extends Activity {
         }
     }
 
-    public void end(){
+    /*Restarts app when connection lost*/
+    private void end(){
         ((MyApplication)this.getApplication()).setFirstOpen(true);
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
@@ -147,7 +159,8 @@ public class TempControl extends Activity {
         startActivity(i);
     }
 
-    public void updateUi(){
+    /*Updates Ui */
+    private void updateUi(){
         TextView temperature = (TextView) findViewById(R.id.CurrentTemp);
         TextView humidity = (TextView) findViewById(R.id.CurrentHumid);
         String tempText = ((MyApplication) this.getApplication()).getTemperature()+ "°C";
@@ -156,7 +169,8 @@ public class TempControl extends Activity {
         humidity.setText(humidityText);
     }
 
-    public void updateWeatherUi(){
+    /*Updates weather Ui */
+    private void updateWeatherUi(){
         String[] directions = {"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"};
         Map<String,String> weather = ((MyApplication) this.getApplication()).getWeather();
         TextView temperature = (TextView)findViewById(R.id.WeatherTemperature);
@@ -205,7 +219,7 @@ public class TempControl extends Activity {
         }
     }
 
-
+    /*Maps api icon status codes to images for ui*/
     private void setIcons(){
         icons.put("01d",R.drawable.clearskyd);
         icons.put("01n",R.drawable.clearskyn);
@@ -225,7 +239,8 @@ public class TempControl extends Activity {
         icons.put("50n", R.drawable.mistn);
     }
 
-    public String classifyTime(){
+    /*Classifies time for data mining*/
+    private String classifyTime(){
         Calendar rightNow = Calendar.getInstance();
         int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format >= 6 && currentHourIn24Format <=10){

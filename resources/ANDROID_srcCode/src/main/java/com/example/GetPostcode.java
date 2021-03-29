@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+
+/*Gets the users posctode stored in the database and sets a global variable*/
 public class GetPostcode {
 
     public void run(String houseID,MyApplication m){

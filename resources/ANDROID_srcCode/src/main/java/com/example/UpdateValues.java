@@ -1,6 +1,5 @@
 package com.example;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +10,9 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UpdateValues extends Activity {
+/*Class called every minute that retrieves the values of sensors,lights,fans and locks from arduino
+ */
+public class UpdateValues{
 
     public void  run(MyApplication m){
         GetHttp h = new GetHttp(m);
@@ -59,7 +60,7 @@ public class UpdateValues extends Activity {
         String result;
         MyApplication m;
         private static final String raptor = MainActivity.raptor;
-
+        //private static final String raptor = MainActivity.nodMCUwebServer;
         public GetHttp(MyApplication m){
             super();
             this.m = m;

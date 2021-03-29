@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+
+/*Sends dismiss alarm http request to arduino on seperate thread*/
 public class DismissAlarm {
 
     public void run(String apiKey){

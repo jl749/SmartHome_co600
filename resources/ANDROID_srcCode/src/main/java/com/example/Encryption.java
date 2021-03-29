@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
+/*Encryption class that hashes password using SH256 when logging in*/
 public class Encryption {
 
     public static String encryptPassword(String password)
