@@ -18,13 +18,13 @@ public class CheckSpeech {
     private final ArrayList<String> commandWordsTemp = new ArrayList<>(
             Arrays.asList("set","change","adjust"));
     private final ArrayList<String> commandWordsAlarmOn = new ArrayList<>(
-            Arrays.asList("turn alarm on","activate alarm","turn on alarm"));
+            Arrays.asList("turn alarm on","activate alarm","turn on alarm","turn the alarm on"));
     private final ArrayList<String> commandWordsAlarmOff = new ArrayList<>(
-            Arrays.asList("deactivate alarm","turn alarm off","turn off alarm"));
+            Arrays.asList("deactivate alarm","turn alarm off","turn off alarm","turn the alarm off"));
     private final ArrayList<String> commandWordLightsOn = new ArrayList<>(
-            Arrays.asList("turn lights on","turn on lights"));
+            Arrays.asList("turn lights on","turn on lights","turn the lights on"));
     private final ArrayList<String> commandWordLightsOff = new ArrayList<>(
-            Arrays.asList("turn lights off","turn off lights"));
+            Arrays.asList("turn lights off","turn off lights","turn the lights off"));
     private final ArrayList<String> commandWordLockOn = new ArrayList<>(
             Arrays.asList("activate lock","lock"));
     private final ArrayList<String> commandWordLockOff = new ArrayList<>(
@@ -65,50 +65,50 @@ public class CheckSpeech {
         String[] array = match.split(" ");
         for(String word: commandWordsTemp) {
             if (array[0].equals(word)) {
-                return "temperature";
+                return("temperature");
             }
         }
         for(String word:commandWordLightsOn){
             if(word.equals(match)){
-                return "lightson";
+                return("lightson");
             }
         }
         for(String word:commandWordLightsOff){
             if(word.equals(match)){
-                return "lightsoff";
+                return("lightsoff");
             }
         }
         for(String word:commandWordLockOn){
             if(word.equals(match)){
-                return "lockon";
+                return("lockon");
             }
         }
         for(String word:commandWordLockOff){
             if(word.equals(match)){
-                return "lockoff";
+                return("lockoff");
             }
         }
         for(String word:commandWordsFanOn){
             if(word.equals(match)){
-                return "fanon";
+                return("fanon");
             }
         }
         for(String word:commandWordsFanOff){
             if(word.equals(match)){
-                return "fanoff";
+                return("fanoff");
             }
         }
         for(String word:commandWordsAlarmOn){
             if(word.equals(match)){
-                return "alarmon";
+                return("alarmon");
             }
         }
         for(String word:commandWordsAlarmOff){
             if(word.equals(match)){
-                return "alarmoff";
+                return("alarmoff");
             }
         }
-        return "navigate";
+        return("navigate");
     }
 
     public int tryParseInt(String value, int defaultVal) {

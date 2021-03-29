@@ -2,28 +2,18 @@ package com.example;
 
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -35,16 +25,74 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         houseID = intent.getStringExtra("HouseID");
+
         UpdateValues uv = new UpdateValues();
         uv.run(((MyApplication)context.getApplicationContext()));
         GetAlarmAndTemp gat = new GetAlarmAndTemp();
         gat.run(((MyApplication)context.getApplicationContext()),houseID);
+        updateWeather(context);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 checkIntruder(context);
+                updateDataset(context);
             }
-        }, 5000);//increase time
+        }, 5000);
+    }
+
+    public void updateWeather(Context context){
+        System.out.println(((MyApplication) context.getApplicationContext()).validPostCode());
+        if(((MyApplication) context.getApplicationContext()).validPostCode()) {
+            WeatherAPI wapi = new WeatherAPI();
+            wapi.run(((MyApplication) context.getApplicationContext()), ((MyApplication)context.getApplicationContext()).getPostCode());
+        }
+    }
+
+    public void updateDataset(Context c){
+        boolean status = ((MyApplication)c.getApplicationContext()).getDataminingStatus();
+        String apiKey = ((MyApplication)c.getApplicationContext()).getAPIKey();
+        String[] arr = new String[5];
+        arr[0] = ((MyApplication)c.getApplicationContext()).getTempOutside();
+        arr[1] = ((MyApplication)c.getApplicationContext()).getTemperature();
+        arr[2] = "?";
+        arr[3] = ((MyApplication)c.getApplicationContext()).getHumidity();
+        arr[4] = classifyTime();
+        System.out.println(Arrays.toString(arr));
+        String action = "";
+        if(status){
+            try {
+                DataMining.GET().updateDataset(((MyApplication)c.getApplicationContext()).getUsername());
+                DataMining.GET().buildModel();
+            if(DataMining.GET().getNumInstances(((MyApplication)c.getApplicationContext()).getUsername())>9) {
+                    if (DataMining.GET().classifyInst(arr) != null) {
+                        action = DataMining.GET().classifyInst(arr);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (action.equals("C")) {
+                coolingOn(apiKey);
+            } else if (action.equals("H")) {
+                heatingOn(apiKey);
+            }
+        }
+        System.out.println(action);
+    }
+
+    public void coolingOn(String apiKey){
+        FanLedLockControl flc = new FanLedLockControl();
+        flc.run("1", true,apiKey,"FAN");
+        flc.run("", false,apiKey,"HEAT");
+        System.out.println("cooling on");
+    }
+
+    public void heatingOn(String apiKey){
+        FanLedLockControl flc = new FanLedLockControl();
+        flc.run("1", false,apiKey,"FAN");
+        flc.run("", true,apiKey,"HEAT");
+        System.out.println("Heating on");
     }
 
     public void checkIntruder(Context c){
@@ -73,5 +121,25 @@ public class AlarmReceiver extends BroadcastReceiver {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(c);
             notificationManager.notify(1, builder.build());
             }
+    }
+
+    public String classifyTime(){
+        Calendar rightNow = Calendar.getInstance();
+        int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
+        if(currentHourIn24Format >= 6 && currentHourIn24Format <=10){
+            return "6~10";
+        }
+        else if(currentHourIn24Format >= 11 && currentHourIn24Format <=13){
+            return "11~13";
+        }
+        else if(currentHourIn24Format >= 14 && currentHourIn24Format <=17){
+            return "14~17";
+        }
+        else if(currentHourIn24Format >= 18 && currentHourIn24Format <=22){
+            return "18~22";
+        }
+        else{
+            return "others";
+        }
     }
 }

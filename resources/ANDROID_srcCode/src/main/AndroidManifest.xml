@@ -36,7 +36,7 @@
         <activity android:name=".FunctionMenu" android:screenOrientation="portrait" />
         <activity android:name=".Alarm" android:screenOrientation="portrait" />
         <activity android:name=".Voicerec" android:screenOrientation="portrait" />
-        <activity android:name=".Deeplearning" android:screenOrientation="portrait" />
+        <activity android:name=".DataminingSettings" android:screenOrientation="portrait" />
         <activity android:name=".UpdateValues" android:screenOrientation="portrait" />
         <activity android:name=".AirQuality" android:screenOrientation="portrait" />
         <activity

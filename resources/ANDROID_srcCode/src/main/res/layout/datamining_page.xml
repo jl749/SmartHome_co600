@@ -13,55 +13,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="5"
         android:layout_margin="10dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="100dp"
             android:padding="15dp"
-            android:text="Settings"
+            android:text="Data Mining (BETA)"
             android:gravity="center"
             android:background="#333"
             android:textColor="#fff" />
 
-        <Button
-            android:id="@+id/deeplearning"
+        <ToggleButton
+            android:id="@+id/toggBtn"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="100dp"
             android:padding="5dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:text="Data Mining (Beta)"/>
+            android:gravity="center" />
 
         <Button
-            android:id="@+id/setPostcode"
+            android:id="@+id/resetData"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="100dp"
             android:padding="5dp"
             android:layout_gravity="center"
-            android:text="Change postcode"/>
-
-        <Button
-            android:id="@+id/changePin"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="Change Pin"/>
+            android:text="Reset Data"/>
 
 
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="Log Out"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
