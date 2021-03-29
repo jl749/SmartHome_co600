@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class DataMining {
     public static final DataMining INSTANCE = new DataMining();
-    private static final String path = "";
+    private static String path = "";
     private static J48 tree = null;
     private static Instances dataset = null;
 
@@ -48,20 +48,18 @@ public class DataMining {
             throw new IOException("invalid input array format (array length should be 5)");
         try{
             Instance inst  = new DenseInstance(6);
+            for(int i=0 ; i<4 ; i++)
+                if(instance[i].matches("\\d+"))
+                    inst.setValue(i, Double.parseDouble(instance[i]));
             Attribute time = new Attribute("time", new ArrayList<String>(Arrays.asList("6~10", "11~13", "14~17", "18~22", "others")), 4);
-            inst.setValue(time, instance[4]);
-            inst.setValue(0, Double.parseDouble(instance[0]));
-            inst.setValue(1, Double.parseDouble(instance[1]));
-            inst.setValue(2, Double.parseDouble(instance[2]));
-            inst.setValue(3, Double.parseDouble(instance[3]));
             inst.setValue(time, instance[4]);
             inst.setDataset(dataset);
 
             dataset.add(0, inst);
             double[] prob=tree.distributionForInstance(dataset.get(0));
-            //System.out.println(Arrays.toString(prob));
-            double accuracy=prob[0]/prob[1]+prob[0];
-            if(accuracy < 60)
+            System.out.println("prob: "+Arrays.toString(prob));
+            double accuracy=prob[0]/(prob[1]+prob[0]);
+            if(accuracy < 0.6)
                 return "do_nothing";
 
             double cV = tree.classifyInstance(dataset.get(0));
@@ -87,6 +85,7 @@ public class DataMining {
 
         StringBuilder sb=new StringBuilder();
         for(int i=0 ; i<n-1 ; i++){
+            if(i==2)    continue;
             sb.append(newInstance[i]);
             sb.append(",");
         }
@@ -143,7 +142,7 @@ public class DataMining {
             fstream.write("@relation tempControlData\n");
             fstream.write("@attribute tempOutside numeric\n");
             fstream.write("@attribute tempInside numeric\n");
-            fstream.write("@attribute tempSet numeric\n");
+            //fstream.write("@attribute tempSet numeric\n");
             fstream.write("@attribute humidity numeric\n");
             fstream.write("@attribute time {6~10, 11~13, 14~17, 18~22, others}\n");
             fstream.write("@attribute class {H, C}\n\n"); //Heating, Cooling
@@ -168,5 +167,9 @@ public class DataMining {
             return (new ConverterUtils.DataSource(path + username + "_trainingSet.arff").getDataSet()).numInstances();
         }catch(Exception e){e.printStackTrace();}
         return -1;
+    }
+
+    public static void setPath(String fpath){
+        path=fpath;
     }
 }

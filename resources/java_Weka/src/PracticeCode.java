@@ -91,8 +91,8 @@ public class PracticeCode {
                 System.out.println("DM starting......");
                 DataMining.GET().updateDataset(name); //update static Instances
                 DataMining.GET().buildModel(); //update J48
-                System.out.println(DataMining.GET().classifyInst(new String[] {"8","13","19","56","6~10"}));
-                System.out.println(DataMining.GET().classifyInst(new String[] {"30","25","15","86","11~13"}));
+                System.out.println(DataMining.GET().classifyInst(new String[] {"8","13","?","56","6~10"}));
+                System.out.println(DataMining.GET().classifyInst(new String[] {"30","25","?","86","11~13"}));
             }
 
         }catch(Exception e){e.printStackTrace();}
