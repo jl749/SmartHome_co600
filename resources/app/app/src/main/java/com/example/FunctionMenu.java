@@ -15,13 +15,19 @@ import android.view.View;
 import android.widget.ImageButton;
 
 
+/**Function menu page class
+ * This activity is called when the user logs in and enters pin (and chooses house).
+ */
 public class FunctionMenu extends Activity {
 
     final Handler handler = new Handler(Looper.getMainLooper());
     public String houseId;
     private ProgressDialog working_dialog;
 
-
+    /*Sets on click listeners for the menu.
+    * Checks all connections, loads data and sets up 1 minute main loop that updates values of censors.
+    * Shows connection lost alert message if connection failed.
+    */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         houseId = getIntent().getStringExtra("HOUSE_SESSION_ID");
@@ -106,12 +112,14 @@ public class FunctionMenu extends Activity {
         }, 7000);
     }
 
-    public void updateWeather(){
+    /*Updates weather*/
+    private void updateWeather(){
         WeatherAPI wapi = new WeatherAPI();
         wapi.run(((MyApplication) this.getApplication()),((MyApplication) this.getApplication()).getPostCode());
     }
 
-    public void end(){
+    /*Restarts app*/
+    private void end(){
         ((MyApplication)this.getApplication()).setFirstOpen(true);
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
@@ -121,14 +129,18 @@ public class FunctionMenu extends Activity {
         startActivity(i);
     }
 
-    public void setAPIKey(){
+    /*Sets global APIKey value*/
+    private void setAPIKey(){
         GetAPIKey gak = new GetAPIKey();
         if(((MyApplication) this.getApplication()).getFirstOpen()) {
             gak.run(((MyApplication)this.getApplication()),houseId);
         }
     }
 
-    public void checkConnection(){
+    /*Checks connection status and shows alert if connection lost or starts 1 minute main loop that updates values
+    * if connected successfully.
+    */
+    private void checkConnection(){
         System.out.println("connection lost = " + ((MyApplication) this.getApplication()).connection());
         if(((MyApplication) this.getApplication()).checkNull()){
             final AlertDialog alertDialog = new AlertDialog.Builder(FunctionMenu.this).create();
@@ -156,10 +168,12 @@ public class FunctionMenu extends Activity {
         }
     }
 
+    /*Initial dialog builder that runs until all http connections to retrieve values finish*/
     private void showWorkingDialog() {
         working_dialog = ProgressDialog.show(this, "","Working please wait...", true);
     }
 
+    /*Remove working dialog*/
     private void removeWorkingDialog() {
         if (working_dialog != null) {
             working_dialog.dismiss();

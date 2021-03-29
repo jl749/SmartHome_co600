@@ -5,12 +5,15 @@ import android.content.Context;
 
 import java.io.*;
 
+
+
 public class BinaryFile{
 
-
+    /*Writes a binary file containing users info (Username and Password)
+    * for ease of login
+    */
     public  static void writeBinaryOBJ(String id, String pass, Context c) {
         UserInfo record=new UserInfo(id,pass);
-        ObjectOutputStream objOUT=null;
         FileOutputStream fos=null;
         ObjectOutputStream os = null;
         try{
@@ -26,6 +29,7 @@ public class BinaryFile{
         }
     }
 
+    /*Reads the binary file when user logs in*/
     public static UserInfo readBinaryOBJ(Context c){
         UserInfo record=new UserInfo();
         FileInputStream fis = null;

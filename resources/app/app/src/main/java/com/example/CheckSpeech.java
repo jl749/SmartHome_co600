@@ -3,7 +3,11 @@ package com.example;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
+
 public class CheckSpeech {
+
+    /*This class stores available speech commands and checks speech to see if valid commands are found*/
 
     private final ArrayList<String> tempPage = new ArrayList<String>(
             Arrays.asList("temperature", "humidity", "weather","degree","degrees"));
@@ -34,7 +38,7 @@ public class CheckSpeech {
     private final ArrayList<String> commandWordsFanOff = new ArrayList<>(
             Arrays.asList("turn fan off","deactivate fan","turn off fan"));
 
-
+    /*Checks for set temperature commands and navigate commands  */
     public String checkSpeech(String match){
         String command = checkCommandWord(match);
 
@@ -51,6 +55,7 @@ public class CheckSpeech {
         return command;
     }
 
+    /*Checks for numeric values in speech within the range of the thermostat*/
     public int checkForInteger(String match){//check if number is in voice command
         for (String word : match.split(" ")) {
             int value = tryParseInt(word,0);
@@ -61,6 +66,7 @@ public class CheckSpeech {
         return 0;
     }
 
+    /*Checks for relevant command words and returns the found category*/
     private String checkCommandWord(String match){//check for first word to be command word
         String[] array = match.split(" ");
         for(String word: commandWordsTemp) {
@@ -111,7 +117,8 @@ public class CheckSpeech {
         return("navigate");
     }
 
-    public int tryParseInt(String value, int defaultVal) {
+    /*String to int conversions*/
+    private int tryParseInt(String value, int defaultVal) {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
@@ -119,7 +126,8 @@ public class CheckSpeech {
         }
     }
 
-    public String checkNavigation(String match){
+    /*If category keyword found but no command words recognized redirect to category found */
+    private String checkNavigation(String match){
         for(String word: tempPage){
             if(match.contains(word)){
                 return("TempControl");

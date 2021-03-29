@@ -8,23 +8,26 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
 
+/**Air Quality page class
+ * This activity is called when the user navigates to the AQI Page
+ */
 
 public class AirQuality extends Activity {
 
     public int airQualityIndex;
     public String apiKey;
-    final Handler handler = new Handler(Looper.getMainLooper());
     private static BroadcastReceiver tickReceiver;
 
+    /*
+    *Sets view to airquality page loads all values and sets onclick listeners unless
+    *null values found. If null values found show connection lost error message.
+    *Sets up a loop that checks connection loss and updates ui every minute.
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,12 +80,14 @@ public class AirQuality extends Activity {
         registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
-    public void update(){
+    /*Checks if connection lost and updates UI (every minute)*/
+    private void update(){
         checkConnection();
         updateUI();
     }
 
-    public void updateUI(){
+    /*Updates Ui */
+    private void updateUI(){
         TextView aqi = findViewById(R.id.aqi);
         SwitchCompat fanSwitch = findViewById(R.id.fanSwitch);
         airQualityIndex = Integer.parseInt(((MyApplication) this.getApplication()).getAqi());
@@ -94,7 +99,8 @@ public class AirQuality extends Activity {
         }
     }
 
-    public void checkConnection() {
+    /*Runs connection lost alert if null values found*/
+    private void checkConnection() {
         if (((MyApplication) this.getApplication()).connection()) {
             AlertDialog alertDialog = new AlertDialog.Builder(AirQuality.this).create();
             alertDialog.setTitle("Connection Error");
@@ -110,14 +116,16 @@ public class AirQuality extends Activity {
         }
     }
 
-    public void setFanOn(){
+    /*Mutator for the fan global variable */
+    private void setFanOn(){
         ((MyApplication) this.getApplication()).setFan("1");
     }
-    public void setFanOff(){
+    private void setFanOff(){
         ((MyApplication) this.getApplication()).setFan("0");
     }
 
-    public void end(){
+    /*Restarts app when connection lost*/
+    private void end(){
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -126,18 +134,19 @@ public class AirQuality extends Activity {
         startActivity(i);
     }
 
-    public void changeStatus(){
+    /*Changes UI depending on the air quality picked up from censor*/
+    private void changeStatus(){
         TextView good = findViewById(R.id.good);
         TextView moderate = findViewById(R.id.moderate);
         TextView unhealthy = findViewById(R.id.unhealthy);
         TextView hazardous = findViewById(R.id.hazardous);
-        if(airQualityIndex<= 25){
+        if(airQualityIndex<= 50){
             good.setBackgroundResource(R.drawable.bordergood);
         }
-        else if(airQualityIndex>25 && airQualityIndex<=50){
+        else if(airQualityIndex>50 && airQualityIndex<=100){
             moderate.setBackgroundResource(R.drawable.bordermoderate);
         }
-        else if(airQualityIndex>50 && airQualityIndex<=75){
+        else if(airQualityIndex>100 && airQualityIndex<=150){
             unhealthy.setBackgroundResource(R.drawable.borderunhealthy);
         }
         else{

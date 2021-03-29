@@ -19,14 +19,17 @@ public class CloseNotification extends AppCompatActivity {
     public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
     public static  String apiKey;
 
+    /*Creates the dismiss button in the intruder alert notification. Dismiss button also calls
+    * dismiss to arduino to turn of the alarm.
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.cancel(getIntent().getIntExtra(NOTIFICATION_ID, -1));
         apiKey = ((MyApplication)this.getApplication()).getAPIKey();
-        DismissAlarm da = new DismissAlarm(apiKey);
-        da.execute();
+        DismissAlarm da = new DismissAlarm();
+        da.run(apiKey);
         finish(); // since finish() is called in onCreate(), onDestroy() will be called immediately
     }
 
@@ -36,37 +39,5 @@ public class CloseNotification extends AppCompatActivity {
         intent.putExtra(NOTIFICATION_ID, notificationId);
         PendingIntent dismissIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         return dismissIntent;
-    }
-
-    private class DismissAlarm extends AsyncTask<Void, Void, Void> {
-
-        HttpURLConnection request = null;
-        URL url = null;
-        String apiKey;
-
-        private static final String ip = MainActivity.nodMCUwebServer;
-
-        public DismissAlarm(String apiKey) {
-            super();
-            this.apiKey = apiKey;
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                url = new URL(ip + "/A_DISMISS/" + apiKey);
-                request=(HttpURLConnection) url.openConnection();
-                request.connect();
-                request.getInputStream().close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                try{request.disconnect();}catch(Exception e) {e.printStackTrace();}
-            }
-            return null;
-        }
     }
 }

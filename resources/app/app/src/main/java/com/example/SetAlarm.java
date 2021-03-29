@@ -1,6 +1,5 @@
 package com.example;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -10,8 +9,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+/*Class called when user turns on/off alarm.
+* This class updates the intrusion alarm stored in the database
+*/
 
-public class SetAlarm extends Activity {
+public class SetAlarm{
 
     public void run(boolean b,String houseID){
         UpdateIntruder update = new UpdateIntruder(b, houseID);

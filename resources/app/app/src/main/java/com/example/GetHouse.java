@@ -12,7 +12,9 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/*Gets the house numbers of the logged in user from the database
+* and sets global variables.
+*/
 public class GetHouse extends Activity {
 
     public void run(MyApplication m,String username){

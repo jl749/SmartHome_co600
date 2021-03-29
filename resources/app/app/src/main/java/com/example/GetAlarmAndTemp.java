@@ -14,7 +14,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/*Gets the variables found in the database (Locks status and set temp) and
+* saves them as global variables.
+* These variables are stored in database so in case of arduino power loss locks
+* will not be deactivated and previous temperature will not be lost.
+*/
 public class GetAlarmAndTemp extends Activity {
 
     public void  run(MyApplication m,String houseID){

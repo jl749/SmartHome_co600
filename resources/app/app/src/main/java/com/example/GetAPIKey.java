@@ -10,6 +10,10 @@ import java.net.URL;
 import java.net.URLConnection;
 
 
+/*Retrieves api key from database and stores it
+* as a global variable. The api key is used as extra
+* security when sending http request to control arduino
+*/
 
 public class GetAPIKey extends Activity {
 

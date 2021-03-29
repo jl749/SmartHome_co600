@@ -17,12 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-
+/*Class called to get the weather using postcode as the location.
+*Calls first api to get location of postcode and second api to get weather at the location
+* that matches the postcode
+*/
 public class WeatherAPI {
     private static final String apiKey = "414a72d3e6793b70712631f53c6de000";
     //http://www.geonames.org/postalcode-search.html?q=ME7+1RF&country=GB

@@ -1,6 +1,5 @@
 package com.example;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -10,8 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-
-public class SetTemperature extends Activity {
+/*Class called when user adjusts target temperature
+ * This class updates the set temp value stored in the database
+ */
+public class SetTemperature{
 
     public void run(Integer val, String houseID){
         setTemp set = new setTemp(val, houseID);

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/*Class that sends http request to arduino to control the fan,LED,lock and heating pad*/
 public class FanLedLockControl {
 
     private static final String ip = MainActivity.nodMCUwebServer;

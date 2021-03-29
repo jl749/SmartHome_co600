@@ -10,6 +10,10 @@ import java.io.ObjectOutputStream;
 
 public class PinFile {
 
+
+    /*Writes a binary file containing users pin.
+     * Only when custom pin is created
+     */
     public  static void writeBinaryOBJ(String pin, Context c) {
         PinInfo userpin = new PinInfo(pin);
         ObjectOutputStream objOUT=null;

@@ -1,39 +1,35 @@
 package com.example;
 
-import android.annotation.SuppressLint;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.VoiceInteractor;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.icu.text.StringSearch;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
+
 
 import static android.Manifest.permission.RECORD_AUDIO;
+
+/**Voice recognition page class
+ * This activity is called when the user navigates to the Voicerec class
+ */
 
 public class Voicerec extends Activity {
 
@@ -48,7 +44,12 @@ public class Voicerec extends Activity {
             Arrays.asList("Change temperature to 20","Turn lights off","Alarm on","Turn fan off"));
 
 
-
+    /*
+    Sets view to airquality page loads all values and sets onclick listeners
+    and speech recognizer unless null values found. If null values found show
+    connection lost error message.
+    Sets up a loop that checks connection loss and updates ui every minute.
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +138,7 @@ public class Voicerec extends Activity {
             houseID = ((MyApplication) this.getApplication()).getCurrentHouse();
             apiKey = ((MyApplication) this.getApplication()).getAPIKey();
             ImageButton recordVoice = (ImageButton) findViewById(R.id.recordVoice);
-            recordVoice.setOnTouchListener((v, event) -> {
+            recordVoice.setOnTouchListener((View v, MotionEvent event) -> {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     speechRecognizer.startListening(intentRecognizer);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -171,7 +172,8 @@ public class Voicerec extends Activity {
         }
     }
 
-    public void checkConnection() {
+    /*Runs connection lost alert if null values found*/
+    private void checkConnection() {
         if (((MyApplication) this.getApplication()).connection()) {
             AlertDialog alertDialog = new AlertDialog.Builder(Voicerec.this).create();
             alertDialog.setTitle("Connection Error");
@@ -187,7 +189,8 @@ public class Voicerec extends Activity {
         }
     }
 
-    public void end(){
+    /*Restarts app when connection lost*/
+    private void end(){
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -195,7 +198,8 @@ public class Voicerec extends Activity {
         startActivity(i);
     }
 
-    public String classifyTime(){
+    /*Classifies time for data mining*/
+    private String classifyTime(){
         Calendar rightNow = Calendar.getInstance();
         int currentHourIn24Format = rightNow.get(Calendar.HOUR_OF_DAY);
         if(currentHourIn24Format >= 6 && currentHourIn24Format <=10){
@@ -215,9 +219,11 @@ public class Voicerec extends Activity {
         }
     }
 
-    public void writeInstance(String temperatureSet){
+    /*Writes a new instance every time target temp adjusted with current values*/
+    private void writeInstance(String temperatureSet){
         String[] arr = new String[5];
-        arr[0] = ((MyApplication)this.getApplication()).getTempOutside();
+        String weather = ((MyApplication)this.getApplication()).getTempOutside();
+        arr[0] = (weather==null)?"":weather;
         arr[1] = ((MyApplication)this.getApplication()).getTemperature();
         arr[2] = temperatureSet;
         arr[3] = ((MyApplication)this.getApplication()).getHumidity();
@@ -231,6 +237,7 @@ public class Voicerec extends Activity {
         }
     }
 
+    /*Shows alert box to confirm action when command has been recognized*/
     private void executeCommand(String command){
         int changeTemp = tryParseInt(command,0);
         if(changeTemp!=0){
@@ -240,7 +247,6 @@ public class Voicerec extends Activity {
                         public void onClick(DialogInterface dialog, int which) {
                             setTemp(changeTemp);
                             writeInstance(Integer.toString(changeTemp));
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -251,7 +257,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setLights(true);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -262,7 +267,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setLights(false);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -273,7 +277,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setLock(true);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -284,7 +287,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setLock(false);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -295,7 +297,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setFan(true);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -306,7 +307,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setFan(false);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -317,7 +317,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setAlarm(false);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -328,7 +327,6 @@ public class Voicerec extends Activity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             setAlarm(true);
-                            System.out.println("GREAT SUCCESS!!!");
                         }
                     });
             alertDialog.show();
@@ -355,6 +353,7 @@ public class Voicerec extends Activity {
         }
     }
 
+    /*Builds alert box*/
     private AlertDialog displayConfirmationAlert(String message){
         AlertDialog alertDialog = new AlertDialog.Builder(Voicerec.this).create();
         alertDialog.setTitle("Confirm command");
@@ -369,7 +368,8 @@ public class Voicerec extends Activity {
         return alertDialog;
     }
 
-    public int tryParseInt(String value, int defaultVal) {
+    /*String to integer conversion*/
+    private int tryParseInt(String value, int defaultVal) {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
@@ -377,12 +377,14 @@ public class Voicerec extends Activity {
         }
     }
 
+    /*Sets target temperature*/
     private void setTemp(int targetTemp){
         SetTemperature setTemp = new SetTemperature();
         setTemp.run(targetTemp, houseID);
         ((MyApplication)this.getApplication()).setTargetTemp(Integer.toString(targetTemp));
     }
 
+    /*Turns LEDs on or off*/
     private void setLights(boolean state){
         final FanLedLockControl fllc = new FanLedLockControl();
         fllc.run("1", state,apiKey,"LED");
@@ -394,6 +396,7 @@ public class Voicerec extends Activity {
         }
     }
 
+    /*Locks/unlocks doors*/
     private void setLock(boolean state){
         final FanLedLockControl fllc = new FanLedLockControl();
         fllc.run("1", state,apiKey,"LOCK");
@@ -405,6 +408,7 @@ public class Voicerec extends Activity {
         }
     }
 
+    /*Turns fan on or off*/
     private void setFan(boolean state){
         final FanLedLockControl fllc = new FanLedLockControl();
         fllc.run("1", state,apiKey,"FAN");
@@ -416,6 +420,7 @@ public class Voicerec extends Activity {
         }
     }
 
+    /*Turn alarm on or off*/
     private void setAlarm(boolean state) {
         SetAlarm alarm = new SetAlarm();
         alarm.run(state,houseID);

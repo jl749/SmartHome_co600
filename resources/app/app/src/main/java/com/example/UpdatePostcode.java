@@ -1,6 +1,5 @@
 package com.example;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -10,6 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+/*Class called when user changes postcode in settings page.
+* This function updates the users postcode in the database
+*/
 public class UpdatePostcode {
 
     public void run(String houseID, String postcode){

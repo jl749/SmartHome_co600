@@ -1,9 +1,7 @@
 package com.example;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,24 +10,27 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-
 import androidx.appcompat.widget.SwitchCompat;
 
+
+/**Alarm page class
+ * This activity is called when the user navigates to the Alarm page
+ */
 public class Alarm extends Activity {
 
     static Boolean isTouched = false;
     private static BroadcastReceiver tickReceiver;
-    final Handler handler = new Handler(Looper.getMainLooper());
     private static String houseID;
     private static String apiKey;
 
+    /*
+    Sets view to alarm page loads all values and sets onclick listeners unless
+    null values found. If null values found show connection lost error message.
+    Sets up a loop that checks connection and updates ui every minute.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,12 +91,14 @@ public class Alarm extends Activity {
         }
     }
 
-    public void update(){
+    /*Checks if connection lost and updates UI (every minute)*/
+    private void update(){
         checkConnection();
         updateUi();
     }
 
-    public void updateUi(){
+    /*Updates Ui */
+    private void updateUi(){
         SwitchCompat aSwitch = findViewById(R.id.toggleAlarm);
         if (((MyApplication) this.getApplication()).getAlarm().equals("1")) {
             ImageView image = (ImageView) findViewById(R.id.alarmState1);
@@ -113,7 +116,8 @@ public class Alarm extends Activity {
         }
     }
 
-    public void end(){
+    /*Restarts app when connection lost*/
+    private void end(){
         Intent i = getBaseContext().getPackageManager().
                 getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -121,7 +125,8 @@ public class Alarm extends Activity {
         startActivity(i);
     }
 
-    public void checkConnection() {
+    /*Runs connection lost alert if null values found*/
+    private void checkConnection() {
         if (((MyApplication) this.getApplication()).connection()) {
             AlertDialog alertDialog = new AlertDialog.Builder(Alarm.this).create();
             alertDialog.setTitle("Connection Error");
@@ -137,10 +142,11 @@ public class Alarm extends Activity {
         }
     }
 
-    public void alarmOn(){
+    /*Mutator for the alarm global variable */
+    private void alarmOn(){
         ((MyApplication) this.getApplication()).setAlarm("1");
     }
-    public void alarmOff(){
+    private void alarmOff(){
         ((MyApplication) this.getApplication()).setAlarm("0");
     }
     

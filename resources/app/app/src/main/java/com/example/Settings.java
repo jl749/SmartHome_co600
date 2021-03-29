@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import java.io.File;
 
-
+/**Settings page class
+ * This activity is called when the user navigates to the settings page
+ */
 public class Settings extends Activity {
 
     private String m_Text = "";
@@ -24,6 +26,8 @@ public class Settings extends Activity {
     private String n_Text = "";
     private  String currentPin;
 
+
+    /*Sets listeners for each button*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +80,7 @@ public class Settings extends Activity {
         });
     }
 
+    /*Shows input dialog when user clicks on the change postcode button*/
     private void inputDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Input postcode");
@@ -108,6 +113,7 @@ public class Settings extends Activity {
         builder.show();
     }
 
+    /*Updates the users postcode in the database*/
     public void updatePostCode(String postCode){
         ((MyApplication)this.getApplication()).setPostCode(postCode);
         String houseID = ((MyApplication)this.getApplication()).getCurrentHouse();
@@ -120,11 +126,13 @@ public class Settings extends Activity {
         toast.show();
     }
 
+    /*Updates the weather api for the new postcode*/
     public void updateWeather(String postCode){
         WeatherAPI wapi = new WeatherAPI();
         wapi.run(((MyApplication) this.getApplication()),postCode);
     }
 
+    /*Shows first input box to confirm current pin when user wants to change pin*/
     private void inputCurrentPinDialog(String message){
         currentPin = ((MyApplication)this.getApplication()).getCurrentPin();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -167,6 +175,7 @@ public class Settings extends Activity {
         builder.show();
     }
 
+    /*Shows input dialog that is used to set the new pin */
     private void inputNewPinDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Input New Pin");
@@ -186,7 +195,7 @@ public class Settings extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 n_Text = input.getText().toString();
-                if(!n_Text.isEmpty()) {
+                if(n_Text.length() == 4) {
                     setNewPin(n_Text);
                 }
                 else{
@@ -204,6 +213,7 @@ public class Settings extends Activity {
         builder.show();
     }
 
+    /*Saves new pin in binary file*/
     private void setNewPin(String pin){
         System.out.println(pin);
         ((MyApplication)this.getApplication()).setCurrentPin(pin);

@@ -3,8 +3,9 @@ package com.example;
 import android.app.Application;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+
+/*Class containing global variables mutator and accessor methods*/
 
 public class MyApplication extends Application {
 
