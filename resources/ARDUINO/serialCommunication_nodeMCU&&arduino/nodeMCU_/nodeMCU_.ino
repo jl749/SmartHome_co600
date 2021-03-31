@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
-const char* ssid = "BT-FFA25W";
-const char* pass = "cATY9hbJUC4GQi";
+const char* ssid = "Igor";
+const char* pass = "@Qwer1234";
 const String houseID="houseID=1234";
-const char* phpHost = "http://192.168.1.75/co600/getThreshold.php";
+const char* phpHost = "http://192.168.43.146/co600/getThreshold.php";
 String apiKey;
 WiFiClient client;
 
@@ -49,7 +49,7 @@ void setup() {
   server.begin();
   Serial.println("Server started");
 
-  http.begin(F("http://192.168.1.75/co600/getAPIKey.php"));
+  http.begin(F("http://192.168.43.146/co600/getAPIKey.php"));
   http.setTimeout(1000);
   http.addHeader("Content-Type","application/x-www-form-urlencoded");
   int httpCode = http.POST(houseID);
@@ -67,6 +67,7 @@ void setup() {
 }
 
 void loop() {
+  //while(tmp_set > tmp+2)
   unsigned long currentMillis = millis();
   if(currentMillis - previousMillis >= interval){
     previousMillis = currentMillis;
@@ -78,11 +79,11 @@ void loop() {
     count=0;
     httpPOST(phpHost, houseID); //read db
     
-    if(intruder_Alarm_set != ALARM_SET){
-      String command = "A/";
-      command += !ALARM_SET;
-      s.println(command); //update alarm
-    }
+    if(intruder_Alarm_set == 0 && ALARM_SET == 1)
+      s.println(F("A/0")); //update alarm
+    else if(intruder_Alarm_set == 1 && ALARM_SET == 0)
+      s.println(F("A/1")); //update alarm
+    
   }
   webServer();
 }
@@ -109,6 +110,15 @@ void httpPOST(String url, String data){
         if(strcmp(token2, "TMP_set") == 0){
           token2 = strtok_r(NULL, delimiter2, &end_token);
           tmp_set = atoi(token2);
+          if(tmp<=tmp_set-2){
+            s.println(F("HEAT/1"));
+          }else if(tmp>=tmp_set+2){
+            s.println(F("FAN2/1"));
+            s.println(F("HEAT/0"));
+          }else{
+            s.println(F("FAN2/0"));
+            s.println(F("HEAT/0"));
+          }
         }else if(strcmp(token2, "Intruder_Alarm") == 0){
           token2 = strtok_r(NULL, delimiter2, &end_token);
           intruder_Alarm_set = atoi(token2);
@@ -156,6 +166,12 @@ void webServer(){
     }else if(request.indexOf(F("FAN1/0"))!=-1){
       Serial.println(F("FAN1 off"));
       s.println(F("FAN1/0"));
+    }else if(request.indexOf(F("FAN2/1"))!=-1){
+      Serial.println(F("FAN2 on"));
+      s.println(F("FAN2/1"));
+    }else if(request.indexOf(F("FAN2/0"))!=-1){
+      Serial.println(F("FAN2 off"));
+      s.println(F("FAN2/0"));
     }else if(request.indexOf(F("LOCK1/1"))!=-1){
       Serial.println(F("LOCK1 on"));
       s.println(F("LOCK1/1"));
@@ -166,6 +182,9 @@ void webServer(){
       Serial.println(F("Alarm Dismiss"));
       motion=0;
       s.println(F("A_DISMISS"));
+    }else if(request.indexOf(F("HEAT/0"))!=-1){
+      Serial.println(F("HEAT off"));
+      s.println(F("HEAT/0"));
     }
   }
   client.flush();

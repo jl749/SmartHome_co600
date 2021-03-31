@@ -19,7 +19,9 @@ AirQualitySensor sensor(A3);
 #define MOTION_PIN 2
 bool motion,ALARM_SET=0;
 
+#define HEAT A0
 #define FAN1 10
+#define FAN2 11
 #define LOCK1 9
 
 #define BUZZER 3
@@ -33,9 +35,8 @@ void setup() {
   pinMode(BUZZER, OUTPUT);
   digitalWrite(ledPin1, LOW);
   digitalWrite(ledPin2, LOW);
-  
+  //digitalWrite(HEAT, HIGH);
   Serial.begin(9600);
-
   pinMode(JSON_RX, INPUT);
   pinMode(JSON_TX, OUTPUT);
   s.begin(9600);
@@ -51,7 +52,9 @@ void loop() {
   if(ALARM_SET && digitalRead(MOTION_PIN) == HIGH){
     motion=1;
     digitalWrite(BUZZER, HIGH);
-  }
+  }else if(ALARM_SET==0)
+    digitalWrite(BUZZER, LOW);
+  
   if(s.available()>0){
     String incomingString = s.readStringUntil('\n');
     //Serial.println(incomingString);
@@ -84,12 +87,24 @@ void loop() {
     }else if(incomingString.indexOf(F("FAN1/0"))!=-1){
       Serial.println(F("FAN1 off"));
       digitalWrite(FAN1, HIGH);
+    }else if(incomingString.indexOf(F("FAN2/1"))!=-1){
+      Serial.println(F("FAN2 on"));
+      digitalWrite(FAN2, LOW);
+    }else if(incomingString.indexOf(F("FAN2/0"))!=-1){
+      Serial.println(F("FAN2 off"));
+      digitalWrite(FAN2, HIGH);
     }else if(incomingString.indexOf(F("LOCK1/1"))!=-1){
       Serial.println(F("LOCK1 on"));
       digitalWrite(LOCK1, LOW);
     }else if(incomingString.indexOf(F("LOCK1/0"))!=-1){
       Serial.println(F("LOCK1 off"));
       digitalWrite(LOCK1, HIGH);
+    }else if(incomingString.indexOf(F("HEAT/1"))!=-1){
+      Serial.println(F("HEAT on"));
+      digitalWrite(HEAT, LOW);
+    }else if(incomingString.indexOf(F("HEAT/0"))!=-1){
+      Serial.println(F("HEAT off"));
+      digitalWrite(HEAT, HIGH);
     }
   }
 }
