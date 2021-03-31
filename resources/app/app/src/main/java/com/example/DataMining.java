@@ -1,33 +1,34 @@
 package com.example;
+import weka.classifiers.functions.SMOreg;
 import weka.classifiers.trees.J48;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class DataMining {
     public static final DataMining INSTANCE = new DataMining();
     private static String path = "";
     private static J48 tree = null;
+    private static SMOreg smo = null;
     private static Instances dataset = null;
+    private static double targetTemp = -1;
 
     protected DataMining(){}
 
     public static DataMining GET(){ return INSTANCE; }
 
-    public static void setPath(String path1){
-        path=path1;
-    }
-
     public static void updateDataset(String username){
         try{
             dataset = new Instances(new BufferedReader(new FileReader(path + username + "_trainingSet.arff")));
-            dataset.setClassIndex(dataset.numAttributes() - 1); //set class att
             System.out.println(dataset.toSummaryString());
         }catch (Exception e) {e.printStackTrace();}
     }
@@ -37,14 +38,27 @@ public class DataMining {
     /*REQUIRE updateDataset() call before*/
     public static void buildModel(){
         try {
+            dataset.setClassIndex(2); //set class att
+            Remove remove = new Remove();
+            remove.setOptions(new String[] {"-R", "6"}); //filter class {H, C}
+            remove.setInputFormat(dataset);
+            Instances filteredDataset = Filter.useFilter(dataset, remove);
+            smo = new SMOreg();
+            smo.buildClassifier(filteredDataset);
+            System.out.println(smo);
+
+            dataset.setClassIndex(dataset.numAttributes() - 1); //set class att
+            remove = new Remove();
             tree = new J48();
-            int n = (int) (dataset.numInstances()*0.1);
-            String[] options = new String[]{"-C", "0.6", "-M", ""+n};
+            remove.setOptions(new String[] {"-R", "3"}); //filter tempSet
+            remove.setInputFormat(dataset);
+            filteredDataset = Filter.useFilter(dataset, remove);
+            int n = (int) (filteredDataset.numInstances()*0.1);
+            String[] options = new String[]{"-M", ""+n}; //"-C", "0.7",
             tree.setOptions(options);
-            tree.buildClassifier(dataset);
+            tree.buildClassifier(filteredDataset);
             System.out.println(tree.graph());
         }catch(Exception e){e.printStackTrace();}
-
     }
 
     /*input instance array does not contain class attribute, length=5*/
@@ -54,25 +68,53 @@ public class DataMining {
         try{
             Instance inst  = new DenseInstance(6);
             for(int i=0 ; i<4 ; i++)
-                if(instance[i].matches("\\d+"))
+                if(instance[i]!=null && instance[i].matches("\\d+"))
                     inst.setValue(i, Double.parseDouble(instance[i]));
             Attribute time = new Attribute("time", new ArrayList<String>(Arrays.asList("6~10", "11~13", "14~17", "18~22", "others")), 4);
             inst.setValue(time, instance[4]);
             inst.setDataset(dataset);
 
             dataset.add(0, inst);
-            double[] prob=tree.distributionForInstance(dataset.get(0));
-            System.out.println("prob: "+Arrays.toString(prob));
-            double accuracy=prob[0]/(prob[1]+prob[0]);
-            if(accuracy < 0.6)
-                return "do_nothing";
+            Remove remove = new Remove();
+            remove.setInputFormat(dataset);
+            remove.setOptions(new String[] {"-R", "3"}); //filter tempSet
+            Instances filteredDataset = Filter.useFilter(dataset, remove);
 
-            double cV = tree.classifyInstance(dataset.get(0));
+            filteredDataset.setClassIndex(filteredDataset.numAttributes() - 1);
+            double[] prob=tree.distributionForInstance(filteredDataset.get(0));
+            double cV = tree.classifyInstance(filteredDataset.get(0));
+
+            remove = new Remove();
+            remove.setOptions(new String[] {"-R", "6"}); //filter class {H, C}
+            remove.setInputFormat(dataset);
+            filteredDataset = Filter.useFilter(dataset, remove);
+            filteredDataset.setClassIndex(2);
+            double predictedTargetTemp = smo.classifyInstance(filteredDataset.get(0));
+
+            String predictedClassT = inst.classAttribute().value((int)cV);
+            String predictedClassR = "";
+            if(instance[1]==null || !instance[1].matches("\\d+")){
+                return null;
+            }
+            if(Double.parseDouble(instance[1]) > predictedTargetTemp)
+                predictedClassR = "C";
+            else if(Double.parseDouble(instance[1]) < predictedTargetTemp)
+                predictedClassR = "H";
+
+            System.out.println("regression = "+predictedClassR + " , "+predictedTargetTemp);
+            System.out.println("regression = "+predictedClassT + " , "+Arrays.toString(prob));
+
             dataset.delete(0);
-            return inst.classAttribute().value((int)cV);
+
+            if(predictedClassT.equals(predictedClassR)) {
+                targetTemp = predictedTargetTemp;
+                return predictedClassT;
+            }
         }catch (Exception e){e.printStackTrace();}
         return null;
     }
+    /*after classify call getTargetTemp()*/
+    public static double getTargetTemp(){return targetTemp;}
 
     /*CALL WHEN SET TEMP - add new instance to existing arff*/
     public static void writeInstance(String[] instance, String username) throws IOException {
@@ -90,7 +132,6 @@ public class DataMining {
 
         StringBuilder sb=new StringBuilder();
         for(int i=0 ; i<n-1 ; i++){
-            if(i==2)    continue;
             sb.append(newInstance[i]);
             sb.append(",");
         }
@@ -147,7 +188,7 @@ public class DataMining {
             fstream.write("@relation tempControlData\n");
             fstream.write("@attribute tempOutside numeric\n");
             fstream.write("@attribute tempInside numeric\n");
-            //fstream.write("@attribute tempSet numeric\n");
+            fstream.write("@attribute tempSet numeric\n");
             fstream.write("@attribute humidity numeric\n");
             fstream.write("@attribute time {6~10, 11~13, 14~17, 18~22, others}\n");
             fstream.write("@attribute class {H, C}\n\n"); //Heating, Cooling
@@ -172,5 +213,9 @@ public class DataMining {
             return (new ConverterUtils.DataSource(path + username + "_trainingSet.arff").getDataSet()).numInstances();
         }catch(Exception e){e.printStackTrace();}
         return -1;
+    }
+
+    public static void setPath(String fpath){
+        path=fpath;
     }
 }
