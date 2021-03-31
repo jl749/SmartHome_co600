@@ -90,9 +90,10 @@ public class PracticeCode {
             if(DataMining.GET().getNumInstances(name) > 9 && DataMining.GET().getFileExists(name)){
                 System.out.println("DM starting......");
                 DataMining.GET().updateDataset(name); //update static Instances
-                DataMining.GET().buildModel(); //update J48
+                DataMining.GET().buildModel(); //update J48, regression
                 System.out.println(DataMining.GET().classifyInst(new String[] {"8","13","?","56","6~10"}));
-                System.out.println(DataMining.GET().classifyInst(new String[] {"30","25","?","86","11~13"}));
+                System.out.println(DataMining.GET().classifyInst(new String[] {"30","25",null,"86","11~13"}));
+                System.out.println(DataMining.GET().classifyInst(new String[] {"15",null,"?","15","6~10"}));
             }
 
         }catch(Exception e){e.printStackTrace();}
