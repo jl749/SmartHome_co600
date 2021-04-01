@@ -1,4 +1,4 @@
-# co600_FianlYearProject
+# co600_FinalYearProject
 
 Alarm demo video:
 
