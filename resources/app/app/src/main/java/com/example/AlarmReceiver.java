@@ -58,7 +58,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    /*Runs the data mining algorithm*/
+    /*Runs the data mining algorithm and changes the target temp (turns heating or cooling on*/
     private void updateDataset(Context c){
         boolean status = ((MyApplication)c.getApplicationContext()).getDataminingStatus();
         String apiKey = ((MyApplication)c.getApplicationContext()).getAPIKey();
@@ -75,14 +75,19 @@ public class AlarmReceiver extends BroadcastReceiver {
             try {
                 DataMining.GET().updateDataset(((MyApplication)c.getApplicationContext()).getUsername());
                 DataMining.GET().buildModel();
-            if(DataMining.GET().getNumInstances(((MyApplication)c.getApplicationContext()).getUsername())>9) {
-                    if (DataMining.GET().classifyInst(arr) != null) {
-                        action = DataMining.GET().classifyInst(arr);
-                        int temp = (int) DataMining.GET().getTargetTemp();
-                        SetTemperature st = new SetTemperature();
-                        st.run(temp,((MyApplication)c.getApplicationContext()).getCurrentHouse());
-                        ((MyApplication)c.getApplicationContext()).setTargetTemp(temp+"");
-                    }
+                if(DataMining.GET().getNumInstances(((MyApplication)c.getApplicationContext()).getUsername())>9) {
+                        if (DataMining.GET().classifyInst(arr) != null) {
+                            action = DataMining.GET().classifyInst(arr);
+                            int temp = (int) DataMining.GET().getTargetTemp();
+                            SetTemperature st = new SetTemperature();
+                            st.run(temp,((MyApplication)c.getApplicationContext()).getCurrentHouse());
+                            ((MyApplication)c.getApplicationContext()).setTargetTemp(temp+"");
+                        }
+                        else{
+                            FanLedLockControl flc = new FanLedLockControl();
+                            flc.run("2", false,apiKey,"FAN");
+                            flc.run("",false,apiKey,"HEAT");
+                        }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
