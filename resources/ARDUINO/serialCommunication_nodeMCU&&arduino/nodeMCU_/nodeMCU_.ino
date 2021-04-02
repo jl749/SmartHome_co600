@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
-const char* ssid = "Igor";
-const char* pass = "@Qwer1234";
+const char* ssid = "DirectSave-061EF0";
+const char* pass = "190715502585";
 const String houseID="houseID=1234";
-const char* phpHost = "http://192.168.43.146/co600/getThreshold.php";
+const char* phpHost = "http://192.168.1.8/co600/getThreshold.php";
 String apiKey;
 WiFiClient client;
 
@@ -49,7 +49,7 @@ void setup() {
   server.begin();
   Serial.println("Server started");
 
-  http.begin(F("http://192.168.43.146/co600/getAPIKey.php"));
+  http.begin(F("http://192.168.1.8/co600/getAPIKey.php"));
   http.setTimeout(1000);
   http.addHeader("Content-Type","application/x-www-form-urlencoded");
   int httpCode = http.POST(houseID);
