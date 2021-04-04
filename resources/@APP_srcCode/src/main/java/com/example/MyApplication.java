@@ -32,6 +32,7 @@ public class MyApplication extends Application {
     private String username;
     private String tempOutside;
     private boolean dataminingStatus = false;
+    private int counter = 0;
 
     public String getCurrentPin(){ return currentPin; }
     public String getAqi(){return aqi;}
@@ -66,6 +67,7 @@ public class MyApplication extends Application {
     }
     public String getTempOutside() {return tempOutside; }
     public boolean getDataminingStatus(){ return dataminingStatus;}
+    public int getCounter(){return counter;}
 
     public boolean connection(){
         return connectionLost;
@@ -107,6 +109,7 @@ public class MyApplication extends Application {
     }
     public void setTempOutside(String tempOutside){this.tempOutside = tempOutside; }
     public void setDataminingStatus(Boolean status){this.dataminingStatus = status; }
+    public void setCounter(int i){counter=i; }
 
     public void setFirstOpen(boolean firstOpen){
         this.firstOpen = firstOpen;

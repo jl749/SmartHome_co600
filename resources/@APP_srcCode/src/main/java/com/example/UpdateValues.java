@@ -59,8 +59,8 @@ public class UpdateValues{
         ArrayList<String> variables = new ArrayList<String>();
         String result;
         MyApplication m;
-        private static final String raptor = MainActivity.raptor;
-        //private static final String raptor = MainActivity.nodMCUwebServer;
+        //private static final String raptor = MainActivity.raptor;
+        private static final String nodeMCUwebServer = MainActivity.nodMCUwebServer;
         public GetHttp(MyApplication m){
             super();
             this.m = m;
@@ -73,7 +73,7 @@ public class UpdateValues{
             URL url=null;
 
             try {
-                url = new URL(raptor+"status.html");
+                url = new URL(nodeMCUwebServer);
                 con = (HttpURLConnection) url.openConnection();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 try {

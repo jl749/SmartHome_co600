@@ -35,9 +35,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
 
-    static final String nodMCUwebServer="http://192.168.1.72/";
-    //static final String raptor ="http://192.168.1.72/co600/";
-    static final String raptor ="https://raptor.kent.ac.uk/~jl749/";
+    static final String nodMCUwebServer="http://192.168.1.222/";
+    static final String raptor ="http://192.168.1.111/co600/";
+    //static final String raptor ="https://raptor.kent.ac.uk/~jl749/";
     private String pin = "2222";
     private String username;
     LinearLayout layout;

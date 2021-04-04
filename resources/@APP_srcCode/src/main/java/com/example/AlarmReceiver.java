@@ -27,6 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     */
     @Override
     public void onReceive(final Context context, Intent intent) {
+        int counter = ((MyApplication)context.getApplicationContext()).getCounter();
         houseID = intent.getStringExtra("HouseID");
         UpdateValues uv = new UpdateValues();
         uv.run(((MyApplication)context.getApplicationContext()));
@@ -36,10 +37,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                System.out.println(counter);
+                if(counter == 5){
+                    updateDataset(context);
+                    ((MyApplication)context.getApplicationContext()).setCounter(0);
+                }
                 checkIntruder(context);
-                updateDataset(context);
             }
         }, 5000);
+        ((MyApplication)context.getApplicationContext()).setCounter(counter+1);
     }
 
     /*Updates the weather*/
@@ -48,10 +54,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         if(((MyApplication) context.getApplicationContext()).validPostCode()) {
             WeatherAPI wapi = new WeatherAPI();
             wapi.run(((MyApplication) context.getApplicationContext()), ((MyApplication)context.getApplicationContext()).getPostCode());
+
         }
     }
 
-    /*Runs the data mining algorithm*/
+    /*Runs the data mining algorithm and changes the target temp (turns heating or cooling on*/
     private void updateDataset(Context c){
         boolean status = ((MyApplication)c.getApplicationContext()).getDataminingStatus();
         String apiKey = ((MyApplication)c.getApplicationContext()).getAPIKey();
@@ -68,38 +75,25 @@ public class AlarmReceiver extends BroadcastReceiver {
             try {
                 DataMining.GET().updateDataset(((MyApplication)c.getApplicationContext()).getUsername());
                 DataMining.GET().buildModel();
-            if(DataMining.GET().getNumInstances(((MyApplication)c.getApplicationContext()).getUsername())>9) {
-                    if (DataMining.GET().classifyInst(arr) != null) {
-                        action = DataMining.GET().classifyInst(arr);
-                    }
+                if(DataMining.GET().getNumInstances(((MyApplication)c.getApplicationContext()).getUsername())>9) {
+                        if (DataMining.GET().classifyInst(arr) != null) {
+                            action = DataMining.GET().classifyInst(arr);
+                            int temp = (int) DataMining.GET().getTargetTemp();
+                            SetTemperature st = new SetTemperature();
+                            st.run(temp,((MyApplication)c.getApplicationContext()).getCurrentHouse());
+                            ((MyApplication)c.getApplicationContext()).setTargetTemp(temp+"");
+                        }
+                        else{
+                            FanLedLockControl flc = new FanLedLockControl();
+                            flc.run("2", false,apiKey,"FAN");
+                            flc.run("",false,apiKey,"HEAT");
+                        }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            if (action.equals("C")) {
-                coolingOn(apiKey);
-            } else if (action.equals("H")) {
-                heatingOn(apiKey);
-            }
         }
         System.out.println(action);
-    }
-
-    /*Turn on cooling if data mining algorithm deems it fit*/
-    private void coolingOn(String apiKey){
-        FanLedLockControl flc = new FanLedLockControl();
-        flc.run("1", true,apiKey,"FAN");
-        flc.run("", false,apiKey,"HEAT");
-        System.out.println("cooling on");
-    }
-
-    /*Turn on heating if data mining algorithm deems it fit*/
-    private void heatingOn(String apiKey){
-        FanLedLockControl flc = new FanLedLockControl();
-        flc.run("1", false,apiKey,"FAN");
-        flc.run("", true,apiKey,"HEAT");
-        System.out.println("Heating on");
     }
 
     /*Checks if intruder alarm is on and motion has been detected and sends notification to phone*/
