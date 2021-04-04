@@ -2,7 +2,7 @@
 const char* ssid = "DirectSave-061EF0";
 const char* pass = "190715502585";
 const String houseID="houseID=1234";
-const char* phpHost = "http://192.168.1.8/co600/getThreshold.php";
+const char* phpHost = "http://192.168.1.111/co600/getThreshold.php";
 String apiKey;
 WiFiClient client;
 
@@ -29,12 +29,22 @@ unsigned long count = 0;
 const char* delimiter1 = "\n";
 const char* delimiter2 = "=";
 
+// Set your Static IP address
+IPAddress local_IP(192, 168, 1, 222);
+// Set your Gateway IP address
+IPAddress gateway(192, 168, 0, 1);
+
+IPAddress subnet(255, 255, 0, 0);
+
 void setup() {
   // Initialize Serial port
   Serial.begin(9600);
   s.begin(9600);
   while(!Serial) continue;
 
+  if (!WiFi.config(local_IP, gateway, subnet))
+    Serial.println("STA Failed to configure");
+  
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, pass);
   while (WiFi.status() != WL_CONNECTED) {
@@ -49,7 +59,7 @@ void setup() {
   server.begin();
   Serial.println("Server started");
 
-  http.begin(F("http://192.168.1.8/co600/getAPIKey.php"));
+  http.begin(F("http://192.168.1.111/co600/getAPIKey.php"));
   http.setTimeout(1000);
   http.addHeader("Content-Type","application/x-www-form-urlencoded");
   int httpCode = http.POST(houseID);
@@ -112,6 +122,7 @@ void httpPOST(String url, String data){
           tmp_set = atoi(token2);
           if(tmp<=tmp_set-2){
             s.println(F("HEAT/1"));
+            s.println(F("FAN2/0"));
           }else if(tmp>=tmp_set+2){
             s.println(F("FAN2/1"));
             s.println(F("HEAT/0"));
