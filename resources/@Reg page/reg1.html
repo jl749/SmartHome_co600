@@ -1,18 +1,20 @@
+<html>
 <head><link rel="stylesheet" href="reg.css"></head>
+<body>
 <div class="testbox">
   <h1>Registration</h1>
-  <form action="/">
+  <form action="./registration.php" method="POST">
   <hr>
   <label><img src="mainicon.png" alt="mainicon" width="50" height="50"></label>
   <hr>
-  <input type="text" Username="Username" id="Username" placeholder="Username" required/>
- <input type="text" name="Firstname" id="name" placeholder="Firstname" required/>
-<input type="text" name="Surname" id="Surname" placeholder="Surname" required/>
- <input type="password" name="name" id="name" placeholder="Password" required/>
-  <div class="Password">
-   </div>
+  <input type="text" name="username" id="username" placeholder="Username" required/>
+  <input type="text" name="N" id="N" placeholder="Firstname" required/>
+  <input type="text" name="FN" id="FN" placeholder="Surname" required/>
+  <input type="password" name="pass" id="pass" placeholder="Password" required/>
   <p>By clicking Register, you agree on our <a href="#">terms and condition</a>.</p>
       <br>
-   <a href="#" class="button">Register</a>
+  <input type="submit" class="button" value="Register"/>
   </form>
 </div>
+</body>
+</html>
