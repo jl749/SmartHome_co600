@@ -32,6 +32,8 @@ void setup() {
   pinMode(MOTION_PIN, INPUT);
   pinMode(FAN1, OUTPUT);  digitalWrite(FAN1, HIGH);
   pinMode(LOCK1, OUTPUT); digitalWrite(LOCK1, HIGH);
+  pinMode(FAN2, OUTPUT);  digitalWrite(FAN2, HIGH);
+  pinMode(HEAT, OUTPUT); digitalWrite(HEAT, HIGH);
   pinMode(BUZZER, OUTPUT);
   digitalWrite(ledPin1, LOW);
   digitalWrite(ledPin2, LOW);
